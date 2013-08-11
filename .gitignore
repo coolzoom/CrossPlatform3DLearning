@@ -1,0 +1,6 @@
+#Build and temporary directory
+[Tt]emp
+
+#The CodeBlocks layout files
+*.layout
+
