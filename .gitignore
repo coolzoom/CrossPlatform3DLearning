@@ -4,3 +4,6 @@
 #The CodeBlocks layout files
 *.layout
 
+#Backup files
+*.???\~
+
