@@ -1,5 +1,7 @@
 #include <cstdlib>
-
+#ifdef _WIN32
+#include <Windows.h>
+#endif
 #include <SDL.h>
 #include <GL/gl.h>
 #include <GL/glu.h>

@@ -30,3 +30,4 @@ gcc -lglut -lGL -lGLEW -lGLU main.c -o OpenGLExample
 Download and install cmake
 Download SDL and unzip it to a folder
 Create an SDLDIR environment variable and set it to that folder
+In the lib subdirectory of SDL, choose the 64 or 32 bit subdirectory and copy its contents one level up
