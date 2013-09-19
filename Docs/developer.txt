@@ -1,12 +1,12 @@
 -------------------------------------------------------
-Toy Tanks
+Cross Platform 3D Learning
 
 by Dimitrios Kourkoulis
 
 Developer Instructions
 -------------------------------------------------------
 
-Environment setup (Ubuntu):
+* Environment setup (Ubuntu):
 
 sudo apt-get update
 sudo apt-get install freeglut3
@@ -23,3 +23,10 @@ sudo apt-get install libsdl1.2-dbg
 Compilation of sample OpenGL program (Ubuntu):
 
 gcc -lglut -lGL -lGLEW -lGLU main.c -o OpenGLExample
+
+
+* Environment setup (Windows):
+
+Download and install cmake
+Download SDL and unzip it to a folder
+Create an SDLDIR environment variable and set it to that folder
