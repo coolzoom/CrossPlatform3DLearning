@@ -11,7 +11,6 @@ include_directories(${SDL_INCLUDE_DIR})
 
 link_libraries(
 	${SDL_LIBRARY}
-	SDLmain
 )
 
 find_package(OpenGL REQUIRED)
