@@ -31,3 +31,5 @@ Download and install cmake
 Download SDL and unzip it to a folder
 Create an SDLDIR environment variable and set it to that folder
 In the lib subdirectory of SDL, choose the 64 or 32 bit subdirectory and copy its contents one level up
+Strangely enough, even though cmake adds the full path to the SDL libraries to the project, the directory
+  in which they are located still needs to be added to the Additional Library Directories of the linker.
