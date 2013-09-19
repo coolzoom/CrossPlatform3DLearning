@@ -1,7 +1,10 @@
 #include <cstdlib>
+
 #ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #endif
+
 #include <SDL.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -63,7 +66,7 @@ void InitGL(int Width, int Height)	        // We call this right after our OpenG
 void DrawGLScene()
 {
     if (angle > 360) angle = 0;
-    angle += 3;
+    angle += 10;
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear The Screen And The Depth Buffer
 
