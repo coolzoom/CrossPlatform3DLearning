@@ -28,6 +28,8 @@ GLfloat LightPosition[] = {-5.0f, 0.0f, 2.0f, 1.0f};
 GLuint filter;
 GLuint texture[3];
 
+const GLuint frameRate = 60;
+
 void InitGL(int Width, int Height)	        // We call this right after our OpenGL window is created.
 {
 
@@ -66,7 +68,7 @@ void InitGL(int Width, int Height)	        // We call this right after our OpenG
 void DrawGLScene()
 {
     if (angle > 360) angle = 0;
-    angle += 10;
+    angle += 3;
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear The Screen And The Depth Buffer
 
@@ -177,11 +179,17 @@ int main ( int argc, char** argv )
 
     // program main loop
     bool done = false;
+
+	// ticks for setting the frame rate
+	GLuint ticks = SDL_GetTicks();
+	GLuint prevTicks = ticks;
+	GLuint ticksInterval = 1000 / frameRate;
+
     while (!done)
     {
 
         SDL_Event event;
-        while (SDL_PollEvent(&event))
+        if (SDL_PollEvent(&event))
         {
             switch (event.type)
             {
@@ -198,7 +206,13 @@ int main ( int argc, char** argv )
             }
             }
         }
-        DrawGLScene();
+		
+		ticks = SDL_GetTicks();
+		if (ticks - prevTicks > ticksInterval)
+		{
+			prevTicks = ticks;
+			DrawGLScene();
+		}
     }
 
     SDL_FreeSurface(icon);
