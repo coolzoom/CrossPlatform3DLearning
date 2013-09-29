@@ -1,0 +1,5 @@
+The models have been created with Blender 2.62
+There was an issue when transferring files from
+newer versions of Blender (some faces would 
+disappear) so it was decided to only use this
+version for this project.
