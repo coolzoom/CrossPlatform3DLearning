@@ -19,6 +19,9 @@ sudo apt-get install build-essential
 sudo apt-get install libglew1.5-dev libglm-dev
 sudo apt-get install libsdl1.2-dev
 sudo apt-get install libsdl1.2-dbg
+sudo apt-get install libboost-dev
+sudo apt-get install libboost-test1.46.1
+sudo ln -s /usr/lib/libboost_unit_test_framework.so.1.46.1 /usr/lib/libboost_unit_test_framework.so
 
 Compilation of sample OpenGL program (Ubuntu):
 

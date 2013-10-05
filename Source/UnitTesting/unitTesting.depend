@@ -1,0 +1,4 @@
+# depslib dependency file v1.0
+1380949308 source:/home/me/Source/CrossPlatform3DLearning/Source/UnitTesting/main.cpp
+	<boost/test/unit_test.hpp>
+
