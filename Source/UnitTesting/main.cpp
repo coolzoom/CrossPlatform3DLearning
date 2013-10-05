@@ -1,18 +1,14 @@
-#define BOOST_TEST_MAIN
+#define BOOST_TEST_DYN_LINK
+#define BOOST_TEST_MODULE MyTest
 #include <boost/test/unit_test.hpp>
-using namespace boost::unit_test;
 
-void my_test_function()
+BOOST_AUTO_TEST_CASE( my_test )
 {
-    int a = 5;
-}
-
-
-test_suite* init_unit_test_suite ( int argc, char* argv[] )
-{
-    test_suite* test = BOOST_TEST_SUITE( "Master test suite" );
-
-    test->add( BOOST_TEST_CASE( &my_test_function ) );
-
-    return test;
+    BOOST_CHECK( 1 == 1 );
+    BOOST_REQUIRE( 1 == 1);
+    BOOST_CHECK_MESSAGE(1 == 2, "Ooops! Just testing :)");
+    BOOST_CHECK_EQUAL(2, 1);
+    BOOST_ERROR("Testing again");
+    BOOST_FAIL("Testing FAIL, and here it stops");
+    BOOST_CHECK_MESSAGE(1 == 2, "This should not appear (execution stops on BOOST_FAIL)");
 }
