@@ -30,10 +30,26 @@ GLuint texture[3];
 
 const GLuint frameRate = 60;
 
-void InitGL(int Width, int Height)	        // We call this right after our OpenGL window is created.
+/// A class used to test Doxygen
+class DoxygenTestClass
 {
+    public:
+    int DoxygenTestVariable; /// Test variable
 
-    //NeHeLoadBitmap("Untitled.bmp", texture[0]);
+    DoxygenTestClass(int testInitVariable /** Test initialisation variable */)
+    {
+        DoxygenTestVariable = testInitVariable;
+    }
+};
+
+/**
+* Initialise OpenGL
+* We call this right after our OpenGL window is created.
+*/
+void InitGL(
+            int Width /**The width of the window*/,
+            int Height /**The height of the window*/)
+{
     glEnable(GL_TEXTURE_2D);
 
     glViewport(0, 0, Width, Height);
@@ -206,7 +222,7 @@ int main ( int argc, char** argv )
             }
             }
         }
-		
+
 		ticks = SDL_GetTicks();
 		if (ticks - prevTicks > ticksInterval)
 		{
