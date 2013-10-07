@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 2.8)
-project (test)
+project (game)
 
 Find_Package(SDL REQUIRED)
 
@@ -21,6 +21,6 @@ if(NOT OPENGL_FOUND)
     message(ERROR " OPENGL not found!")
 endif(NOT OPENGL_FOUND)
 
-add_executable (test main.cpp)
+add_executable (game main.cpp)
 
-target_link_libraries(test ${OPENGL_LIBRARIES}) 
+target_link_libraries(game ${OPENGL_LIBRARIES}) 
