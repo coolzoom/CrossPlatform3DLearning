@@ -24,14 +24,45 @@ sudo apt-get install libboost-test1.46.1
 sudo ln -s /usr/lib/libboost_unit_test_framework.so.1.46.1 /usr/lib/libboost_unit_test_framework.so
 sudo apt-get install doxygen
 
-Compilation of sample OpenGL program (Ubuntu):
-
-gcc -lglut -lGL -lGLEW -lGLU main.c -o OpenGLExample
-
-
 * Environment setup (Windows):
 
-Download and install cmake
-Download SDL and unzip it to a folder
+Download and install cmake (http://www.cmake.org/). I am using version 2.8.
+Download SDL and unzip it to a folder (http://www.libsdl.org/). I am using version 1.2.
 Create an SDLDIR environment variable and set it to that folder
 In the lib subdirectory of SDL, choose the 64 or 32 bit subdirectory and copy its contents one level up
+Download and install Doxygen (http://www.stack.nl/~dimitri/doxygen/)
+Download the Boost libraries (http://www.boost.org/) and unzip them in a folder. I am using version 1.54. 
+(In Ubuntu I am using an earlier version because it was the latest available for my package manager)
+Create a folder to install the built version of the libraries of Boost, e.g. C:\boost_1_54_0_installed
+From the source Boost folder, execute 
+	bootstrap.bat
+	b2 install --prefix=C:\boost_1_54_0_installed address-model=32 --build-type=complete --with-test
+Set environment variable BOOST_ROOT to C:\boost_1_54_0_installed\
+Set environment variable BOOST_LIBRARYDIR to C:\boost_1_54_0_installed\lib\
+
+* Compiling and running (both systems)
+
+Create a directory, called "Temp" in the root folder of the project. Then go to that directory and
+execute the following (you might need to use backslashes in Windows, depending on your shell):
+  For the main program:
+    cmake ../Source/Game
+  For the unit tests:
+    cmake ../Source/UnitTesting
+Then, in Linux, you just need to run make and you will have the executable ready to run. In Windows,
+a Visual Studio project will be created, which you can open with Visual Studio 2010, compile and execute.
+In Windows you will probably need to copy the dlls of the libraries we are using (SDL, Boost, etc) to the
+output directory (Release or Debug), unless they are already accessible from any place in your system (e.g.
+if they have been installed to the System directory)
+
+* Simple compilation of sample OpenGL program (Ubuntu):
+
+gcc -lglut -lGL -lGLEW -lGLU main.cpp -o OpenGLExample
+(I have just put this here to always remember what compiling looked like before
+cmake :) )
+
+* Compiling the documentation (both systems)
+Go to the Source/Game directory
+Execute:
+  doxygen doxygen.cfg
+The documentation will be created and placed in the Docs/SourceCodeDoc/html directory
+
