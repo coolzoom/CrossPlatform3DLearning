@@ -1,26 +1,24 @@
-cmake_minimum_required (VERSION 2.8)
-project (game)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+PROJECT(game)
 
-Find_Package(SDL REQUIRED)
+FIND_PACKAGE(SDL REQUIRED)
 
-if (NOT SDL_FOUND)
-	message( FATAL ERROR "SDL not found!")
-endif(NOT SDL_FOUND)
+IF(NOT SDL_FOUND)
+	MESSAGE(FATAL ERROR "SDL not found!")
+ENDIF(NOT SDL_FOUND)
 
-include_directories(${SDL_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${SDL_INCLUDE_DIR})
 
-link_libraries(
-	${SDL_LIBRARY}
-)
+LINK_LIBRARIES(${SDL_LIBRARY})
 
-find_package(OpenGL REQUIRED)
-include_directories(${OpenGL_INCLUDE_DIRS})
-link_directories(${OpenGL_LIBRARY_DIRS})
-add_definitions(${OpenGL_DEFINITIONS})
-if(NOT OPENGL_FOUND)
-    message(ERROR " OPENGL not found!")
-endif(NOT OPENGL_FOUND)
+FIND_PACKAGE(OpenGL REQUIRED)
+INCLUDE_DIRECTORIES(${OpenGL_INCLUDE_DIRS})
+LINK_DIRECTORIES(${OpenGL_LIBRARY_DIRS})
+ADD_DEFINITIONS(${OpenGL_DEFINITIONS})
+IF(NOT OPENGL_FOUND)
+    MESSAGE(ERROR " OPENGL not found!")
+ENDIF(NOT OPENGL_FOUND)
 
-add_executable (game main.cpp)
+ADD_EXECUTABLE(game main.cpp)
 
-target_link_libraries(game ${OPENGL_LIBRARIES}) 
+TARGET_LINK_LIBRARIES(game ${OPENGL_LIBRARIES}) 
