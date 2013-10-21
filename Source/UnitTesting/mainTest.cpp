@@ -1,9 +1,14 @@
 #define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MODULE MyTest
 #include <boost/test/unit_test.hpp>
+#include "../GameCharacter.h"
 
 BOOST_AUTO_TEST_CASE( my_test )
 {
+	GameCharacter *gc = new GameCharacter();
+
+	delete gc;
+
     BOOST_CHECK( 1 == 1 );
     BOOST_REQUIRE( 1 == 1);
     BOOST_CHECK_MESSAGE(1 == 2, "Ooops! Just testing :)");

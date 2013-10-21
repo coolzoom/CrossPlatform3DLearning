@@ -19,6 +19,8 @@ IF(NOT OPENGL_FOUND)
     MESSAGE(ERROR " OPENGL not found!")
 ENDIF(NOT OPENGL_FOUND)
 
-ADD_EXECUTABLE(game main.cpp)
+ADD_EXECUTABLE(game main.cpp GameCharacter.cpp GameCharacter.h)
+
+ADD_SUBDIRECTORY(UnitTesting)
 
 TARGET_LINK_LIBRARIES(game ${OPENGL_LIBRARIES}) 
