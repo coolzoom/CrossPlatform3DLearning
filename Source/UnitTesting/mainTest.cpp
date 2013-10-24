@@ -6,7 +6,7 @@
 BOOST_AUTO_TEST_CASE( my_test )
 {
 	GameCharacter *gc = new GameCharacter();
-
+	gc->LoadFromFile("../../Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj");
 	delete gc;
 
     BOOST_CHECK( 1 == 1 );
