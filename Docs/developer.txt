@@ -48,16 +48,15 @@ Set environment variable BOOST_LIBRARYDIR to C:\boost_1_54_0_installed\lib\
 
 Create a directory, called "Temp" in the root folder of the project. Then go to that directory and
 execute the following (you might need to use backslashes in Windows, depending on your shell):
-  For the main program:
-    cmake ../Source/Game
-  For the unit tests:
-    cmake ../Source/UnitTesting
+    cmake ../Source
 Then, in Linux, you just need to run make and you will have the executable ready to run. In Windows,
 a Visual Studio project will be created, which you can open with Visual Studio 2010, compile and execute.
 In Windows you will probably need to copy the dlls of the libraries we are using (SDL, Boost, etc) to the
 output directory (Release or Debug), unless they are already accessible in your system (e.g.
 if they have been installed to the System directory or if their directories have been included in the PATH
 environment variable.)
+To create an Eclipse project in Linux, run the following command from the Temp directory, mentioned above:
+cmake -G "Eclipse CDT4 - Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_ECLIPSE_MAKE_ARGUMENTS=-j8 ../Source/
 
 * Simple compilation of sample OpenGL program (Ubuntu):
 
