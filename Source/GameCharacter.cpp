@@ -14,6 +14,15 @@ GameCharacter::~GameCharacter(void)
 void GameCharacter::LoadFromFile( string fileLocation )
 {
 	ifstream file(fileLocation);
+	string line;
 	if (file.is_open())
+	{
+		while (getline(file, line))
+		{
+			cout << line << endl;
+		}
 		file.close();
+	}
+	else cout << "Could not open file." << endl;
+		
 }
