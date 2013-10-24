@@ -13,7 +13,7 @@ GameCharacter::~GameCharacter(void)
 
 void GameCharacter::LoadFromFile( string fileLocation )
 {
-	ifstream file(fileLocation);
+	ifstream file(fileLocation.c_str());
 	string line;
 	if (file.is_open())
 	{
