@@ -30,29 +30,27 @@ GLuint texture[3];
 
 const GLuint frameRate = 60;
 
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-/// <summary>	Doxygen test class. </summary>
-///
-/// <remarks>	Me, 19/10/2013. </remarks>
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
+/// Doxygen test class
 class DoxygenTestClass
 {
     public:
     int DoxygenTestVariable; /// Test variable
 
-    DoxygenTestClass(int testInitVariable /** Test initialisation variable */)
+    /**
+     * Test initialisation
+     * @param testInitVariable test initialisation variable
+     */
+    DoxygenTestClass(int testInitVariable)
     {
         DoxygenTestVariable = testInitVariable;
     }
 };
 
 /**
-* Initialise OpenGL
-* We call this right after our OpenGL window is created.
-*/
+ * Initialise OpenGL
+ * @param Width The width of the window
+ * @param Height The height of the window
+ */
 void InitGL(
             int Width /**The width of the window*/,
             int Height /**The height of the window*/)
