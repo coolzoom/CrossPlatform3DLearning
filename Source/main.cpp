@@ -15,12 +15,6 @@ bool light;
 bool lp;
 bool fp;
 
-GLfloat xrot;
-GLfloat yrot;
-GLfloat xspeed;
-GLfloat yspeed;
-GLfloat z=-0.5f;
-
 GLfloat LightAmbient[] = {0.5f, 0.5f, 0.5f, 1.0f};
 GLfloat LightDiffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
 GLfloat LightPosition[] = {-5.0f, 0.0f, 2.0f, 1.0f};
