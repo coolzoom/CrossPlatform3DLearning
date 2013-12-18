@@ -9,7 +9,6 @@ BOOST_AUTO_TEST_CASE( my_test )
 #ifdef _WIN32
 	gc->LoadFromFile("../../../Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj");
 #else
-
 	gc->LoadFromFile("../../Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj");
 #endif
 	delete gc;

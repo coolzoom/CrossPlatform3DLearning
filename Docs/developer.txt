@@ -57,7 +57,8 @@ if they have been installed to the System directory or if their directories have
 environment variable.)
 To create an Eclipse project in Linux, run the following command from the Temp directory, mentioned above:
 cmake -G "Eclipse CDT4 - Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_ECLIPSE_MAKE_ARGUMENTS=-j8 ../Source/
-
+You will have to set the working directory from Build Configurations to where Temp and Temp/UnitTesting for the program
+and the unit tests respectively. Otherwise some files (like model files) will not be found during execution.
 * Simple compilation of sample OpenGL program (Ubuntu):
 
 gcc -lglut -lGL -lGLEW -lGLU main.cpp -o OpenGLExample
