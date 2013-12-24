@@ -11,6 +11,7 @@ BOOST_AUTO_TEST_CASE( my_test )
 #else
 	gc->LoadFromFile("../../Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj");
 #endif
+	gc->OutputVectors();
 	delete gc;
 
     BOOST_CHECK( 1 == 1 );
