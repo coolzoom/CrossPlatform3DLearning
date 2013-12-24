@@ -9,7 +9,7 @@ using namespace std;
 class GameCharacter
 {
 private:
-	vector<GLfloat**> objectTokens;
+	vector<GLfloat*> *objectTokens;
 public:
 	/**
 	 * Initialisation of the game character
