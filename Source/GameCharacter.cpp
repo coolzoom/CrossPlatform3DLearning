@@ -56,3 +56,9 @@ void GameCharacter::outputVertices() {
 				<< endl;
 	}
 }
+
+void GameCharacter::render() {
+	//glBegin(GL_TRIANGLES);
+
+	//glEnd();
+}

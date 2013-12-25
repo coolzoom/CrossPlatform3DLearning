@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include <iostream>
 
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
@@ -6,8 +7,15 @@
 #endif
 
 #include <SDL.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
+
+// After adding glew.h, these two had to be removed
+// for the project to compile.
+//#include <GL/gl.h>
+//#include <GL/glu.h>
+
+#include <GL/glew.h>
+
+using namespace std;
 
 float angle = 0;
 
@@ -48,6 +56,8 @@ public:
  */
 void InitGL(int Width /**The width of the window*/,
 		int Height /**The height of the window*/) {
+	cout << "OpenGL version supported by machine: " << glGetString(GL_VERSION)
+			<< endl;
 	glEnable(GL_TEXTURE_2D);
 
 	glViewport(0, 0, Width, Height);
@@ -164,8 +174,19 @@ int main(int argc, char** argv) {
 		printf("Unable to init SDL: %s\n", SDL_GetError());
 		return 1;
 	}
-
 	atexit(SDL_Quit);
+
+	glewInit();
+
+	if (glewIsSupported("GL_VERSION_2_0"))
+		cout << "Ready for OpenGL 2.0\n" << endl;
+	else {
+		cout << "OpenGL 2.0 is not supported by HW but maybe by SW" << endl;
+		// Even if not supported by hardware, it may be
+		// supported by software. In Linux, try
+		// LIBGL_ALWAYS_SOFTWARE=1 glxinfo | grep -i Opengl
+	}
+
 
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
@@ -180,7 +201,7 @@ int main(int argc, char** argv) {
 
 	if (!screen) {
 
-		printf("Unable to set video: %s\n", SDL_GetError());
+		cout << "Unable to set video: %s\n" << SDL_GetError() << endl;
 		return 1;
 	}
 
@@ -222,6 +243,6 @@ int main(int argc, char** argv) {
 	SDL_FreeSurface(icon);
 	SDL_FreeSurface(screen);
 
-	printf("Exited cleanly\n");
+	cout << "Exited cleanly\n";
 	return 0;
 }

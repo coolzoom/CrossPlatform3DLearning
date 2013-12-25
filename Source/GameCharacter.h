@@ -27,6 +27,11 @@ public:
 	 * Output vertices to stdout
 	 */
 	void outputVertices();
+
+	/**
+	 * Render the model
+	 */
+	void render();
 };
 
 
