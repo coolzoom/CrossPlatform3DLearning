@@ -9,7 +9,7 @@ using namespace std;
 class GameCharacter
 {
 private:
-	vector<GLfloat*> *objectTokens;
+	vector<GLfloat*> *vertices;
 public:
 	/**
 	 * Initialisation of the game character
@@ -21,12 +21,12 @@ public:
 	 * Load model from file
 	 * @param fileLocation The file location
 	 */
-	void LoadFromFile(string fileLocation);
+	void loadFromFile(string fileLocation);
 
 	/**
-	 * Output vectors to stdout
+	 * Output vertices to stdout
 	 */
-	void OutputVectors();
+	void outputVertices();
 };
 
 

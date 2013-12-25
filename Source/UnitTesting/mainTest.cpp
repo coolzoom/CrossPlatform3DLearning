@@ -7,11 +7,11 @@ BOOST_AUTO_TEST_CASE( my_test )
 {
 	GameCharacter *gc = new GameCharacter();
 #ifdef _WIN32
-	gc->LoadFromFile("../../../Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj");
+	gc->loadFromFile("../../../Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj");
 #else
-	gc->LoadFromFile("../../Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj");
+	gc->loadFromFile("../../Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj");
 #endif
-	gc->OutputVectors();
+	gc->outputVertices();
 	delete gc;
 
     BOOST_CHECK( 1 == 1 );
