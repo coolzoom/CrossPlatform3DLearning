@@ -27,6 +27,7 @@ sudo ln -s /usr/lib/libboost_unit_test_framework.so.1.46.1 /usr/lib/libboost_uni
   to be named according to how CMake expects to find it and placed in the proper directory. If that is not the
   case, a symbolic link can be made to correct the problem.)
 sudo apt-get install doxygen
+sudo apt-get install valgrind
 
 * Environment setup (Windows):
 
