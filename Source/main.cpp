@@ -8,12 +8,10 @@
 
 #include <SDL.h>
 
-// After adding glew.h, these two had to be removed
-// for the project to compile.
-//#include <GL/gl.h>
-//#include <GL/glu.h>
-
 #include <GL/glew.h>
+// The following need to be included AFTER glew.h
+#include <GL/gl.h>
+#include <GL/glu.h>
 
 using namespace std;
 
@@ -186,7 +184,6 @@ int main(int argc, char** argv) {
 		// supported by software. In Linux, try
 		// LIBGL_ALWAYS_SOFTWARE=1 glxinfo | grep -i Opengl
 	}
-
 
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
