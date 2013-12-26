@@ -1,4 +1,4 @@
-#include "GameCharacter.h"
+#include "Model.h"
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
@@ -7,13 +7,14 @@
 
 using namespace std;
 using namespace boost;
+using namespace AvoidTheBug3D;
 
-GameCharacter::GameCharacter(void) {
+Model::Model(void) {
 	vertices = new vector<GLfloat *>();
 	vertices->clear();
 }
 
-GameCharacter::~GameCharacter(void) {
+Model::~Model(void) {
 	if (vertices != NULL) {
 		for (int i=0; i != vertices->size(); ++i) {
 			delete[] vertices->at(i);
@@ -23,7 +24,7 @@ GameCharacter::~GameCharacter(void) {
 	}
 }
 
-void GameCharacter::loadFromFile(string fileLocation) {
+void Model::loadFromFile(string fileLocation) {
 	ifstream file(fileLocation.c_str());
 	string line;
 	if (file.is_open()) {
@@ -48,7 +49,7 @@ void GameCharacter::loadFromFile(string fileLocation) {
 
 }
 
-void GameCharacter::outputVertices() {
+void Model::outputVertices() {
 	int vectorCount = vertices->size();
 	for (int idx = 0; idx != vectorCount; ++idx) {
 		cout << "Vertice:" << vertices->at(idx)[0] << " - "
@@ -57,8 +58,9 @@ void GameCharacter::outputVertices() {
 	}
 }
 
-void GameCharacter::render() {
-	//glBegin(GL_TRIANGLES);
-
+void Model::render() {
+	// These won't work unless we link the unit tests with the
+	// OpenGL libraries
+	//glBegin(GL_QUADS);
 	//glEnd();
 }

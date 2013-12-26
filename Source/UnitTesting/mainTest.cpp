@@ -1,11 +1,13 @@
 #define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MODULE MyTest
 #include <boost/test/unit_test.hpp>
-#include "../GameCharacter.h"
+#include "../Model.h"
+
+using namespace AvoidTheBug3D;
 
 BOOST_AUTO_TEST_CASE( my_test )
 {
-	GameCharacter *gc = new GameCharacter();
+	Model *gc = new Model();
 #ifdef _WIN32
 	gc->loadFromFile("../../../Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj");
 #else

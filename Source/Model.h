@@ -5,17 +5,18 @@
 #include <vector>
 using namespace std;
 
+namespace AvoidTheBug3D {
+
 /// A game character
-class GameCharacter
-{
+class Model {
 private:
 	vector<GLfloat*> *vertices;
 public:
 	/**
 	 * Initialisation of the game character
 	 */
-	GameCharacter(void);
-	~GameCharacter(void);
+	Model(void);
+	~Model(void);
 
 	/**
 	 * Load model from file
@@ -34,4 +35,4 @@ public:
 	void render();
 };
 
-
+}

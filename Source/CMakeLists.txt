@@ -26,7 +26,9 @@ ENDIF(NOT GLEW_FOUND)
 INCLUDE_DIRECTORIES(${GLEW_INCLUDE_DIRS})
 MESSAGE(${GLEW_LIBRARIES})
 
-ADD_EXECUTABLE(game main.cpp GameCharacter.cpp GameCharacter.h)
+ADD_EXECUTABLE(game main.cpp Model.cpp Model.h GameLogic.h GameLogic.cpp
+ WorldObject.h WorldObject.cpp Character.h Character.cpp PlayerView.h
+ PlayerView.cpp Renderer.h Renderer.cpp)
 
 ADD_SUBDIRECTORY(UnitTesting)
 
