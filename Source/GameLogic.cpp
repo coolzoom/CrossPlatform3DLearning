@@ -2,7 +2,7 @@
  * GameLogic.cpp
  *
  *  Created on: Dec 26, 2013
- *      Author: me
+ *      Author: Dimitri Kourkoulis
  */
 
 #include "GameLogic.h"

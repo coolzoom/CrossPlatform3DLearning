@@ -2,7 +2,7 @@
  * PlayerView.h
  *
  *  Created on: Dec 26, 2013
- *      Author: me
+ *      Author: Dimitri Kourkoulis
  */
 
 #ifndef PLAYERVIEW_H_

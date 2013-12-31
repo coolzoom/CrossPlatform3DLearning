@@ -1,20 +1,20 @@
 /*
- * Character.cpp
+ * GameException.cpp
  *
- *  Created on: Dec 26, 2013
+ *  Created on: Dec 29, 2013
  *      Author: Dimitri Kourkoulis
  */
 
-#include "Character.h"
+#include "GameException.h"
 
 namespace AvoidTheBug3D {
 
-Character::Character() {
+GameException::GameException() {
 	// TODO Auto-generated constructor stub
 
 }
 
-Character::~Character() {
+GameException::~GameException() {
 	// TODO Auto-generated destructor stub
 }
 
