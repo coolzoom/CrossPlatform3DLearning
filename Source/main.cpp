@@ -3,12 +3,12 @@
 
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
+#include <windows.h>
 #endif
-
+#include <GL/glew.h>
 #include <SDL.h>
 
-#include <GL/glew.h>
+
 // The following need to be included AFTER glew.h
 #include <GL/gl.h>
 #include <GL/glu.h>

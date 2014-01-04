@@ -45,7 +45,7 @@ Download the Boost libraries (http://www.boost.org/) and unzip them in a folder.
 Create a folder to install the built version of the libraries of Boost, e.g. C:\boost_1_54_0_installed
 From the source Boost folder, execute 
 	bootstrap.bat
-	b2 install --prefix=C:\boost_1_54_0_installed address-model=32 --build-type=complete --with-test
+        b2 install --prefix=C:\boost_1_54_0_installed address-model=32 --build-type=complete --with-date_time --with-test
 Set environment variable BOOST_ROOT to C:\boost_1_54_0_installed\
 Set environment variable BOOST_LIBRARYDIR to C:\boost_1_54_0_installed\lib\
 
