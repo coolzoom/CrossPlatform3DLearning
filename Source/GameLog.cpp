@@ -6,16 +6,15 @@
  */
 
 #include "GameLog.h"
-#include <iostream>
+#include <ostream>
 #include <boost/date_time/posix_time/posix_time.hpp>
 
 using namespace std;
 
 namespace AvoidTheBug3D {
 
-GameLog::GameLog() {
-	// TODO Auto-generated constructor stub
-
+GameLog::GameLog(ostream &stream) {
+	logStream = &stream;
 }
 
 GameLog::~GameLog() {
@@ -48,7 +47,7 @@ void GameLog::append(const GameLogLevel level, const string message) {
 		break;
 	}
 
-	cout << dateTimeOstringstream.str().c_str() << " - " << indicator << ": " << message.c_str() << endl;
+	*logStream << dateTimeOstringstream.str().c_str() << " - " << indicator << ": " << message.c_str() << endl;
 }
 
 } /* namespace AvoidTheBug3D */

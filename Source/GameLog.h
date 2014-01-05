@@ -21,7 +21,7 @@
 #define LOGDEBUG(MESSAGE)
 #endif
 
-#include <iostream>
+#include <ostream>
 
 using namespace std;
 
@@ -35,11 +35,13 @@ enum GameLogLevel {
 };
 
 class GameLog {
+private:
+	ostream *logStream;
 public:
 	/**
 	 * Default constructor
 	 */
-	GameLog();
+	GameLog(ostream &stream);
 
 	/**
 	 * Destructor
