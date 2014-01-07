@@ -1,27 +1,21 @@
 /*
- * gameLogTest.cpp
+ * gameLogDebugTest.cpp
  *
- *  Created on: Dec 31, 2013
+ *  Created on: Jan 7, 2014
  *      Author: Dimitrios Kourkoulis
  */
 #include <boost/test/unit_test.hpp>
-
-#ifdef DEBUG
-#undef DEBUG
+#if not defined(DEBUG) && not defined(_DEBUG)
+#define DEBUG
 #endif
-
-#ifdef _DEBUG
-#undef _DEBUG
-#endif
-
 #include "../GameLog.h"
 #include <sstream>
 
 using namespace std;
 
 using namespace AvoidTheBug3D;
-BOOST_AUTO_TEST_SUITE(GameLogTestSuite)
-BOOST_AUTO_TEST_CASE( gameLogTest )
+BOOST_AUTO_TEST_SUITE(GameLogDebugTestSuite)
+BOOST_AUTO_TEST_CASE( gameLogDebugTest )
 {
 	ostringstream oss;
 
@@ -30,8 +24,8 @@ BOOST_AUTO_TEST_CASE( gameLogTest )
 	LOGINFO("It works");
 	BOOST_CHECK_EQUAL(oss.str().find("It works") != (string::npos), true);
 
-	LOGDEBUG("This should not appear")
-	BOOST_CHECK_EQUAL(oss.str().find("This should not appear") == (string::npos), true);
+	LOGDEBUG("This should appear")
+	BOOST_CHECK_EQUAL(oss.str().find("This should appear") != (string::npos), true);
 
 	delete log;
 }

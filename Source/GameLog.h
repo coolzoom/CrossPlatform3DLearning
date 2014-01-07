@@ -12,10 +12,12 @@
  * Logging is accessed through macros so that it can be completely
  * omitted if deactivated.
  */
-#define LOGINFO(MESSAGE) log->append(info, MESSAGE);
+
 #define LOGERROR(MESSAGE) log->append(error, MESSAGE);
 
-#ifdef GAMELOGDEBUG
+#define LOGINFO(MESSAGE) log->append(info, MESSAGE);
+
+#if defined(DEBUG) || defined(_DEBUG)
 #define LOGDEBUG(MESSAGE) log->append(debug, MESSAGE);
 #else
 #define LOGDEBUG(MESSAGE)

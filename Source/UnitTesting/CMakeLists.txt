@@ -5,7 +5,8 @@ INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
 LINK_LIBRARIES(
                ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
               )
-ADD_EXECUTABLE(unittest mainTest.cpp gameLogTest.cpp modelTest.cpp ../Model.cpp ../Model.h ../GameLogic.h ../GameLogic.cpp
+ADD_EXECUTABLE(unittest mainTest.cpp gameLogTest.cpp gameLogDebugTest.cpp modelTest.cpp 
+ ../Model.cpp ../Model.h ../GameLogic.h ../GameLogic.cpp
  ../WorldObject.h ../WorldObject.cpp ../Character.h ../Character.cpp ../PlayerView.h
  ../PlayerView.cpp ../Renderer.h ../Renderer.cpp ../GameLog.h ../GameLog.cpp)
 
