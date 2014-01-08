@@ -18,7 +18,7 @@ GameLog::GameLog(ostream &stream) {
 }
 
 GameLog::~GameLog() {
-	// TODO Auto-generated destructor stub
+
 }
 
 void GameLog::append(const GameLogLevel level, const string message) {

@@ -13,12 +13,12 @@
  * omitted if deactivated.
  */
 
-#define LOGERROR(MESSAGE) log->append(error, MESSAGE);
+#define LOGERROR(MESSAGE) log->append(error, MESSAGE)
 
-#define LOGINFO(MESSAGE) log->append(info, MESSAGE);
+#define LOGINFO(MESSAGE) log->append(info, MESSAGE)
 
 #if defined(DEBUG) || defined(_DEBUG)
-#define LOGDEBUG(MESSAGE) log->append(debug, MESSAGE);
+#define LOGDEBUG(MESSAGE) log->append(debug, MESSAGE)
 #else
 #define LOGDEBUG(MESSAGE)
 #endif
@@ -26,6 +26,7 @@
 #include <ostream>
 
 using namespace std;
+
 
 namespace AvoidTheBug3D {
 
@@ -36,6 +37,9 @@ enum GameLogLevel {
 	info, debug, error
 };
 
+/**
+ * Logging class
+ */
 class GameLog {
 private:
 	ostream *logStream;

@@ -15,9 +15,15 @@ using namespace std;
 namespace AvoidTheBug3D {
 
 class GameException : public exception  {
+private:
+	char *message;
 public:
 	GameException();
-	virtual ~GameException();
+	GameException(char * message);
+
+	virtual const char* what() const throw();
+
+	virtual ~GameException() throw();
 };
 
 } /* namespace AvoidTheBug3D */

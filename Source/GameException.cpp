@@ -10,12 +10,22 @@
 namespace AvoidTheBug3D {
 
 GameException::GameException() {
-	// TODO Auto-generated constructor stub
+	message = 0;
 
 }
 
-GameException::~GameException() {
+GameException::GameException(char* message) {
+	this->message = message;
+}
+
+const char* GameException::what() const throw () {
+	return message;
+}
+
+
+GameException::~GameException() throw() {
 	// TODO Auto-generated destructor stub
 }
 
 } /* namespace AvoidTheBug3D */
+
