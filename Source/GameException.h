@@ -9,6 +9,7 @@
 #define GAMEEXCEPTION_H_
 
 #include <exception>
+#include <string>
 
 using namespace std;
 
@@ -16,10 +17,10 @@ namespace AvoidTheBug3D {
 
 class GameException : public exception  {
 private:
-	char *message;
+	string message;
 public:
 	GameException();
-	GameException(char * message);
+	GameException(string message);
 
 	virtual const char* what() const throw();
 

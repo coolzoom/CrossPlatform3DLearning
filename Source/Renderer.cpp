@@ -40,7 +40,7 @@ void Renderer::Init(int width, int height) {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 
 		LOGERROR(SDL_GetError());
-		//throw GameException("Unable to init SDL");
+		throw GameException(string("Unable to init SDL"));
 	}
 
 	glewInit();
@@ -68,7 +68,7 @@ void Renderer::Init(int width, int height) {
 	if (!screen) {
 
 		LOGERROR(SDL_GetError());
-		//throw new GameException("Unable to set video");
+		throw GameException("Unable to set video");
 	}
 
 	//LOGINFO("OpenGL version supported by machine:");

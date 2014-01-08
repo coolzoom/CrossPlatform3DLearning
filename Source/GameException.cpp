@@ -10,16 +10,16 @@
 namespace AvoidTheBug3D {
 
 GameException::GameException() {
-	message = 0;
+
 
 }
 
-GameException::GameException(char* message) {
+GameException::GameException(string message) {
 	this->message = message;
 }
 
 const char* GameException::what() const throw () {
-	return message;
+	return message.c_str();
 }
 
 
