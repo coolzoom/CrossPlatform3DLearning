@@ -66,10 +66,10 @@ void Renderer::Init(int width, int height) {
 		throw GameException("Error initialising GLEW");
 	}
 
-	if (glewIsSupported("GL_VERSION_2_1")) {
-		LOGINFO("Ready for OpenGL 2.1");
+	if (glewIsSupported("GL_VERSION_3_3")) {
+		LOGINFO("Ready for OpenGL 3.3");
 	} else {
-		LOGINFO("OpenGL 2.1 is not supported");
+		LOGINFO("OpenGL 3.3 is not supported");
 	}
 
 	//LOGINFO("OpenGL version supported by machine:");

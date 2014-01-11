@@ -37,7 +37,9 @@ sudo apt-get install valgrind
 Download and install cmake (http://www.cmake.org/). I am using version 2.8.
 Download SDL and unzip it to a folder (http://www.libsdl.org/). I am using version 1.2.
 Create an SDLDIR environment variable and set it to that folder
-In the lib subdirectory of SDL, choose the 64 or 32 bit subdirectory and copy its contents one level up
+In the lib subdirectory of SDL, copy the contents of the 32 bit subdirectory one level up
+Download GLEW for windows (http://glew.sourceforge.net/) and unzip it to a folder.
+Create GLEW_ROOT_DIR environment variable and set it to that folder.
 Download and install Doxygen (http://www.stack.nl/~dimitri/doxygen/)
 Download the Boost libraries (http://www.boost.org/) and unzip them in a folder. I am using version 1.54. 
 (In Ubuntu I am using an earlier version because it was the latest available for my package manager)
@@ -54,8 +56,11 @@ Create a directory, called "Temp" in the root folder of the project. Then go to 
 execute the following (you might need to use backslashes in Windows, depending on your shell):
     cmake ../Source
 Then, in Linux, you just need to run make and you will have the executable ready to run. In Windows,
-a Visual Studio project will be created, which you can open with Visual Studio 2010, compile and execute.
-In Windows you will probably need to copy the dlls of the libraries we are using (SDL, Boost, etc) to the
+a Visual Studio project will be created, which you can open with Visual Studio 2010, compile and execute. If 
+the linker reports that it cannot find a library from Boost or GLEW, you need to right click on the project, 
+select Properties, and go to Configuration Properties > Linker > Input and edit the Additional Dependencies.
+Locate the library that cannot be found and, if it does not start by "lib", add that prefix to it.
+In Windows you will probably need to copy the dlls of the libraries we are using (SDL, Boost, GLEW etc) to the
 output directory (Release or Debug), unless they are already accessible in your system (e.g.
 if they have been installed to the System directory or if their directories have been included in the PATH
 environment variable.)
