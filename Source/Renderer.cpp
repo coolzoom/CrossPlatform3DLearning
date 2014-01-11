@@ -8,8 +8,6 @@
 #include "GameException.h"
 #include "GameLog.h"
 
-
-
 namespace AvoidTheBug3D {
 
 #include <GL/glew.h>

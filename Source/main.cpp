@@ -8,6 +8,7 @@
 
 #include "GameLog.h"
 #include "Renderer.h"
+#include "GameException.h"
 
 using namespace std;
 using namespace AvoidTheBug3D;
@@ -21,7 +22,16 @@ int main(int argc, char** argv) {
 	log = new GameLog(cout);
 
 	Renderer *renderer = new Renderer(log);
-	renderer->Init(1024, 768);
+	try
+	{
+		renderer->Init(1024, 768);
+	}
+	catch(GameException &e)
+	{
+		delete renderer;
+		LOGERROR(e.what());
+		return 1;
+	}
 
 	// program main loop
 	bool done = false;
