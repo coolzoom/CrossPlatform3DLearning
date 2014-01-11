@@ -41,17 +41,6 @@ void Renderer::Init(int width, int height) {
 		throw GameException(string("Unable to init SDL"));
 	}
 
-	glewInit();
-
-	if (glewIsSupported("GL_VERSION_2_1"))
-		LOGINFO("Ready for OpenGL 2.1");
-	else {
-		LOGINFO("OpenGL 2.1 is not supported by HW but maybe by SW");
-		// Even if not supported by hardware, it may be
-		// supported by software. In Linux, try
-		// LIBGL_ALWAYS_SOFTWARE=1 glxinfo | grep -i Opengl
-	}
-
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
@@ -67,6 +56,20 @@ void Renderer::Init(int width, int height) {
 
 		LOGERROR(SDL_GetError());
 		throw GameException("Unable to set video");
+	}
+
+	string glVersion = (char*) glGetString(GL_VERSION);
+	glVersion = "OpenGL version supported by machine: " + glVersion;
+	LOGINFO(glVersion);
+
+	if (glewInit() != GLEW_OK) {
+		throw GameException("Error initialising GLEW");
+	}
+
+	if (glewIsSupported("GL_VERSION_2_1")) {
+		LOGINFO("Ready for OpenGL 2.1");
+	} else {
+		LOGINFO("OpenGL 2.1 is not supported");
 	}
 
 	//LOGINFO("OpenGL version supported by machine:");
