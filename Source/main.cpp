@@ -8,6 +8,7 @@
 
 #include "GameLog.h"
 #include "Renderer.h"
+#include "RendererOpenGL14.h"
 #include "GameException.h"
 
 using namespace std;
@@ -21,7 +22,7 @@ int main(int argc, char** argv) {
 
 	log = new GameLog(cout);
 
-	Renderer *renderer = new Renderer(log);
+	Renderer *renderer = new RendererOpenGL14(log);
 	try
 	{
 		renderer->Init(1024, 768);

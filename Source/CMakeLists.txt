@@ -1,11 +1,19 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 PROJECT(game)
 
+if(WIN32)
 FIND_PACKAGE(Boost COMPONENTS date_time REQUIRED)
+else()
+FIND_PACKAGE(Boost REQUIRED)
+endif()
+
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
+
+if (WIN32)
 LINK_LIBRARIES(
                ${Boost_DATE_TIME_LIBRARY}
               )
+endif()
 
 FIND_PACKAGE(SDL REQUIRED)
 
@@ -34,7 +42,7 @@ MESSAGE(${GLEW_LIBRARIES})
 
 ADD_EXECUTABLE(game main.cpp GameLog.cpp Model.cpp GameLogic.cpp
  WorldObject.cpp Character.cpp 
- PlayerView.cpp Renderer.cpp GameException.cpp
+ PlayerView.cpp Renderer.cpp RendererOpenGL14.cpp GameException.cpp
  )
 
 ADD_SUBDIRECTORY(UnitTesting)
