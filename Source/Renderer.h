@@ -31,7 +31,7 @@ public:
 	/**
 	 * Destructor
 	 */
-	virtual ~Renderer() = 0;
+	virtual ~Renderer();
 
 };
 
