@@ -17,7 +17,6 @@
 
 #include "GameLog.h"
 #include "Renderer.h"
-using namespace AvoidTheBug3D;
 
 namespace AvoidTheBug3D {
 
@@ -45,11 +44,6 @@ public:
 	 */
 	RendererOpenGL14(GameLog *log);
 
-	/**
-	 * Initialise renderer (OpenGL, GLEW, etc)
-	 * @param width The width of the window
-	 * @param height The height of the window
-	 */
 	void Init(int width, int height);
 
 	void DrawScene();

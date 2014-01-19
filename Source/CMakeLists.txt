@@ -42,7 +42,7 @@ MESSAGE(${GLEW_LIBRARIES})
 
 ADD_EXECUTABLE(game main.cpp GameLog.cpp Model.cpp GameLogic.cpp
  WorldObject.cpp Character.cpp 
- PlayerView.cpp Renderer.cpp RendererOpenGL14.cpp GameException.cpp
+ PlayerView.cpp Renderer.cpp RendererOpenGL14.cpp RendererOpenGL33.cpp GameException.cpp
  )
 
 ADD_SUBDIRECTORY(UnitTesting)
