@@ -1,4 +1,4 @@
-# CMakeLists - Avoid the Bug 3D - Unit Testing
+# CMakeLists - Avoid the Bug 3D
 #
 # Created on: Aug 10, 2013
 #     Author: Dimitri Kourkoulis
