@@ -23,6 +23,7 @@ using namespace AvoidTheBug3D;
 BOOST_AUTO_TEST_SUITE(GameLogTestSuite)
 BOOST_AUTO_TEST_CASE( gameLogTest )
 {
+
 	ostringstream oss;
 
 	GameLog *log = new GameLog(oss);

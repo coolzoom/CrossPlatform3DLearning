@@ -10,7 +10,7 @@
 
 using namespace AvoidTheBug3D;
 BOOST_AUTO_TEST_SUITE(ModelTestSuite)
-BOOST_AUTO_TEST_CASE( my_test ) {
+BOOST_AUTO_TEST_CASE( model_test ) {
 	Model *gc = new Model();
 #ifdef _WIN32
 	gc->loadFromFile("../../../Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj");
