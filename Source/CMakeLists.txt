@@ -4,7 +4,7 @@ PROJECT(game)
 if(WIN32)
 FIND_PACKAGE(Boost COMPONENTS date_time REQUIRED)
 else()
-FIND_PACKAGE(Boost REQUIRED)
+FIND_PACKAGE(Boost COMPONENTS filesystem system REQUIRED)
 endif()
 
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
@@ -14,6 +14,11 @@ LINK_LIBRARIES(
                ${Boost_DATE_TIME_LIBRARY}
               )
 endif()
+
+LINK_LIBRARIES(
+			   ${Boost_FILESYSTEM_LIBRARIES}
+               ${Boost_SYSTEM_LIBRARIES}
+               )
 
 FIND_PACKAGE(SDL REQUIRED)
 

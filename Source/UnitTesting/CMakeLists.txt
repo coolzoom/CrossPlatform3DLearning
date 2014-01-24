@@ -3,13 +3,15 @@ PROJECT(unittest)
 if (WIN32)
 FIND_PACKAGE(Boost COMPONENTS unit_test_framework date_time REQUIRED)
 else()
-FIND_PACKAGE(Boost COMPONENTS unit_test_framework REQUIRED)
+FIND_PACKAGE(Boost COMPONENTS unit_test_framework filesystem system REQUIRED)
 endif()
 
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
 
 LINK_LIBRARIES(
                ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+               ${Boost_FILESYSTEM_LIBRARIES}
+               ${Boost_SYSTEM_LIBRARIES}
 )
 
 if (WIN32)
@@ -19,8 +21,7 @@ LINK_LIBRARIES(
 endif()
 
 ADD_EXECUTABLE(unittest mainTest.cpp gameLogTest.cpp gameLogDebugTest.cpp modelTest.cpp 
- ../Model.cpp ../GameLogic.cpp
- ../WorldObject.cpp ../Character.cpp
- ../PlayerView.cpp ../GameLog.cpp)
+ ../Model.cpp ../GameLogic.cpp ../WorldObject.cpp ../Character.cpp ../PlayerView.cpp 
+ ../GameLog.cpp ../Configuration.cpp configurationTest.cpp)
 
 

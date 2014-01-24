@@ -8,12 +8,29 @@
 #ifndef CONFIGURATION_H_
 #define CONFIGURATION_H_
 
+#include <string>
+
+using namespace std;
+
 namespace AvoidTheBug3D {
 
 class Configuration {
 public:
+	/**
+	 * Default constructor
+	 */
 	Configuration();
+
+	/**
+	 * Destructor
+	 */
 	virtual ~Configuration();
+
+	/**
+	 * Get the home directory of the application
+	 * @return The home diractory
+	 */
+	string getHomeDirectory();
 };
 
 } /* namespace AvoidTheBug3D */
