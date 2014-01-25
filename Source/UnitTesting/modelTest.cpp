@@ -14,16 +14,14 @@ using namespace AvoidTheBug3D;
 BOOST_AUTO_TEST_SUITE(ModelTestSuite)
 BOOST_AUTO_TEST_CASE( model_test ) {
 
-	Model *modelPtr = new Model();
-	boost::scoped_ptr<Model> model(modelPtr);
-
 	GameLog *logPtr = new GameLog(cout);
 	boost::shared_ptr<GameLog> log(logPtr);
 
 	Configuration *cfgPtr = new Configuration(log);
-	boost::scoped_ptr<Configuration> cfg(cfgPtr);
+	boost::shared_ptr<Configuration> cfg(cfgPtr);
 
-	model->loadFromFile(cfg->getHomeDirectory() + "/Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj" );
+	Model *modelPtr = new Model("/Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj", cfg, log);
+	boost::scoped_ptr<Model> model(modelPtr);
 
 	BOOST_CHECK_EQUAL(model->getNumVertices() > 0, true);
 

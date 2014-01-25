@@ -115,7 +115,7 @@ void RendererOpenGL14::DrawScene() {
 	glBegin(GL_QUADS);				// start drawing a polygon (4 sided)
 
 	// Front Face
-	glNormal3f(0.0f, 0.0f, 1.0f);		// Normal Pointing Towards Viewer
+	//glNormal3f(0.0f, 0.0f, 1.0f);		// Normal Pointing Towards Viewer
 	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(-1.0f, -1.0f, 1.0f);	// Point 1 (Front)
 	glTexCoord2f(1.0f, 0.0f);
@@ -125,7 +125,7 @@ void RendererOpenGL14::DrawScene() {
 	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(-1.0f, 1.0f, 1.0f);	// Point 4 (Front)
 	// Back Face
-	glNormal3f(0.0f, 0.0f, -1.0f);			// Normal Pointing Away From Viewer
+	//glNormal3f(0.0f, 0.0f, -1.0f);			// Normal Pointing Away From Viewer
 	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(-1.0f, -1.0f, -1.0f);	// Point 1 (Back)
 	glTexCoord2f(1.0f, 1.0f);
@@ -135,7 +135,7 @@ void RendererOpenGL14::DrawScene() {
 	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(1.0f, -1.0f, -1.0f);	// Point 4 (Back)
 	// Top Face
-	glNormal3f(0.0f, 1.0f, 0.0f);					// Normal Pointing Up
+	//glNormal3f(0.0f, 1.0f, 0.0f);					// Normal Pointing Up
 	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(-1.0f, 1.0f, -1.0f);	// Point 1 (Top)
 	glTexCoord2f(0.0f, 0.0f);
@@ -145,7 +145,7 @@ void RendererOpenGL14::DrawScene() {
 	glTexCoord2f(1.0f, 1.0f);
 	glVertex3f(1.0f, 1.0f, -1.0f);	// Point 4 (Top)
 	// Bottom Face
-	glNormal3f(0.0f, -1.0f, 0.0f);					// Normal Pointing Down
+	//glNormal3f(0.0f, -1.0f, 0.0f);					// Normal Pointing Down
 	glTexCoord2f(1.0f, 1.0f);
 	glVertex3f(-1.0f, -1.0f, -1.0f);	// Point 1 (Bottom)
 	glTexCoord2f(0.0f, 1.0f);
@@ -155,7 +155,7 @@ void RendererOpenGL14::DrawScene() {
 	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(-1.0f, -1.0f, 1.0f);	// Point 4 (Bottom)
 	// Right face
-	glNormal3f(1.0f, 0.0f, 0.0f);					// Normal Pointing Right
+	//glNormal3f(1.0f, 0.0f, 0.0f);					// Normal Pointing Right
 	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(1.0f, -1.0f, -1.0f);	// Point 1 (Right)
 	glTexCoord2f(1.0f, 1.0f);
@@ -165,7 +165,7 @@ void RendererOpenGL14::DrawScene() {
 	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(1.0f, -1.0f, 1.0f);	// Point 4 (Right)
 	// Left Face
-	glNormal3f(-1.0f, 0.0f, 0.0f);					// Normal Pointing Left
+	//glNormal3f(-1.0f, 0.0f, 0.0f);					// Normal Pointing Left
 	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(-1.0f, -1.0f, -1.0f);	// Point 1 (Left)
 	glTexCoord2f(1.0f, 0.0f);

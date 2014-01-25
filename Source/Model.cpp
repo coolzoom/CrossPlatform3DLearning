@@ -4,14 +4,19 @@
 #include <stdlib.h>
 #include <boost/foreach.hpp>
 #include <boost/tokenizer.hpp>
+#include "GameException.h"
 
 using namespace std;
 using namespace boost;
 namespace AvoidTheBug3D {
 
-Model::Model(void) {
+Model::Model(string filename, const boost::shared_ptr<Configuration> &cfg, const boost::shared_ptr<GameLog> &log) {
+	this->cfg = cfg;
+	this->log = log;
+
 	vertices = new vector<GLfloat *>();
 	vertices->clear();
+	loadFromFile(filename);
 }
 
 Model::~Model(void) {
@@ -25,7 +30,7 @@ Model::~Model(void) {
 }
 
 void Model::loadFromFile(string fileLocation) {
-	ifstream file(fileLocation.c_str());
+	ifstream file((cfg->getHomeDirectory() + fileLocation).c_str());
 	string line;
 	if (file.is_open()) {
 		while (getline(file, line)) {
@@ -45,7 +50,7 @@ void Model::loadFromFile(string fileLocation) {
 		}
 		file.close();
 	} else
-		cout << "Could not open file." << endl;
+		throw GameException("Could not open file " + cfg->getHomeDirectory() + fileLocation);
 
 }
 
