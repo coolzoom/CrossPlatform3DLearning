@@ -30,11 +30,9 @@ sudo apt-get install libboost-test1.46.1
 sudo ln -s /usr/lib/libboost_unit_test_framework.so.1.46.1 
 /usr/lib/libboost_unit_test_framework.so (The exact
   versioned name may differ, depending on the version of the Boost library and 
-the versioned file's path may
-  differ depending on the Linux distribution. The point is that the 
-libboost_unit_test_framework library needs
-  to be named according to how CMake expects to find it and placed in the proper 
-directory. If that is not the
+  the versioned file's path may differ depending on the Linux distribution. The point 
+  is that the libboost_unit_test_framework library needs to be named according to 
+  how CMake expects to find it and placed in the proper directory. If that is not the
   case, a symbolic link can be made to correct the problem.)
 sudo apt-get install libboost-filesystem-dev
 sudo apt-get install libboost-filesystem1.46.1
