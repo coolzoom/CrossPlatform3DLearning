@@ -2,7 +2,7 @@
  * Configuration.cpp
  *
  *  Created on: Jan 19, 2014
- *      Author: me
+ *      Author: Dimitri Kourkoulis
  */
 
 #include "Configuration.h"

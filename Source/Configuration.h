@@ -2,7 +2,7 @@
  * Configuration.h
  *
  *  Created on: Jan 19, 2014
- *      Author: me
+ *      Author: Dimitri Kourkoulis
  */
 
 #ifndef CONFIGURATION_H_
