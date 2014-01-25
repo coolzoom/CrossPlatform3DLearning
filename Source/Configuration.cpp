@@ -26,40 +26,39 @@ Configuration::~Configuration() {
 }
 
 string Configuration::getHomeDirectory() {
-	string current = string(boost::filesystem::current_path().c_str());
-    string currentLower = current;
+	boost::filesystem::path homePath = boost::filesystem::current_path();
+    string currentLower = string(homePath.c_str());
     transform(currentLower.begin(), currentLower.end(), currentLower.begin(), ::tolower);
     string homeDirectory;
     if (boost::algorithm::ends_with(currentLower, "unittesting")) // Linux unit testing
     {
-
+    	homePath = homePath.branch_path().branch_path();
     }
     else if (boost::algorithm::ends_with(currentLower, "temp")) // Linux IDE execution
     {
-
+    	homePath = homePath.branch_path();
     }
     else if (boost::algorithm::ends_with(currentLower, "debug") ||
     		boost::algorithm::ends_with(currentLower, "release")) // Windows
     {
     	if (currentLower.find("unittesting")) // Unit testing
     	{
-
+    		homePath = homePath.branch_path().branch_path().branch_path();
     	}
     	else // IDE execution
     	{
-
+    		homePath = homePath.branch_path().branch_path();
     	}
     }
     else if (boost::algorithm::ends_with(currentLower, "bin")) // production
     {
-
+    	homePath = homePath.branch_path();
     }
     else // if no conditions is met, the home directory cannot be determined
     {
     	throw GameException("Could not determine the home directory");
-
     }
-	return homeDirectory;
+	return string(homePath.c_str());
 }
 
 

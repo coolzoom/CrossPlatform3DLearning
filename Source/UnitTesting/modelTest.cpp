@@ -7,17 +7,17 @@
 #include <boost/test/unit_test.hpp>
 #include "../Model.h"
 #include "../GameLog.h"
+#include "../Configuration.h"
 
 using namespace AvoidTheBug3D;
 BOOST_AUTO_TEST_SUITE(ModelTestSuite)
 BOOST_AUTO_TEST_CASE( model_test ) {
 	Model *gc = new Model();
-#ifdef _WIN32
-	gc->loadFromFile("../../../Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj");
-#else
-	gc->loadFromFile("../../Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj");
-#endif
+	Configuration *cfg = new Configuration();
+	gc->loadFromFile(cfg->getHomeDirectory() + "/Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj" );
 	gc->outputVertices();
+
+	delete cfg;
 	delete gc;
 
 	BOOST_CHECK(1 == 1);
