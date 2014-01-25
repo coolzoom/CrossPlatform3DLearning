@@ -17,6 +17,7 @@
 
 #include "GameLog.h"
 #include "Renderer.h"
+#include <boost/smart_ptr.hpp>
 
 namespace AvoidTheBug3D {
 
@@ -29,7 +30,7 @@ const GLfloat LightPosition[] = { -5.0f, 0.0f, 2.0f, 1.0f };
  */
 class RendererOpenGL14 : public Renderer {
 private:
-	GameLog *log;
+	boost::shared_ptr<GameLog> log;
 	float angle;
 
 	SDL_Surface *screen;
@@ -42,7 +43,7 @@ public:
 	 * Constructor
 	 * @param log The logger class to be used
 	 */
-	RendererOpenGL14(GameLog *log);
+	RendererOpenGL14(boost::shared_ptr<GameLog> log);
 
 	void Init(int width, int height);
 

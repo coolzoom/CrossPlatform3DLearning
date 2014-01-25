@@ -10,6 +10,7 @@
 #include "Renderer.h"
 #include "RendererOpenGL14.h"
 #include "GameException.h"
+#include <boost/smart_ptr.hpp>
 
 using namespace std;
 using namespace AvoidTheBug3D;
@@ -18,18 +19,18 @@ const GLuint frameRate = 60;
 
 int main(int argc, char** argv) {
 
-	GameLog *log;
+	GameLog *logPtr = new GameLog(cout);
+	boost::shared_ptr<GameLog> log(logPtr);
 
-	log = new GameLog(cout);
+	Renderer *rendererPtr = new RendererOpenGL14(log);
+	boost::shared_ptr<Renderer> renderer(rendererPtr);
 
-	Renderer *renderer = new RendererOpenGL14(log);
 	try
 	{
 		renderer->Init(1024, 768);
 	}
 	catch(GameException &e)
 	{
-		delete renderer;
 		LOGERROR(e.what());
 		return 1;
 	}
@@ -66,7 +67,5 @@ int main(int argc, char** argv) {
 			renderer->DrawScene();
 		}
 	}
-	delete renderer;
-	delete log;
 	return 0;
 }

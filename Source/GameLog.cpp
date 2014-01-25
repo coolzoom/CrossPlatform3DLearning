@@ -18,6 +18,7 @@ GameLog::GameLog(ostream &stream) {
 }
 
 GameLog::~GameLog() {
+	this->append(info, "Logger getting destroyed");
 
 }
 

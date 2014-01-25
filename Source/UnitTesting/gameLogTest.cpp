@@ -16,6 +16,7 @@
 
 #include "../GameLog.h"
 #include <sstream>
+#include <boost/smart_ptr.hpp>
 
 using namespace std;
 
@@ -23,10 +24,10 @@ using namespace AvoidTheBug3D;
 BOOST_AUTO_TEST_SUITE(GameLogTestSuite)
 BOOST_AUTO_TEST_CASE( gameLogTest )
 {
-
 	ostringstream oss;
 
-	GameLog *log = new GameLog(oss);
+	GameLog *logPtr = new GameLog(oss);
+	boost::scoped_ptr<GameLog> log(logPtr);
 
 	LOGINFO("It works");
 	BOOST_CHECK_EQUAL(oss.str().find("It works") != (string::npos), true);
@@ -34,6 +35,5 @@ BOOST_AUTO_TEST_CASE( gameLogTest )
 	LOGDEBUG("This should not appear")
 	BOOST_CHECK_EQUAL(oss.str().find("This should not appear") == (string::npos), true);
 
-	delete log;
 }
 BOOST_AUTO_TEST_SUITE_END()

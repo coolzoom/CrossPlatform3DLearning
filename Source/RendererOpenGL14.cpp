@@ -17,19 +17,18 @@ namespace AvoidTheBug3D {
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-RendererOpenGL14::RendererOpenGL14(GameLog *log) {
+RendererOpenGL14::RendererOpenGL14(boost::shared_ptr<GameLog> log) {
 	this->log = log;
 	screen = 0;
 	icon = SDL_LoadBMP("ONLINE32.BMP");
-
 	angle = 0;
 }
 
 RendererOpenGL14::~RendererOpenGL14() {
+	LOGINFO("OpenGL 1.4 renderer getting destroyed");
 	SDL_FreeSurface(icon);
 	SDL_FreeSurface(screen);
 	SDL_Quit();
-
 }
 
 void RendererOpenGL14::Init(int width, int height) {
