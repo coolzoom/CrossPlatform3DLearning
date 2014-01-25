@@ -9,17 +9,23 @@
 #define CONFIGURATION_H_
 
 #include <string>
+#include <boost/smart_ptr.hpp>
+#include "GameLog.h"
 
 using namespace std;
 
 namespace AvoidTheBug3D {
 
 class Configuration {
+private:
+	boost::shared_ptr<GameLog> log;
+	string homeDirectory;
+	void findHomeDirectory();
 public:
 	/**
-	 * Default constructor
+	 * Constructor
 	 */
-	Configuration();
+	Configuration(boost::shared_ptr<GameLog> log);
 
 	/**
 	 * Destructor
@@ -28,7 +34,7 @@ public:
 
 	/**
 	 * Get the home directory of the application
-	 * @return The home diractory
+	 * @return The home directory
 	 */
 	string getHomeDirectory();
 };

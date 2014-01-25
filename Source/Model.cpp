@@ -7,7 +7,7 @@
 
 using namespace std;
 using namespace boost;
-using namespace AvoidTheBug3D;
+namespace AvoidTheBug3D {
 
 Model::Model(void) {
 	vertices = new vector<GLfloat *>();
@@ -16,7 +16,7 @@ Model::Model(void) {
 
 Model::~Model(void) {
 	if (vertices != NULL) {
-		for (int i=0; i != vertices->size(); ++i) {
+		for (int i = 0; i != vertices->size(); ++i) {
 			delete[] vertices->at(i);
 		}
 		vertices->clear();
@@ -34,12 +34,12 @@ void Model::loadFromFile(string fileLocation) {
 				tokenizer<char_separator<char> > tokens(line, sep);
 				int idx = 0;
 				GLfloat *v = new GLfloat[3];
-				BOOST_FOREACH (const string& t, tokens) {
-					if (idx > 0) {
-						v[idx - 1] = atof(t.c_str());
-					}
-					++idx;
+				BOOST_FOREACH (const string& t, tokens){
+				if (idx > 0) {
+					v[idx - 1] = atof(t.c_str());
 				}
+				++idx;
+			}
 				vertices->push_back(v);
 			}
 		}
@@ -63,4 +63,9 @@ void Model::render() {
 	// OpenGL libraries
 	//glBegin(GL_QUADS);
 	//glEnd();
+}
+
+int Model::getNumVertices() {
+	return (int)this->vertices->size();
+}
 }

@@ -17,20 +17,15 @@ BOOST_AUTO_TEST_CASE( model_test ) {
 	Model *modelPtr = new Model();
 	boost::scoped_ptr<Model> model(modelPtr);
 
+	GameLog *logPtr = new GameLog(cout);
+	boost::shared_ptr<GameLog> log(logPtr);
 
-	Configuration *cfgPtr = new Configuration();
+	Configuration *cfgPtr = new Configuration(log);
 	boost::scoped_ptr<Configuration> cfg(cfgPtr);
 
 	model->loadFromFile(cfg->getHomeDirectory() + "/Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj" );
-	model->outputVertices();
 
-	BOOST_CHECK(1 == 1);
-	BOOST_REQUIRE(1 == 1);
-	BOOST_CHECK_MESSAGE(1 == 2, "Ooops! Just testing :)");
+	BOOST_CHECK_EQUAL(model->getNumVertices() > 0, true);
 
-	BOOST_ERROR("Testing again");
-	//BOOST_FAIL("Testing FAIL, and here it stops");
-	//BOOST_CHECK_MESSAGE(1 == 2,
-		//	"This should not appear (execution stops on BOOST_FAIL)");
 }
 BOOST_AUTO_TEST_SUITE_END()

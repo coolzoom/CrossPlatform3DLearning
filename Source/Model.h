@@ -37,6 +37,12 @@ public:
 	 * Render the model
 	 */
 	void render();
+
+	/**
+	 * Get the number of vertices in the model
+	 * @return The number of vertices
+	 */
+	int getNumVertices();
 };
 
 }
