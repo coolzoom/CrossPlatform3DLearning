@@ -22,15 +22,15 @@ int main(int argc, char** argv) {
 	GameLog *logPtr = new GameLog(cout);
 	boost::shared_ptr<GameLog> log(logPtr);
 
+	Configuration *confPtr = new Configuration(log);
+	boost::shared_ptr<Configuration> cfg(confPtr);
+
 	Renderer *rendererPtr = new RendererOpenGL14(log);
 	boost::shared_ptr<Renderer> renderer(rendererPtr);
 
-	try
-	{
+	try {
 		renderer->Init(1024, 768);
-	}
-	catch(GameException &e)
-	{
+	} catch (GameException &e) {
 		LOGERROR(e.what());
 		return 1;
 	}
@@ -42,6 +42,12 @@ int main(int argc, char** argv) {
 	GLuint ticks = SDL_GetTicks();
 	GLuint prevTicks = ticks;
 	GLuint ticksInterval = 1000 / frameRate;
+
+	WorldObject *object = new WorldObject("animal", "/Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj", cfg, log);
+	vector<WorldObject> *scenePtr = new vector<WorldObject>();
+	scenePtr->push_back(*object);
+
+	boost::shared_ptr<vector<WorldObject> > scene(scenePtr);
 
 	while (!done) {
 
@@ -64,7 +70,7 @@ int main(int argc, char** argv) {
 		ticks = SDL_GetTicks();
 		if (ticks - prevTicks > ticksInterval) {
 			prevTicks = ticks;
-			renderer->DrawScene();
+			renderer->DrawScene(scene);
 		}
 	}
 	return 0;

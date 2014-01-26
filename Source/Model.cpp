@@ -14,7 +14,7 @@ Model::Model(string filename, const boost::shared_ptr<Configuration> &cfg, const
 	this->cfg = cfg;
 	this->log = log;
 
-	vertices = new vector<GLfloat *>();
+	vertices = new vector<float *>();
 	vertices->clear();
 	loadFromFile(filename);
 }
@@ -38,7 +38,7 @@ void Model::loadFromFile(string fileLocation) {
 				char_separator<char> sep(" ");
 				tokenizer<char_separator<char> > tokens(line, sep);
 				int idx = 0;
-				GLfloat *v = new GLfloat[3];
+				float *v = new float[3];
 				BOOST_FOREACH (const string& t, tokens){
 				if (idx > 0) {
 					v[idx - 1] = atof(t.c_str());
@@ -63,14 +63,12 @@ void Model::outputVertices() {
 	}
 }
 
-void Model::render() {
-	// These won't work unless we link the unit tests with the
-	// OpenGL libraries
-	//glBegin(GL_QUADS);
-	//glEnd();
-}
-
 int Model::getNumVertices() {
 	return (int)this->vertices->size();
 }
+
+vector<float*>* Model::getVertices() {
+	return vertices;
+}
+
 }

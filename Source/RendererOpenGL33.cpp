@@ -17,7 +17,7 @@ RendererOpenGL33::RendererOpenGL33() {
 void RendererOpenGL33::Init(int width, int height) {
 }
 
-void RendererOpenGL33::DrawScene() {
+void RendererOpenGL33::DrawScene(boost::shared_ptr<vector<WorldObject> > scene) {
 }
 
 RendererOpenGL33::~RendererOpenGL33() {

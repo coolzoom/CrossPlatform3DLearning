@@ -5,7 +5,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif
-#include <GL/gl.h>
+
 #include <vector>
 #include <boost/smart_ptr.hpp>
 #include "GameLog.h"
@@ -18,7 +18,7 @@ namespace AvoidTheBug3D {
 /// A game character
 class Model {
 private:
-	vector<GLfloat*> *vertices;
+	vector<float*> *vertices;
 	boost::shared_ptr<Configuration> cfg;
 	boost::shared_ptr<GameLog> log;
 	void loadFromFile(string fileLocation);
@@ -38,15 +38,16 @@ public:
 	void outputVertices();
 
 	/**
-	 * Render the model
-	 */
-	void render();
-
-	/**
 	 * Get the number of vertices in the model
 	 * @return The number of vertices
 	 */
 	int getNumVertices();
+
+	/**
+	 * Get the vertices of the model
+	 * @return The vertices
+	 */
+	vector<float*>* getVertices();
 };
 
 }

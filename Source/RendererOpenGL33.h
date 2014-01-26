@@ -19,7 +19,7 @@ public:
 
 	void Init(int width, int height);
 
-	void DrawScene();
+	void DrawScene(boost::shared_ptr<vector<WorldObject> > scene);
 
 	virtual ~RendererOpenGL33();
 };

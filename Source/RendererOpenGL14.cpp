@@ -7,15 +7,10 @@
 #include "RendererOpenGL14.h"
 #include "GameException.h"
 #include "GameLog.h"
+#include <boost/foreach.hpp>
+#include <iterator>
 
 namespace AvoidTheBug3D {
-
-#include <GL/glew.h>
-#include <SDL.h>
-
-// The following need to be included AFTER glew.h
-#include <GL/gl.h>
-#include <GL/glu.h>
 
 RendererOpenGL14::RendererOpenGL14(boost::shared_ptr<GameLog> log) {
 	this->log = log;
@@ -101,7 +96,8 @@ void RendererOpenGL14::Init(int width, int height) {
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void RendererOpenGL14::DrawScene() {
+void RendererOpenGL14::DrawScene(
+		boost::shared_ptr<vector<WorldObject> > scene) {
 	if (angle > 360)
 		angle = 0;
 	angle += 3;
@@ -112,72 +108,25 @@ void RendererOpenGL14::DrawScene() {
 	glTranslatef(0.0f, 0.0f, -7.0f);
 
 	glRotatef(angle, 1.0f, 1.0f, 0.0f);
-	glBegin(GL_QUADS);				// start drawing a polygon (4 sided)
 
-	// Front Face
-	//glNormal3f(0.0f, 0.0f, 1.0f);		// Normal Pointing Towards Viewer
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(-1.0f, -1.0f, 1.0f);	// Point 1 (Front)
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(1.0f, -1.0f, 1.0f);	// Point 2 (Front)
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(1.0f, 1.0f, 1.0f);	// Point 3 (Front)
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(-1.0f, 1.0f, 1.0f);	// Point 4 (Front)
-	// Back Face
-	//glNormal3f(0.0f, 0.0f, -1.0f);			// Normal Pointing Away From Viewer
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(-1.0f, -1.0f, -1.0f);	// Point 1 (Back)
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(-1.0f, 1.0f, -1.0f);	// Point 2 (Back)
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(1.0f, 1.0f, -1.0f);	// Point 3 (Back)
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(1.0f, -1.0f, -1.0f);	// Point 4 (Back)
-	// Top Face
-	//glNormal3f(0.0f, 1.0f, 0.0f);					// Normal Pointing Up
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(-1.0f, 1.0f, -1.0f);	// Point 1 (Top)
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(-1.0f, 1.0f, 1.0f);	// Point 2 (Top)
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(1.0f, 1.0f, 1.0f);	// Point 3 (Top)
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(1.0f, 1.0f, -1.0f);	// Point 4 (Top)
-	// Bottom Face
-	//glNormal3f(0.0f, -1.0f, 0.0f);					// Normal Pointing Down
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(-1.0f, -1.0f, -1.0f);	// Point 1 (Bottom)
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(1.0f, -1.0f, -1.0f);	// Point 2 (Bottom)
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(1.0f, -1.0f, 1.0f);	// Point 3 (Bottom)
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(-1.0f, -1.0f, 1.0f);	// Point 4 (Bottom)
-	// Right face
-	//glNormal3f(1.0f, 0.0f, 0.0f);					// Normal Pointing Right
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(1.0f, -1.0f, -1.0f);	// Point 1 (Right)
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(1.0f, 1.0f, -1.0f);	// Point 2 (Right)
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(1.0f, 1.0f, 1.0f);	// Point 3 (Right)
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(1.0f, -1.0f, 1.0f);	// Point 4 (Right)
-	// Left Face
-	//glNormal3f(-1.0f, 0.0f, 0.0f);					// Normal Pointing Left
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(-1.0f, -1.0f, -1.0f);	// Point 1 (Left)
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(-1.0f, -1.0f, 1.0f);	// Point 2 (Left)
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(-1.0f, 1.0f, 1.0f);	// Point 3 (Left)
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(-1.0f, 1.0f, -1.0f);	// Point 4 (Left)
+	for (std::vector<WorldObject>::iterator it = scene->begin();
+			it != scene->end(); it++) {
 
-	glEnd();					// done with the polygon
+		glBegin(GL_QUADS);
+
+		vector<float*>* vertices = it->getModel()->getVertices();
+
+
+		for (std::vector<float*>::iterator vit = vertices->begin();
+				vit != vertices->end(); vit++) {
+			glVertex3f(*vit[0], *vit[1], *vit[2]);
+		}
+
+		glEnd();
+	}
 
 	// swap buffers to display, since we're double buffered.
 	SDL_GL_SwapBuffers();
+
 }
 } /* namespace AvoidTheBug3D */

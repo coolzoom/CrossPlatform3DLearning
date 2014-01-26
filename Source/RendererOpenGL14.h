@@ -5,6 +5,9 @@
  *      Author: Dimitri Kourkoulis
  */
 
+#ifndef RENDEREROPENGL14_H_
+#define RENDEREROPENGL14_H_
+
 #include <GL/glew.h>
 #include <SDL.h>
 
@@ -12,12 +15,8 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-#ifndef RENDEREROPENGL14_H_
-#define RENDEREROPENGL14_H_
-
 #include "GameLog.h"
 #include "Renderer.h"
-#include <boost/smart_ptr.hpp>
 
 namespace AvoidTheBug3D {
 
@@ -47,7 +46,7 @@ public:
 
 	void Init(int width, int height);
 
-	void DrawScene();
+	void DrawScene(boost::shared_ptr<vector<WorldObject> > scene);
 
 	/**
 	 * Destructor
