@@ -32,7 +32,7 @@ void RendererOpenGL14::Init(int width, int height) {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 
 		LOGERROR(SDL_GetError());
-		throw GameException(string("Unable to init SDL"));
+		throw GameException(string("Unable to initialise SDL"));
 	}
 
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
@@ -116,10 +116,10 @@ void RendererOpenGL14::DrawScene(
 
 		vector<float*>* vertices = it->getModel()->getVertices();
 
-
-		for (std::vector<float*>::iterator vit = vertices->begin();
-				vit != vertices->end(); vit++) {
-			glVertex3f(*vit[0], *vit[1], *vit[2]);
+		int vectorCount = vertices->size();
+		for (int idx = 0; idx != vectorCount; ++idx) {
+			glVertex3f(vertices->at(idx)[0], vertices->at(idx)[1],
+					vertices->at(idx)[2]);
 		}
 
 		glEnd();
