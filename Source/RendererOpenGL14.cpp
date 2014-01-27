@@ -9,7 +9,8 @@
 #include "GameLog.h"
 #include <boost/foreach.hpp>
 #include <iterator>
-
+#include <cmath>
+#include <iostream>
 namespace AvoidTheBug3D {
 
 RendererOpenGL14::RendererOpenGL14(boost::shared_ptr<GameLog> log) {
@@ -112,14 +113,42 @@ void RendererOpenGL14::DrawScene(
 	for (std::vector<WorldObject>::iterator it = scene->begin();
 			it != scene->end(); it++) {
 
-		glBegin(GL_QUADS);
+		glBegin(GL_TRIANGLE_STRIP);
 
 		vector<float*>* vertices = it->getModel()->getVertices();
 
 		int vectorCount = vertices->size();
 		for (int idx = 0; idx != vectorCount; ++idx) {
+
+			if (idx % 3 == 0 && idx < vectorCount - 3) {
+				LOGINFO("Calculating normal");
+				float a [3] = {
+						vertices->at(idx + 1)[0] - vertices->at(idx)[0],
+						vertices->at(idx + 1)[1] - vertices->at(idx)[1],
+						vertices->at(idx + 1)[2] - vertices->at(idx)[2] };
+
+				float b [3] = { vertices->at(idx + 2)[0]
+						- vertices->at(idx)[0], vertices->at(idx + 2)[1]
+						- vertices->at(idx)[1], vertices->at(idx + 2)[2]
+						- vertices->at(idx)[2] };
+
+				float n[3] = { a[1] * b[2] - a[2] * b[1], a[2] * b[0]
+						- a[0] * b[2], a[0] * b[1] - a[1] * b[0] };
+
+				float l = sqrt(n[0] * n[0] + n[1] * n[1] + n[2] * n[2]);
+
+				n[0] /= l;
+				n[1] /= l;
+				n[2] /= l;
+
+				cout << "Normal: " << n[0] << " " << n[1] << " " << n[2] << endl;
+
+				//glNormal3f(n[0], n[1], n[2]);
+			}
+
 			glVertex3f(vertices->at(idx)[0], vertices->at(idx)[1],
-					vertices->at(idx)[2]);
+								vertices->at(idx)[2]);
+
 		}
 
 		glEnd();

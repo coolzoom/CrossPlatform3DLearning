@@ -42,7 +42,7 @@ int main(int argc, char** argv) {
 		GLuint ticksInterval = 1000 / frameRate;
 
 		WorldObject *object = new WorldObject("animal",
-				"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj", cfg, log);
+				"/Game/Data/UnspecifiedAnimal/simpleShape.obj", cfg, log);
 		vector<WorldObject> *scenePtr = new vector<WorldObject>();
 		scenePtr->push_back(*object);
 
