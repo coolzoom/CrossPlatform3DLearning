@@ -120,20 +120,22 @@ void RendererOpenGL14::DrawScene(
 		int vectorCount = vertices->size();
 		for (int idx = 0; idx != vectorCount; ++idx) {
 
-			if (idx % 3 == 0 && idx < vectorCount - 3) {
+			if (idx  % 3 == 0 && idx < vectorCount - 3) {
 				LOGINFO("Calculating normal");
 				float a [3] = {
 						vertices->at(idx + 1)[0] - vertices->at(idx)[0],
 						vertices->at(idx + 1)[1] - vertices->at(idx)[1],
 						vertices->at(idx + 1)[2] - vertices->at(idx)[2] };
 
-				float b [3] = { vertices->at(idx + 2)[0]
-						- vertices->at(idx)[0], vertices->at(idx + 2)[1]
-						- vertices->at(idx)[1], vertices->at(idx + 2)[2]
-						- vertices->at(idx)[2] };
+				float b [3] = {
+						vertices->at(idx + 2)[0] - vertices->at(idx)[0],
+						vertices->at(idx + 2)[1] - vertices->at(idx)[1],
+						vertices->at(idx + 2)[2] - vertices->at(idx)[2] };
 
-				float n[3] = { a[1] * b[2] - a[2] * b[1], a[2] * b[0]
-						- a[0] * b[2], a[0] * b[1] - a[1] * b[0] };
+				float n[3] = {
+						a[1] * b[2] - a[2] * b[1],
+						a[2] * b[0] - a[0] * b[2],
+						a[0] * b[1] - a[1] * b[0] };
 
 				float l = sqrt(n[0] * n[0] + n[1] * n[1] + n[2] * n[2]);
 
@@ -143,7 +145,7 @@ void RendererOpenGL14::DrawScene(
 
 				cout << "Normal: " << n[0] << " " << n[1] << " " << n[2] << endl;
 
-				//glNormal3f(n[0], n[1], n[2]);
+				glNormal3f(n[0], n[1], n[2]);
 			}
 
 			glVertex3f(vertices->at(idx)[0], vertices->at(idx)[1],
