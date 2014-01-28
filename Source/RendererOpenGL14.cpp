@@ -84,10 +84,10 @@ void RendererOpenGL14::Init(int width, int height) {
 
 	glEnable(GL_LIGHT1);							// Enable Light One
 	glEnable(GL_LIGHTING);
-	glColor4f(1.0f, 1.0f, 1.0f, 0.5f);	// Full Brightness, 50% Alpha ( NEW )
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE);// Blending Function For Translucency Based On Source Alpha Value ( NEW )
-	glEnable(GL_BLEND);		// Turn Blending On
-	glDisable(GL_DEPTH_TEST);
+	glColor4f(1.0f, 1.0f, 1.0f, 0.0f);	// Full Brightness, 0% Alpha ( NEW )
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE);// Blending Function For Translucency Based On Source Alpha Value ( NEW )
+	//glEnable(GL_BLEND);		// Turn Blending On
+	glEnable(GL_DEPTH_TEST);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();				// Reset The Projection Matrix
@@ -113,44 +113,42 @@ void RendererOpenGL14::DrawScene(
 	for (std::vector<WorldObject>::iterator it = scene->begin();
 			it != scene->end(); it++) {
 
-		glBegin(GL_TRIANGLE_STRIP);
+		glBegin(GL_TRIANGLES);
 
 		vector<float*>* vertices = it->getModel()->getVertices();
+		vector<int*>* faces = it->getModel()->getFaces();
 
-		int vectorCount = vertices->size();
-		for (int idx = 0; idx != vectorCount; ++idx) {
+		int numFaces = faces->size();
+		for (int idx = 0; idx != numFaces; ++idx) {
 
-			if (idx  % 3 == 0 && idx < vectorCount - 3) {
-				LOGINFO("Calculating normal");
-				float a [3] = {
-						vertices->at(idx + 1)[0] - vertices->at(idx)[0],
-						vertices->at(idx + 1)[1] - vertices->at(idx)[1],
-						vertices->at(idx + 1)[2] - vertices->at(idx)[2] };
+			// Calculate and push normal
+			float a [3] = {
+					vertices->at(faces->at(idx)[1] - 1)[0] - vertices->at(faces->at(idx)[0] - 1)[0],
+					vertices->at(faces->at(idx)[1] - 1)[1] - vertices->at(faces->at(idx)[0] - 1)[1],
+					vertices->at(faces->at(idx)[1] - 1)[2] - vertices->at(faces->at(idx)[0] - 1)[2] };
 
-				float b [3] = {
-						vertices->at(idx + 2)[0] - vertices->at(idx)[0],
-						vertices->at(idx + 2)[1] - vertices->at(idx)[1],
-						vertices->at(idx + 2)[2] - vertices->at(idx)[2] };
+			float b [3] = {
+					vertices->at(faces->at(idx)[2] - 1)[0] - vertices->at(faces->at(idx)[0] - 1)[0],
+					vertices->at(faces->at(idx)[2] - 1)[1] - vertices->at(faces->at(idx)[0] - 1)[1],
+					vertices->at(faces->at(idx)[2] - 1)[2] - vertices->at(faces->at(idx)[0] - 1)[2] };
 
-				float n[3] = {
-						a[1] * b[2] - a[2] * b[1],
-						a[2] * b[0] - a[0] * b[2],
-						a[0] * b[1] - a[1] * b[0] };
+			float n[3] = {
+					a[1] * b[2] - a[2] * b[1],
+					a[2] * b[0] - a[0] * b[2],
+					a[0] * b[1] - a[1] * b[0] };
 
-				float l = sqrt(n[0] * n[0] + n[1] * n[1] + n[2] * n[2]);
+			float l = sqrt(n[0] * n[0] + n[1] * n[1] + n[2] * n[2]);
 
-				n[0] /= l;
-				n[1] /= l;
-				n[2] /= l;
+			n[0] /= l;
+			n[1] /= l;
+			n[2] /= l;
 
-				cout << "Normal: " << n[0] << " " << n[1] << " " << n[2] << endl;
+			glNormal3f(n[0], n[1], n[2]);
 
-				glNormal3f(n[0], n[1], n[2]);
-			}
-
-			glVertex3f(vertices->at(idx)[0], vertices->at(idx)[1],
-								vertices->at(idx)[2]);
-
+			// Push triangle
+			glVertex3f(vertices->at(faces->at(idx)[0] - 1)[0], vertices->at(faces->at(idx)[0] - 1)[1], vertices->at(faces->at(idx)[0] - 1)[2]);
+			glVertex3f(vertices->at(faces->at(idx)[1] - 1)[0], vertices->at(faces->at(idx)[1] - 1)[1], vertices->at(faces->at(idx)[1] - 1)[2]);
+			glVertex3f(vertices->at(faces->at(idx)[2] - 1)[0], vertices->at(faces->at(idx)[2] - 1)[1], vertices->at(faces->at(idx)[2] - 1)[2]);
 		}
 
 		glEnd();

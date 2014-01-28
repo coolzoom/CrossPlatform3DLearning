@@ -19,13 +19,15 @@ namespace AvoidTheBug3D {
 class Model {
 private:
 	vector<float*> *vertices;
+	vector<int*> *faces;
 	boost::shared_ptr<Configuration> cfg;
 	boost::shared_ptr<GameLog> log;
 	void loadFromFile(string fileLocation);
 public:
 	/**
-	 * Initialisation of the game character
-	 * @param fileLocation The model file location (OBJ)
+	 * Initialisation of the model.
+	 * @param fileLocation The model file location. This must be a Wavefront .obj file and it must have been
+	 * exported from Blender with the options "Triangulate faces" and "Keep Vertex Order" checked
 	 * @param cfg The game configuration
 	 * @param log The log
 	 */
@@ -38,16 +40,34 @@ public:
 	void outputVertices();
 
 	/**
+	 * Output faces to stdout
+	 */
+	void outputFaces();
+
+	/**
 	 * Get the number of vertices in the model
 	 * @return The number of vertices
 	 */
 	int getNumVertices();
 
 	/**
+	 * Get the number of faces in the model
+	 * @return The number of faces
+	 */
+	int getNumFaces();
+
+	/**
 	 * Get the vertices of the model
 	 * @return The vertices
 	 */
 	vector<float*>* getVertices();
+
+	/**
+	 * Get the faces of the model
+	 * @return The faces
+	 */
+	vector<int*>* getFaces();
+
 };
 
 }
