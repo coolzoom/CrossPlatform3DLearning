@@ -6,11 +6,14 @@
  */
 
 #include "RendererOpenGL33.h"
+#include <fstream>
+
 
 namespace AvoidTheBug3D {
 
 RendererOpenGL33::RendererOpenGL33() {
-	// TODO Auto-generated constructor stub
+	vertexShader = loadShaderFromFile("/Game/Data/Shaders/testShader.vert");
+	fragmentShader = loadShaderFromFile("/Game/Data/Shaders/testShader.frag");
 
 }
 
@@ -24,4 +27,13 @@ RendererOpenGL33::~RendererOpenGL33() {
 	// TODO Auto-generated destructor stub
 }
 
+string& RendererOpenGL33::loadShaderFromFile(string fileLocation) {
+//	ifstream file((cfg->getHomeDirectory() + fileLocation).c_str());
+//		string line;
+//		if (file.is_open()) {
+//			while (getline(file, line)) {
+
+}
+
 } /* namespace AvoidTheBug3D */
+

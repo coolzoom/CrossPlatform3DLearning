@@ -18,6 +18,9 @@ class Renderer {
 
 public:
 
+	/**
+	 * Default constructor
+	 */
 	Renderer();
 
 	/**

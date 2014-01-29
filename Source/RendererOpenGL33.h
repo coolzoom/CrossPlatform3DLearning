@@ -10,10 +10,19 @@
 
 #include "GameLog.h"
 #include "Renderer.h"
+#include <string>
+
+using namespace std;
 
 namespace AvoidTheBug3D {
 
 class RendererOpenGL33: public Renderer {
+private:
+	string vertexShader;
+	string fragmentShader;
+
+	string& loadShaderFromFile(string fileLocation);
+
 public:
 	RendererOpenGL33();
 
