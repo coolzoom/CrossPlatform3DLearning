@@ -24,11 +24,9 @@ int main(int argc, char** argv) {
 
 	try {
 
-		Configuration *confPtr = new Configuration(log);
-		boost::shared_ptr<Configuration> cfg(confPtr);
+		boost::shared_ptr<Configuration> cfg(new Configuration(log));
 
-		Renderer *rendererPtr = new RendererOpenGL14(log);
-		boost::shared_ptr<Renderer> renderer(rendererPtr);
+		boost::shared_ptr<Renderer> renderer(new RendererOpenGL14(cfg, log));
 
 		renderer->Init(1024, 768);
 
@@ -42,10 +40,9 @@ int main(int argc, char** argv) {
 
 		WorldObject *object = new WorldObject("animal",
 				"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj", cfg, log);
-		vector<WorldObject> *scenePtr = new vector<WorldObject>();
-		scenePtr->push_back(*object);
 
-		boost::shared_ptr<vector<WorldObject> > scene(scenePtr);
+		boost::shared_ptr<vector<WorldObject> > scene(new vector<WorldObject>());
+		scene->push_back(*object);
 
 		while (!done) {
 

@@ -13,8 +13,8 @@
 #include <iostream>
 namespace AvoidTheBug3D {
 
-RendererOpenGL14::RendererOpenGL14(boost::shared_ptr<GameLog> log) {
-	this->log = log;
+RendererOpenGL14::RendererOpenGL14( boost::shared_ptr<Configuration> cfg,
+		 boost::shared_ptr<GameLog> log) : Renderer(cfg, log) {
 	screen = 0;
 	icon = SDL_LoadBMP("ONLINE32.BMP");
 	angle = 0;

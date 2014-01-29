@@ -11,17 +11,27 @@
 #include <boost/smart_ptr.hpp>
 #include "WorldObject.h"
 #include <vector>
+#include "Configuration.h"
+#include "GameLog.h"
+#include <boost/smart_ptr.hpp>
 
 namespace AvoidTheBug3D {
 
 class Renderer {
 
+protected:
+	boost::shared_ptr<Configuration> cfg;
+	boost::shared_ptr<GameLog> log;
+
 public:
 
 	/**
-	 * Default constructor
+	 * Constructor
+	 * @param cfg The game's configuration object
+	 * @param log The game's logging object
 	 */
-	Renderer();
+	Renderer(boost::shared_ptr<Configuration> cfg,
+			 boost::shared_ptr<GameLog> log);
 
 	/**
 	 * Initialise renderer (OpenGL, GLEW, etc)

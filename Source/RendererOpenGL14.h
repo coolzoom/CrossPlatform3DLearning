@@ -29,7 +29,6 @@ const GLfloat LightPosition[] = { -5.0f, 0.0f, 2.0f, 1.0f };
  */
 class RendererOpenGL14 : public Renderer {
 private:
-	boost::shared_ptr<GameLog> log;
 	float angle;
 
 	SDL_Surface *screen;
@@ -42,7 +41,8 @@ public:
 	 * Constructor
 	 * @param log The logger class to be used
 	 */
-	RendererOpenGL14(boost::shared_ptr<GameLog> log);
+	RendererOpenGL14( boost::shared_ptr<Configuration> cfg,
+			 boost::shared_ptr<GameLog> log);
 
 	void Init(int width, int height);
 

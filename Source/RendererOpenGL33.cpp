@@ -11,7 +11,8 @@
 
 namespace AvoidTheBug3D {
 
-RendererOpenGL33::RendererOpenGL33() {
+RendererOpenGL33::RendererOpenGL33( boost::shared_ptr<Configuration> cfg,
+		 boost::shared_ptr<GameLog> log) : Renderer(cfg, log) {
 	vertexShader = loadShaderFromFile("/Game/Data/Shaders/testShader.vert");
 	fragmentShader = loadShaderFromFile("/Game/Data/Shaders/testShader.frag");
 
@@ -32,6 +33,9 @@ string& RendererOpenGL33::loadShaderFromFile(string fileLocation) {
 //		string line;
 //		if (file.is_open()) {
 //			while (getline(file, line)) {
+
+	string empty = "";
+	return empty;
 
 }
 

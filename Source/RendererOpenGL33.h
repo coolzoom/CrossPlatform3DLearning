@@ -24,7 +24,8 @@ private:
 	string& loadShaderFromFile(string fileLocation);
 
 public:
-	RendererOpenGL33();
+	RendererOpenGL33( boost::shared_ptr<Configuration> cfg,
+			 boost::shared_ptr<GameLog> log);
 
 	void Init(int width, int height);
 
