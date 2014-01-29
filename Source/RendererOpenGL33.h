@@ -8,7 +8,16 @@
 #ifndef RENDEREROPENGL33_H_
 #define RENDEREROPENGL33_H_
 
-#include "GameLog.h"
+#ifndef SDLANDOPENGL
+#define SDLANDOPENGL
+#include <GL/glew.h>
+#include <SDL.h>
+// The following need to be included AFTER glew.h
+#include <GL/gl.h>
+#include <GL/glu.h>
+#endif //SDLANDOPENGL
+
+
 #include "Renderer.h"
 #include <string>
 
@@ -21,7 +30,7 @@ private:
 	string vertexShader;
 	string fragmentShader;
 
-	string& loadShaderFromFile(string fileLocation);
+	string loadShaderFromFile(string fileLocation);
 
 public:
 	RendererOpenGL33( boost::shared_ptr<Configuration> cfg,

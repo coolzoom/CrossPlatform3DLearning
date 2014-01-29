@@ -9,6 +9,7 @@
 #include "GameLog.h"
 #include "Renderer.h"
 #include "RendererOpenGL14.h"
+#include "RendererOpenGL33.h"
 #include "GameException.h"
 #include <boost/smart_ptr.hpp>
 
@@ -26,7 +27,9 @@ int main(int argc, char** argv) {
 
 		boost::shared_ptr<Configuration> cfg(new Configuration(log));
 
+		//OpenGL v1.4 or v3.3. Uncomment accordingly
 		boost::shared_ptr<Renderer> renderer(new RendererOpenGL14(cfg, log));
+		//boost::shared_ptr<Renderer> renderer(new RendererOpenGL33(cfg, log));
 
 		renderer->Init(1024, 768);
 
