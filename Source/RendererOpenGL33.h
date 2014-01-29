@@ -27,6 +27,8 @@ namespace AvoidTheBug3D {
 
 class RendererOpenGL33: public Renderer {
 private:
+	SDL_Surface *screen;
+	SDL_Surface *icon;
 	string vertexShader;
 	string fragmentShader;
 
