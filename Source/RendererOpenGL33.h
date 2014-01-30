@@ -17,10 +17,9 @@ namespace AvoidTheBug3D {
 
 class RendererOpenGL33: public Renderer {
 private:
-	string vertexShader;
-	string fragmentShader;
-
 	string loadShaderFromFile(string fileLocation);
+	GLuint compileShader(string shaderSource, GLenum shaderType);
+	GLuint getProgram();
 
 public:
 	RendererOpenGL33( boost::shared_ptr<Configuration> cfg,
