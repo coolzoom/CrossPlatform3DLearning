@@ -11,8 +11,11 @@
 
 namespace AvoidTheBug3D {
 
-RendererOpenGL33::RendererOpenGL33( boost::shared_ptr<Configuration> cfg,
-		 boost::shared_ptr<GameLog> log) : Renderer(cfg, log) {
+RendererOpenGL33::RendererOpenGL33(boost::shared_ptr<Configuration> cfg,
+		boost::shared_ptr<GameLog> log) :
+		Renderer(cfg, log) {
+	screen = 0;
+	icon = SDL_LoadBMP("ONLINE32.BMP");
 	vertexShader = loadShaderFromFile("/Game/Shaders/testShader.vert");
 	fragmentShader = loadShaderFromFile("/Game/Shaders/testShader.frag");
 }
@@ -25,6 +28,13 @@ void RendererOpenGL33::Init(int width, int height) {
 		LOGERROR(SDL_GetError());
 		throw GameException(string("Unable to initialise SDL"));
 	}
+
+	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	SDL_WM_SetCaption("SDL Application", "SDL Test");
 
 	SDL_WM_SetIcon(icon, NULL);
 
@@ -52,7 +62,8 @@ void RendererOpenGL33::Init(int width, int height) {
 
 }
 
-void RendererOpenGL33::DrawScene(boost::shared_ptr<vector<WorldObject> > scene) {
+void RendererOpenGL33::DrawScene(
+		boost::shared_ptr<vector<WorldObject> > scene) {
 }
 
 RendererOpenGL33::~RendererOpenGL33() {
@@ -62,12 +73,12 @@ RendererOpenGL33::~RendererOpenGL33() {
 string RendererOpenGL33::loadShaderFromFile(string fileLocation) {
 	string shaderSource = "";
 	ifstream file((cfg->getHomeDirectory() + fileLocation).c_str());
-			string line;
-			if (file.is_open()) {
-				while (getline(file, line)) {
-					shaderSource += line + "\n";
-				}
-			}
+	string line;
+	if (file.is_open()) {
+		while (getline(file, line)) {
+			shaderSource += line + "\n";
+		}
+	}
 	return shaderSource;
 }
 
