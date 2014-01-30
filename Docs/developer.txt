@@ -12,8 +12,6 @@ Created on: Aug 10, 2013
 ----------------------------
 
 sudo apt-get update
-sudo apt-get install freeglut3
-sudo apt-get install freeglut3-dev
 sudo apt-get install binutils-gold
 sudo apt-get install g++ cmake
 sudo apt-get install libglew-dev
@@ -21,7 +19,6 @@ sudo apt-get install libglew-dev
  to find this library. In that case, you can download it from here and put
  it in cmake's modules directory:
  http://code.google.com/p/nvidia-texture-tools/source/browse/trunk/cmake/FindGLEW.cmake)
-sudo apt-get install mesa-common-dev
 sudo apt-get install build-essential
 sudo apt-get install libsdl1.2-dev
 sudo apt-get install libsdl1.2-dbg
@@ -38,7 +35,6 @@ sudo apt-get install libboost-filesystem-dev
 sudo apt-get install libboost-filesystem1.46.1
 sudo apt-get install doxygen
 sudo apt-get install valgrind
-
 
 * Environment setup (Windows)
 -----------------------------
