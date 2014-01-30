@@ -8,14 +8,7 @@
 #ifndef RENDEREROPENGL14_H_
 #define RENDEREROPENGL14_H_
 
-#ifndef SDLANDOPENGL
-#define SDLANDOPENGL
-#include <GL/glew.h>
-#include <SDL.h>
-// The following need to be included AFTER glew.h
-#include <GL/gl.h>
-#include <GL/glu.h>
-#endif //SDLANDOPENGL
+
 
 #include "GameLog.h"
 #include "Renderer.h"
@@ -32,9 +25,6 @@ const GLfloat LightPosition[] = { -5.0f, 0.0f, 2.0f, 1.0f };
 class RendererOpenGL14 : public Renderer {
 private:
 	float angle;
-
-	SDL_Surface *screen;
-	SDL_Surface *icon;
 
 	GLuint texture[3];
 
