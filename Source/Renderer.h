@@ -10,11 +10,14 @@
 
 #ifndef SDLANDOPENGL
 #define SDLANDOPENGL
-#include <GL/glew.h>
-#include <SDL.h>
-// The following need to be included AFTER glew.h
-#include <GL/gl.h>
-#include <GL/glu.h>
+//#define NO_SDL_GLEXT
+//#define GLEW_STATIC
+#include <GL/glew.h> // It seems that, when using glew,
+                      // we do not need to include gl.h,
+                      // glext.h or glu.h (if we do include
+					  // them, they need to be included after
+                      // glew.
+#include "SDL.h"
 #endif //SDLANDOPENGL
 
 #include <boost/smart_ptr.hpp>

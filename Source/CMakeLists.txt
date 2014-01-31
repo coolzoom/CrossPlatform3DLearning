@@ -33,6 +33,7 @@ IF(NOT OPENGL_FOUND)
     MESSAGE(ERROR " OPENGL not found!")
 ENDIF(NOT OPENGL_FOUND)
 
+
 # GLEW (OpenGL Extension Wrangler Library)
 find_package(GLEW REQUIRED)
 IF(NOT GLEW_FOUND)

@@ -16,6 +16,7 @@ RendererOpenGL33::RendererOpenGL33(boost::shared_ptr<Configuration> cfg,
 		Renderer(cfg, log) {
 //	vertexShader = loadShaderFromFile("/Game/Shaders/testShader.vert");
 //	fragmentShader = loadShaderFromFile("/Game/Shaders/testShader.frag");
+	compileShader("/Game/Shaders/testShader.vert", GL_VERTEX_SHADER);
 }
 
 void RendererOpenGL33::Init(int width, int height) {
@@ -44,21 +45,25 @@ string RendererOpenGL33::loadShaderFromFile(string fileLocation) {
 }
 
 GLuint RendererOpenGL33::compileShader(string shaderSource, GLenum shaderType) {
-//	GLuint shader = glCreateShader(shaderType);
-//		const char *shaderSourceChars = shaderSource.c_str();
-//		glShaderSource(shader, 1, &shaderSourceChars, NULL);
+
+
+//		GLuint shader = glCreateShader(shaderType);
 //
-//		glCompileShader(shader);
+
+//		const char *shaderSourceChars = shaderSource.c_str();
+//		__glewShaderSource(shader, 1, &shaderSourceChars, NULL);
+//
+//		__glewCompileShader(shader);
 //
 //		GLint status;
-//		glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
+//		__glewGetShaderiv(shader, GL_COMPILE_STATUS, &status);
 //		if (status == GL_FALSE)
 //		{
-//			GLint infoLogLength;
-//			glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
-//
-//			boost::shared_ptr<GLchar> infoLog(new GLchar[infoLogLength + 1]);
-//			glGetShaderInfoLog(shader, infoLogLength, NULL, infoLog);
+////			GLint infoLogLength;
+////			__glewGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
+////
+////			boost::shared_ptr<GLchar> infoLog(new GLchar[infoLogLength + 1]);
+////			__glewGetShaderInfoLog(shader, infoLogLength, NULL, infoLog);
 //
 //			throw GameException("Failed to compile shader:\n" + shaderSource);
 //		}
