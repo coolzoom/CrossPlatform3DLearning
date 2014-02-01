@@ -56,7 +56,8 @@ Create a folder to install the built version of the libraries of Boost, e.g.
 C:\boost_1_54_0_installed
 From the source Boost folder, execute bootstrap.bat
 	b2 install --prefix=C:\boost_1_54_0_installed address-model=32 
---build-type=complete --with-date_time --with-test
+--build-type=complete --with-date_time --with-test --with-filesystem 
+--with-system
 Set environment variable BOOST_ROOT to C:\boost_1_54_0_installed\
 Set environment variable BOOST_LIBRARYDIR to C:\boost_1_54_0_installed\lib\
 
@@ -80,7 +81,12 @@ In Windows you will probably need to copy the dlls of the libraries we are using
 (SDL, Boost, GLEW etc) to the output directory (Release or Debug), unless they 
 are already accessible in your system (e.g.  if they have been installed to the 
 System directory or if their directories have been included in the PATH 
-environment variable.)
+environment variable.) You will also need to add /NODEFAULTLIB:MSVCRT to each
+project's linker additional options (project properties > Linker > Command Line >
+Additional Options). Otherwise you will see warnings like the following one when
+linking:
+warning LNK4098: defaultlib 'msvcrt.lib' conflicts with use of other libs; use 
+/NODEFAULTLIB:library
 To create an Eclipse project in Linux, run the following command from the Temp 
 directory, mentioned above:
 cmake -G "Eclipse CDT4 - Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug 

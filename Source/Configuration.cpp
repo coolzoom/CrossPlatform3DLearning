@@ -32,7 +32,7 @@ string Configuration::getHomeDirectory() {
 
 void Configuration::findHomeDirectory() {
 	boost::filesystem::path homePath = boost::filesystem::current_path();
-	string currentLower = string(homePath.c_str());
+	string currentLower = homePath.generic_string();
 	transform(currentLower.begin(), currentLower.end(), currentLower.begin(),
 			::tolower);
 
@@ -60,7 +60,7 @@ void Configuration::findHomeDirectory() {
 		throw GameException("Could not determine the home directory");
 	}
 
-	this->homeDirectory = string(homePath.c_str());
+	this->homeDirectory = homePath.generic_string();
 	LOGINFO("Configuration: found home directory: " + homeDirectory);
 }
 
