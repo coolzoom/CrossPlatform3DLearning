@@ -45,9 +45,17 @@ string RendererOpenGL33::loadShaderFromFile(string fileLocation) {
 }
 
 GLuint RendererOpenGL33::compileShader(string shaderSource, GLenum shaderType) {
-
-
-//		GLuint shader = glCreateShader(shaderType);
+// Bad coding tests...
+//	GL_CreateShader_Func glCreateShader_ptr = 0;
+//
+//	glCreateShader_ptr = (GL_CreateShader_Func) SDL_GL_GetProcAddress("glCreateShader");
+//
+//	if (!glCreateShader_ptr)
+//	{
+//		throw GameException("Could not load " + string("glCreateShader"));
+//	}
+//
+//	GLuint shader = glCreateShader_ptr(shaderType);
 //
 
 //		const char *shaderSourceChars = shaderSource.c_str();
@@ -77,5 +85,4 @@ GLuint RendererOpenGL33::getProgram() {
 }
 
 } /* namespace AvoidTheBug3D */
-
 

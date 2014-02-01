@@ -50,7 +50,7 @@ ADD_EXECUTABLE(game main.cpp GameLog.cpp Model.cpp GameLogic.cpp
  )
 
 # Link to the required libraries
-TARGET_LINK_LIBRARIES(game ${SDL_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${Boost_FILESYSTEM_LIBRARIES}
+TARGET_LINK_LIBRARIES(game ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${SDL_LIBRARY} ${Boost_FILESYSTEM_LIBRARIES}
                ${Boost_SYSTEM_LIBRARIES}) 
 
 # Only when building on Windows, also link to the Boost date_time library (see above)

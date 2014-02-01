@@ -42,6 +42,7 @@ void Renderer::Init(int width, int height) {
 		LOGINFO("Using GLEW version " + glewVersion);
 	}
 
+
 	if (glewIsSupported("GL_VERSION_3_3")) {
 		LOGINFO("Ready for OpenGL 3.3");
 	} else {

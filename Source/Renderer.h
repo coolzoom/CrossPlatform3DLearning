@@ -10,13 +10,14 @@
 
 #ifndef SDLANDOPENGL
 #define SDLANDOPENGL
-//#define NO_SDL_GLEXT
 //#define GLEW_STATIC
-#include <GL/glew.h> // It seems that, when using glew,
+#define NO_SDL_GLEXT
+#include "GL/glew.h" // It seems that, when using glew,
                       // we do not need to include gl.h,
                       // glext.h or glu.h (if we do include
 					  // them, they need to be included after
                       // glew.
+#include "SDL_opengl.h"
 #include "SDL.h"
 #endif //SDLANDOPENGL
 
@@ -28,6 +29,8 @@
 #include <boost/smart_ptr.hpp>
 
 namespace AvoidTheBug3D {
+
+//typedef unsigned int (*GL_CreateShader_Func)(unsigned int);
 
 class Renderer {
 
