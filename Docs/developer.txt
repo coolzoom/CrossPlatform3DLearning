@@ -100,6 +100,10 @@ To create an Eclipse project in Linux, run the following command from the Temp
 directory, mentioned above:
 cmake -G "Eclipse CDT4 - Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug 
 -DCMAKE_ECLIPSE_MAKE_ARGUMENTS=-j8 ../Source/
+If you are using debian, you might need to add a FindGLEW module to your
+cmake installation. I have found one that works here:
+  https://gitorious.org/imageutilities/imageutilities/source/
+  6fbf56db6e851d50faa1f36bc8f11af5664b6d1d:cmake/FindGLEW.cmake
 You will have to set the working directory from Build Configurations to where 
 Temp and Temp/UnitTesting for the program and the unit tests respectively.  
 Otherwise some files (like model files) will not be found during execution.
