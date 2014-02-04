@@ -14,6 +14,12 @@ Renderer::Renderer(boost::shared_ptr<Configuration> cfg,
 
 Renderer::~Renderer() {
 
+	LOGINFO("Renderer superclass destructor running");
+
+	SDL_FreeSurface(icon);
+	SDL_FreeSurface(screen);
+	SDL_Quit();
+
 }
 
 void Renderer::Init(int width, int height) {
@@ -41,7 +47,6 @@ void Renderer::Init(int width, int height) {
 		string glewVersion = (char*) glewGetString(GLEW_VERSION);
 		LOGINFO("Using GLEW version " + glewVersion);
 	}
-
 
 	if (glewIsSupported("GL_VERSION_3_3")) {
 		LOGINFO("Ready for OpenGL 3.3");

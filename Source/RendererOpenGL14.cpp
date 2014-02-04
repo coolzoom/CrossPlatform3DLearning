@@ -21,9 +21,7 @@ RendererOpenGL14::RendererOpenGL14( boost::shared_ptr<Configuration> cfg,
 
 RendererOpenGL14::~RendererOpenGL14() {
 	LOGINFO("OpenGL 1.4 renderer getting destroyed");
-	SDL_FreeSurface(icon);
-	SDL_FreeSurface(screen);
-	SDL_Quit();
+
 }
 
 void RendererOpenGL14::Init(int width, int height) {

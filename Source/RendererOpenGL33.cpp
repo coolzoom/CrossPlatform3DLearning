@@ -14,14 +14,12 @@ namespace AvoidTheBug3D {
 RendererOpenGL33::RendererOpenGL33(boost::shared_ptr<Configuration> cfg,
 		boost::shared_ptr<GameLog> log) :
 		Renderer(cfg, log) {
-//	vertexShader = loadShaderFromFile("/Game/Shaders/testShader.vert");
-//	fragmentShader = loadShaderFromFile("/Game/Shaders/testShader.frag");
-	compileShader("/Game/Shaders/testShader.vert", GL_VERTEX_SHADER);
+
 }
 
 void RendererOpenGL33::Init(int width, int height) {
 	Renderer::Init(width, height);
-
+	compileShader("/Game/Shaders/testShader.vert", GL_VERTEX_SHADER);
 }
 
 void RendererOpenGL33::DrawScene(
@@ -29,7 +27,7 @@ void RendererOpenGL33::DrawScene(
 }
 
 RendererOpenGL33::~RendererOpenGL33() {
-
+	LOGINFO("OpenGL 3.3 renderer getting destroyed");
 }
 
 string RendererOpenGL33::loadShaderFromFile(string fileLocation) {
@@ -44,9 +42,11 @@ string RendererOpenGL33::loadShaderFromFile(string fileLocation) {
 	return shaderSource;
 }
 
-GLuint RendererOpenGL33::compileShader(string shaderSource, GLenum shaderType) {
+GLuint RendererOpenGL33::compileShader(string shaderSourceFile, GLenum shaderType) {
 
 	GLuint shader = glCreateShader(shaderType);
+
+	string shaderSource = this->loadShaderFromFile(shaderSourceFile);
 
 	const char *shaderSourceChars = shaderSource.c_str();
 	glShaderSource(shader, 1, &shaderSourceChars, NULL);
@@ -59,10 +59,19 @@ GLuint RendererOpenGL33::compileShader(string shaderSource, GLenum shaderType) {
 		GLint infoLogLength;
 		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
 
-//		boost::shared_ptr<GLchar> infoLog(new GLchar[infoLogLength + 1]);
-//		glGetShaderInfoLog(shader, infoLogLength, NULL, infoLog);
+		GLchar *infoLog = new GLchar[infoLogLength + 1];
 
-		throw GameException("Failed to compile shader:\n" + shaderSource);
+		glGetShaderInfoLog(shader, infoLogLength, NULL, infoLog);
+
+		string infoLogStr = infoLog;
+
+		delete infoLog;
+
+		throw GameException(
+				"Failed to compile shader:\n" + shaderSource + "\nInfo: "
+						+ infoLogStr);
+	} else {
+		LOGINFO("Shader compiled successfully:\n" + shaderSource);
 	}
 
 	return shader;
