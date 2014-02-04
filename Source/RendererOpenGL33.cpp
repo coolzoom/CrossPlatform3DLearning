@@ -45,39 +45,27 @@ string RendererOpenGL33::loadShaderFromFile(string fileLocation) {
 }
 
 GLuint RendererOpenGL33::compileShader(string shaderSource, GLenum shaderType) {
-// Bad coding tests...
-//	GL_CreateShader_Func glCreateShader_ptr = 0;
-//
-//	glCreateShader_ptr = (GL_CreateShader_Func) SDL_GL_GetProcAddress("glCreateShader");
-//
-//	if (!glCreateShader_ptr)
-//	{
-//		throw GameException("Could not load " + string("glCreateShader"));
-//	}
-//
-//	GLuint shader = glCreateShader_ptr(shaderType);
-//
 
-//		const char *shaderSourceChars = shaderSource.c_str();
-//		__glewShaderSource(shader, 1, &shaderSourceChars, NULL);
-//
-//		__glewCompileShader(shader);
-//
-//		GLint status;
-//		__glewGetShaderiv(shader, GL_COMPILE_STATUS, &status);
-//		if (status == GL_FALSE)
-//		{
-////			GLint infoLogLength;
-////			__glewGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
-////
-////			boost::shared_ptr<GLchar> infoLog(new GLchar[infoLogLength + 1]);
-////			__glewGetShaderInfoLog(shader, infoLogLength, NULL, infoLog);
-//
-//			throw GameException("Failed to compile shader:\n" + shaderSource);
-//		}
-//
-//		return shader;
-	return 0;
+	GLuint shader = glCreateShader(shaderType);
+
+	const char *shaderSourceChars = shaderSource.c_str();
+	glShaderSource(shader, 1, &shaderSourceChars, NULL);
+
+	glCompileShader(shader);
+
+	GLint status;
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
+	if (status == GL_FALSE) {
+		GLint infoLogLength;
+		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
+
+//		boost::shared_ptr<GLchar> infoLog(new GLchar[infoLogLength + 1]);
+//		glGetShaderInfoLog(shader, infoLogLength, NULL, infoLog);
+
+		throw GameException("Failed to compile shader:\n" + shaderSource);
+	}
+
+	return shader;
 }
 
 GLuint RendererOpenGL33::getProgram() {
