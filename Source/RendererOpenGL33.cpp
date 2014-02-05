@@ -14,16 +14,76 @@ namespace AvoidTheBug3D {
 RendererOpenGL33::RendererOpenGL33(boost::shared_ptr<Configuration> cfg,
 		boost::shared_ptr<GameLog> log) :
 		Renderer(cfg, log) {
+	program = 0;
 
 }
 
 void RendererOpenGL33::Init(int width, int height) {
 	Renderer::Init(width, height);
-	compileShader("/Game/Shaders/testShader.vert", GL_VERTEX_SHADER);
+
+	GLuint vertexShader = compileShader("/Game/Shaders/testShader.vert",
+	GL_VERTEX_SHADER);
+	GLuint fragmentShader = compileShader("/Game/Shaders/testShader.frag",
+	GL_VERTEX_SHADER);
+
+	program = glCreateProgram();
+	glAttachShader(program, vertexShader);
+	glAttachShader(program, fragmentShader);
+
+	glLinkProgram(program);
+
+	GLint status;
+	glGetProgramiv(program, GL_LINK_STATUS, &status);
+	if (status == GL_FALSE) {
+		GLint infoLogLength;
+		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLogLength);
+
+		GLchar *infoLog = new GLchar[infoLogLength + 1];
+		glGetProgramInfoLog(program, infoLogLength, NULL, infoLog);
+		string infoLogStr = infoLog;
+
+		delete[] infoLog;
+		throw GameException("Failed to link program:\n" + infoLogStr);
+	} else {
+		LOGINFO("Linked program successfully");
+	}
+	glDeleteShader(vertexShader);
+	glDeleteShader(fragmentShader);
+
 }
 
 void RendererOpenGL33::DrawScene(
 		boost::shared_ptr<vector<WorldObject> > scene) {
+	for (std::vector<WorldObject>::iterator it = scene->begin();
+			it != scene->end(); it++) {
+
+
+		vector<float*>* vertices = it->getModel()->getVertices();
+		vector<int*>* faces = it->getModel()->getFaces();
+
+		float positions[faces->size() * 12]; // faces * num vertices per face * 4 (3 coords + 1)
+
+		int numFaces = faces->size();
+		for (int faceIdx = 0; faceIdx != numFaces; ++faceIdx) {
+
+			for (int verticeIdx = 0; verticeIdx != 3; ++verticeIdx) {
+				for (int coordIdx = 0; coordIdx != 4; ++coordIdx) {
+					if (coordIdx == 3) {
+						positions[faceIdx * 4 + verticeIdx + coordIdx] = 1.0f;
+					} else {
+						positions[faceIdx * 4 + verticeIdx + coordIdx] =
+								vertices->at(faces->at(faceIdx)[verticeIdx] - 1)[coordIdx];
+					}
+				}
+			}
+		}
+
+	//glGenBuffers(1, &positions);
+	//glBindBuffer(GL_ARRAY_BUFFER, positions);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	} // for std::vector<WorldObject>::iterator
 }
 
 RendererOpenGL33::~RendererOpenGL33() {
@@ -42,7 +102,8 @@ string RendererOpenGL33::loadShaderFromFile(string fileLocation) {
 	return shaderSource;
 }
 
-GLuint RendererOpenGL33::compileShader(string shaderSourceFile, GLenum shaderType) {
+GLuint RendererOpenGL33::compileShader(string shaderSourceFile,
+		GLenum shaderType) {
 
 	GLuint shader = glCreateShader(shaderType);
 
@@ -65,7 +126,7 @@ GLuint RendererOpenGL33::compileShader(string shaderSourceFile, GLenum shaderTyp
 
 		string infoLogStr = infoLog;
 
-		delete infoLog;
+		delete[] infoLog;
 
 		throw GameException(
 				"Failed to compile shader:\n" + shaderSource + "\nInfo: "
@@ -75,10 +136,6 @@ GLuint RendererOpenGL33::compileShader(string shaderSourceFile, GLenum shaderTyp
 	}
 
 	return shader;
-}
-
-GLuint RendererOpenGL33::getProgram() {
-	return 0;
 }
 
 } /* namespace AvoidTheBug3D */
