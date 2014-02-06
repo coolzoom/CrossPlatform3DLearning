@@ -42,7 +42,7 @@ int main(int argc, char** argv) {
 		GLuint ticksInterval = 1000 / frameRate;
 
 		WorldObject *object = new WorldObject("animal",
-				"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj", cfg, log);
+				"/Game/Data/Cube/Cube.obj", cfg, log);
 
 		boost::shared_ptr<vector<WorldObject> > scene(new vector<WorldObject>());
 		scene->push_back(*object);

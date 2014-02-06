@@ -54,7 +54,6 @@ void RendererOpenGL33::Init(int width, int height) {
 
 }
 
-
 void RendererOpenGL33::DrawScene(
 		boost::shared_ptr<vector<WorldObject> > scene) {
 	for (std::vector<WorldObject>::iterator it = scene->begin();
@@ -63,21 +62,36 @@ void RendererOpenGL33::DrawScene(
 		vector<float*>* vertices = it->getModel()->getVertices();
 		vector<int*>* faces = it->getModel()->getFaces();
 
-		float positions[faces->size() * 12]; // faces * num vertices per face * 4 (3 coords + 1)
-
 		int numFaces = faces->size();
+		float positions[numFaces * 12]; // faces * num vertices per face * 4 (3 coords + 1)
+		cout << endl << "Calc:" << numFaces * 12 << endl;
+
+		int positionCnt = 0;
 		for (int faceIdx = 0; faceIdx != numFaces; ++faceIdx) {
 
 			for (int verticeIdx = 0; verticeIdx != 3; ++verticeIdx) {
-				for (int coordIdx = 0; coordIdx != 4; ++coordIdx) {
-					if (coordIdx == 3) {
-						positions[faceIdx * 4 + verticeIdx + coordIdx] = 1.0f;
-					} else {
-						positions[faceIdx * 4 + verticeIdx + coordIdx] =
-								vertices->at(faces->at(faceIdx)[verticeIdx] - 1)[coordIdx];
+				for (int coordIdx = 0; coordIdx != 3; ++coordIdx) {
+
+					positions[positionCnt] = vertices->at(
+							faces->at(faceIdx)[verticeIdx] - 1)[coordIdx];
+					++positionCnt;
+
+					if (coordIdx == 2) {
+						positions[positionCnt] = 1.0f;
+						++positionCnt;
 					}
 				}
 			}
+		}
+
+		int sz = positionCnt;
+		cout << endl << "num faces " << numFaces << endl;
+		cout << "Positions " << sz << endl;
+		for (int cnt = 0; cnt != sz; ++cnt) {
+			if (cnt % 4 == 0)
+							cout << endl;
+			cout << positions[cnt] << " ";
+
 		}
 
 		GLuint positionBufferObject;
