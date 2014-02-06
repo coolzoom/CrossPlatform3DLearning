@@ -22,6 +22,7 @@ void RendererOpenGL33::Init(int width, int height) {
 	Renderer::Init(width, height);
 
 	glViewport(0, 0, (GLsizei) width, (GLsizei) height);
+
 	GLuint vertexShader = compileShader("/Game/Shaders/testShader.vert",
 	GL_VERTEX_SHADER);
 	GLuint fragmentShader = compileShader("/Game/Shaders/testShader.frag",
@@ -52,6 +53,7 @@ void RendererOpenGL33::Init(int width, int height) {
 	glDeleteShader(fragmentShader);
 
 }
+
 
 void RendererOpenGL33::DrawScene(
 		boost::shared_ptr<vector<WorldObject> > scene) {
