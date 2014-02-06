@@ -28,7 +28,7 @@ void RendererOpenGL33::Init(int width, int height) {
 
 	program = glCreateProgram();
 	glAttachShader(program, vertexShader);
-	glAttachShader(program, fragmentShader);
+	//glAttachShader(program, fragmentShader);
 
 	glLinkProgram(program);
 
@@ -57,7 +57,6 @@ void RendererOpenGL33::DrawScene(
 	for (std::vector<WorldObject>::iterator it = scene->begin();
 			it != scene->end(); it++) {
 
-
 		vector<float*>* vertices = it->getModel()->getVertices();
 		vector<int*>* faces = it->getModel()->getFaces();
 
@@ -78,10 +77,35 @@ void RendererOpenGL33::DrawScene(
 			}
 		}
 
-	//glGenBuffers(1, &positions);
-	//glBindBuffer(GL_ARRAY_BUFFER, positions);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+		GLuint positionBufferObject;
+
+		glGenBuffers(1, &positionBufferObject);
+		glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions,
+		GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		GLuint vao;
+
+		glGenVertexArrays(1, &vao);
+		glBindVertexArray(vao);
+
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		glUseProgram(program);
+
+		glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glDisableVertexAttribArray(0);
+		glUseProgram(0);
+
+		// swap buffers to display, since we're double buffered.
+		SDL_GL_SwapBuffers();
 
 	} // for std::vector<WorldObject>::iterator
 }
