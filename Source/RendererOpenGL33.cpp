@@ -21,14 +21,15 @@ RendererOpenGL33::RendererOpenGL33(boost::shared_ptr<Configuration> cfg,
 void RendererOpenGL33::Init(int width, int height) {
 	Renderer::Init(width, height);
 
+	glViewport(0, 0, (GLsizei) width, (GLsizei) height);
 	GLuint vertexShader = compileShader("/Game/Shaders/testShader.vert",
 	GL_VERTEX_SHADER);
 	GLuint fragmentShader = compileShader("/Game/Shaders/testShader.frag",
-	GL_VERTEX_SHADER);
+	GL_FRAGMENT_SHADER);
 
 	program = glCreateProgram();
 	glAttachShader(program, vertexShader);
-	//glAttachShader(program, fragmentShader);
+	glAttachShader(program, fragmentShader);
 
 	glLinkProgram(program);
 
