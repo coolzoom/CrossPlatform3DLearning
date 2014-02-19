@@ -56,11 +56,11 @@ void RendererOpenGL33::Init(int width, int height) {
 
 }
 
-const float positions[] = {
-	0.75f, 0.75f, 0.0f, 1.0f,
-	0.75f, -0.75f, 0.0f, 1.0f,
-	-0.75f, -0.75f, 0.0f, 1.0f,
-};
+//const float positions[] = {
+//	0.75f, 0.75f, 0.0f, 1.0f,
+//	0.75f, -0.75f, 0.0f, 1.0f,
+//	-0.75f, -0.75f, 0.0f, 1.0f,
+//};
 
 void RendererOpenGL33::DrawScene(
 		boost::shared_ptr<vector<WorldObject> > scene) {
@@ -70,38 +70,37 @@ void RendererOpenGL33::DrawScene(
 		vector<float*>* vertices = it->getModel()->getVertices();
 		vector<int*>* faces = it->getModel()->getFaces();
 
-//		int numFaces = faces->size();
-//		float positions[numFaces * 12]; // faces * num vertices per face * 4 (3 coords + 1)
-//		cout << endl << "Calc:" << numFaces * 12 << endl;
-//
-//		int positionCnt = 0;
-//		for (int faceIdx = 0; faceIdx != numFaces; ++faceIdx) {
-//
-//			for (int verticeIdx = 0; verticeIdx != 3; ++verticeIdx) {
-//				for (int coordIdx = 0; coordIdx != 3; ++coordIdx) {
-//
-//
-//					positions[positionCnt] = vertices->at(
-//							faces->at(faceIdx)[verticeIdx] - 1)[coordIdx];
-//					++positionCnt;
-//
-//					if (coordIdx == 2) {
-//						positions[positionCnt] = 1.0f;
-//						++positionCnt;
-//					}
-//				}
-//			}
-//		}
+		int numFaces = faces->size();
+		float positions[numFaces * 12]; // faces * num vertices per face * 4 (3 coords + 1)
 
-		int sz =  12; //positionCnt;
-		//cout << endl << "num faces " << numFaces << endl;
-		cout << "Positions " << sz << endl;
-		for (int cnt = 0; cnt != sz; ++cnt) {
-			if (cnt % 4 == 0)
-							cout << endl;
-			cout << positions[cnt] << " ";
+		int positionCnt = 0;
+		for (int faceIdx = 0; faceIdx != numFaces; ++faceIdx) {
 
+			for (int verticeIdx = 0; verticeIdx != 3; ++verticeIdx) {
+				for (int coordIdx = 0; coordIdx != 3; ++coordIdx) {
+
+
+					positions[positionCnt] = vertices->at(
+							faces->at(faceIdx)[verticeIdx] - 1)[coordIdx];
+					++positionCnt;
+
+					if (coordIdx == 2) {
+						positions[positionCnt] = 1.0f;
+						++positionCnt;
+					}
+				}
+			}
 		}
+
+//		int sz =  positionCnt;
+//		cout << endl << "num faces " << numFaces << endl;
+//		cout << "Positions " << sz << endl;
+//		for (int cnt = 0; cnt != sz; ++cnt) {
+//			if (cnt % 4 == 0)
+//							cout << endl;
+//			cout << positions[cnt] << " ";
+//
+//		}
 
 		GLuint positionBufferObject;
 
@@ -116,6 +115,10 @@ void RendererOpenGL33::DrawScene(
 		glGenVertexArrays(1, &vao);
 		glBindVertexArray(vao);
 
+		glEnable(GL_CULL_FACE);
+		 //   glCullFace(GL_BACK);
+		 //   glFrontFace(GL_CW);
+
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
@@ -125,7 +128,7 @@ void RendererOpenGL33::DrawScene(
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawArrays(GL_TRIANGLES, 0, positionCnt);
 
 		glDisableVertexAttribArray(0);
 		glUseProgram(0);
