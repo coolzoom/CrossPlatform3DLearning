@@ -71,7 +71,7 @@ void RendererOpenGL33::DrawScene(
 		vector<int*>* faces = it->getModel()->getFaces();
 
 		int numFaces = faces->size();
-		float positions[numFaces * 12]; // faces * num vertices per face * 4 (3 coords + 1)
+		float *positions = new float[numFaces * 12]; // faces * num vertices per face * 4 (3 coords + 1)
 
 		int positionCnt = 0;
 		for (int faceIdx = 0; faceIdx != numFaces; ++faceIdx) {
@@ -92,21 +92,21 @@ void RendererOpenGL33::DrawScene(
 			}
 		}
 
-//		int sz =  positionCnt;
-//		cout << endl << "num faces " << numFaces << endl;
-//		cout << "Positions " << sz << endl;
-//		for (int cnt = 0; cnt != sz; ++cnt) {
-//			if (cnt % 4 == 0)
-//							cout << endl;
-//			cout << positions[cnt] << " ";
-//
-//		}
+		int sz =  positionCnt;
+		cout << endl << "num faces " << numFaces << endl;
+		cout << "Positions " << sz << endl;
+		for (int cnt = 0; cnt != sz; ++cnt) {
+			if (cnt % 4 == 0)
+							cout << endl;
+			cout << positions[cnt] << " ";
+
+		}
 
 		GLuint positionBufferObject;
 
 		glGenBuffers(1, &positionBufferObject);
 		glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions,
+		glBufferData(GL_ARRAY_BUFFER, numFaces * 12 * sizeof(float), positions,
 		GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -135,6 +135,7 @@ void RendererOpenGL33::DrawScene(
 
 		// swap buffers to display, since we're double buffered.
 		SDL_GL_SwapBuffers();
+		delete[] positions;
 
 	} // for std::vector<WorldObject>::iterator
 }
