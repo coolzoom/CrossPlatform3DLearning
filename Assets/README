@@ -1,5 +1,3 @@
-The models have been created with Blender 2.62
-There was an issue when transferring files from
-newer versions of Blender (some faces would 
-disappear) so it was decided to only use this
-version for this project.
+When exporting the models to Wavefront .obj files,
+make sure you set the options "Triangulate Faces"
+and "Keep Vertex Order".
