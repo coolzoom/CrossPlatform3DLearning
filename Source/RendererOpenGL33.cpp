@@ -56,12 +56,6 @@ void RendererOpenGL33::Init(int width, int height) {
 
 }
 
-//const float positions[] = {
-//	0.75f, 0.75f, 0.0f, 1.0f,
-//	0.75f, -0.75f, 0.0f, 1.0f,
-//	-0.75f, -0.75f, 0.0f, 1.0f,
-//};
-
 void RendererOpenGL33::DrawScene(
 		boost::shared_ptr<vector<WorldObject> > scene) {
 	for (std::vector<WorldObject>::iterator it = scene->begin();
