@@ -23,7 +23,7 @@ void RendererOpenGL33::Init(int width, int height) {
 
 	glViewport(0, 0, (GLsizei) width, (GLsizei) height);
 
-	GLuint vertexShader = compileShader("/Game/Shaders/testShader.vert",
+	GLuint vertexShader = compileShader("/Game/Shaders/perspectiveShader.vert",
 	GL_VERTEX_SHADER);
 	GLuint fragmentShader = compileShader("/Game/Shaders/testShader.frag",
 	GL_FRAGMENT_SHADER);
@@ -48,6 +48,20 @@ void RendererOpenGL33::Init(int width, int height) {
 		throw GameException("Failed to link program:\n" + infoLogStr);
 	} else {
 		LOGINFO("Linked program successfully");
+
+		// Perspective and offset
+		glUseProgram(program);
+		GLuint offsetUniform = glGetUniformLocation(program, "offset");
+
+		GLuint frustumScaleUnif = glGetUniformLocation(program, "frustumScale");
+		GLuint zNearUnif = glGetUniformLocation(program, "zNear");
+		GLuint zFarUnif = glGetUniformLocation(program, "zFar");
+
+		glUniform1f(frustumScaleUnif, 1.0f);
+		glUniform1f(zNearUnif, 1.0f);
+		glUniform1f(zFarUnif, 3.0f);
+		glUniform2f(offsetUniform, 0.5f, 0.5f);
+		glUseProgram(0);
 	}
 	glDetachShader(program, vertexShader);
 	glDetachShader(program, fragmentShader);
@@ -73,7 +87,6 @@ void RendererOpenGL33::DrawScene(
 			for (int verticeIdx = 0; verticeIdx != 3; ++verticeIdx) {
 				for (int coordIdx = 0; coordIdx != 3; ++coordIdx) {
 
-
 					positions[positionCnt] = vertices->at(
 							faces->at(faceIdx)[verticeIdx] - 1)[coordIdx];
 					++positionCnt;
@@ -86,15 +99,15 @@ void RendererOpenGL33::DrawScene(
 			}
 		}
 
-		int sz =  positionCnt;
-		cout << endl << "num faces " << numFaces << endl;
-		cout << "Positions " << sz << endl;
-		for (int cnt = 0; cnt != sz; ++cnt) {
-			if (cnt % 4 == 0)
-							cout << endl;
-			cout << positions[cnt] << " ";
-
-		}
+//		int sz = positionCnt;
+//		cout << endl << "num faces " << numFaces << endl;
+//		cout << "Positions " << sz << endl;
+//		for (int cnt = 0; cnt != sz; ++cnt) {
+//			if (cnt % 4 == 0)
+//				cout << endl;
+//			cout << positions[cnt] << " ";
+//
+//		}
 
 		GLuint positionBufferObject;
 
@@ -109,9 +122,9 @@ void RendererOpenGL33::DrawScene(
 		glGenVertexArrays(1, &vao);
 		glBindVertexArray(vao);
 
-		glEnable(GL_CULL_FACE);
-		 //   glCullFace(GL_BACK);
-		 //   glFrontFace(GL_CW);
+//		glEnable(GL_CULL_FACE);
+//		glCullFace(GL_BACK);
+//		glFrontFace(GL_CW);
 
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
