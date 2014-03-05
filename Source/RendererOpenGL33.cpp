@@ -52,15 +52,14 @@ void RendererOpenGL33::Init(int width, int height) {
 		// Perspective and offset
 		glUseProgram(program);
 		GLuint offsetUniform = glGetUniformLocation(program, "offset");
-
 		GLuint frustumScaleUnif = glGetUniformLocation(program, "frustumScale");
 		GLuint zNearUnif = glGetUniformLocation(program, "zNear");
 		GLuint zFarUnif = glGetUniformLocation(program, "zFar");
-
+		glUniform2f(offsetUniform, 0.0f, 0.0f);
 		glUniform1f(frustumScaleUnif, 1.0f);
 		glUniform1f(zNearUnif, 1.0f);
-		glUniform1f(zFarUnif, 3.0f);
-		glUniform2f(offsetUniform, 0.5f, 0.5f);
+		glUniform1f(zFarUnif, 10.0f);
+
 		glUseProgram(0);
 	}
 	glDetachShader(program, vertexShader);
