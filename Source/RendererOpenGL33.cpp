@@ -23,7 +23,7 @@ void RendererOpenGL33::Init(int width, int height) {
 
 	glViewport(0, 0, (GLsizei) width, (GLsizei) height);
 
-	GLuint vertexShader = compileShader("/Game/Shaders/perspectiveShader.vert",
+	GLuint vertexShader = compileShader("/Game/Shaders/perspectiveMatrixShader.vert",
 	GL_VERTEX_SHADER);
 	GLuint fragmentShader = compileShader("/Game/Shaders/testShader.frag",
 	GL_FRAGMENT_SHADER);
@@ -51,14 +51,21 @@ void RendererOpenGL33::Init(int width, int height) {
 
 		// Perspective and offset
 		glUseProgram(program);
+
 		GLuint offsetUniform = glGetUniformLocation(program, "offset");
-		GLuint frustumScaleUnif = glGetUniformLocation(program, "frustumScale");
-		GLuint zNearUnif = glGetUniformLocation(program, "zNear");
-		GLuint zFarUnif = glGetUniformLocation(program, "zFar");
-		glUniform2f(offsetUniform, 0.0f, 0.0f);
-		glUniform1f(frustumScaleUnif, 1.0f);
-		glUniform1f(zNearUnif, 1.0f);
-		glUniform1f(zFarUnif, 10.0f);
+		glUniform3f(offsetUniform, 0.0f, 0.0f, -2.0f);
+
+		GLuint perspectiveMatrixUniform = glGetUniformLocation(program, "perspectiveMatrix");
+
+		float perspectiveMatrix[16];
+		memset(perspectiveMatrix, 0, sizeof(float) * 16);
+		perspectiveMatrix[0] = 1.0f; // frustum scale
+		perspectiveMatrix[5] = 1.0f; // frustum scale
+		perspectiveMatrix[10] =  (1.0f + 10.0f) / (1.0f - 10.0f) ; // (zNear + zFar) / (zNear - zFar)
+		perspectiveMatrix[14] = 2.0f * 1.0f * 10.0f / (1.0f - 10.0f) ; // 2 * zNear * zFar / (zNear - zFar);
+		perspectiveMatrix[11] = -1.0f; //cameraPos.z? or just the -1 factor...
+
+		glUniformMatrix4fv(perspectiveMatrixUniform, 1, GL_FALSE, perspectiveMatrix);
 
 		glUseProgram(0);
 	}
