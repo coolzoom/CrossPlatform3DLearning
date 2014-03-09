@@ -128,9 +128,9 @@ void RendererOpenGL33::DrawScene(
 		glGenVertexArrays(1, &vao);
 		glBindVertexArray(vao);
 
-//		glEnable(GL_CULL_FACE);
-//		glCullFace(GL_BACK);
-//		glFrontFace(GL_CW);
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		glFrontFace(GL_CCW);
 
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
