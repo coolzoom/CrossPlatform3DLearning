@@ -23,6 +23,9 @@ private:
 	boost::shared_ptr<Configuration> cfg;
 	boost::shared_ptr<GameLog> log;
 	void loadFromFile(string fileLocation);
+	float *vertexData;
+	int vertexDataComponentCount = 0;
+	bool multiColour = false;
 public:
 	/**
 	 * Initialisation of the model.
@@ -67,6 +70,27 @@ public:
 	 * @return The faces
 	 */
 	vector<int*>* getFaces();
+
+
+	/**
+	 * Get the vertex data, e.g. to be sent to glBindBuffer.
+	 * The structure of the data can be defined via the Model's state.
+	 * @return The vertex data
+	 */
+	float * getVertexData();
+
+
+	/**
+	 * Output the vertex data. The structure of the data can be defined
+	 * via the Model's state.
+	 */
+	void outputVertexData();
+
+	/**
+	 * Get the number of components in the vertex data array
+	 * @return The number of vertex data components
+	 */
+	int getVertexDataComponentCount();
 
 };
 

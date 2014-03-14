@@ -19,6 +19,7 @@ Model::Model(string filename, const boost::shared_ptr<Configuration> &cfg,
 	vertices->clear();
 	faces = new vector<int *>();
 	faces->clear();
+	vertexData = NULL;
 	loadFromFile(filename);
 }
 
@@ -38,9 +39,17 @@ Model::~Model(void) {
 		faces->clear();
 		delete faces;
 	}
+
+	if (vertexData != NULL) {
+		delete[] vertexData;
+	}
 }
 
 void Model::loadFromFile(string fileLocation) {
+	if (vertices->size() != 0)
+	{
+		throw new GameException("Illegal attempt to reload model. Please use another object.");
+	}
 	ifstream file((cfg->getHomeDirectory() + fileLocation).c_str());
 	string line;
 	if (file.is_open()) {
@@ -52,18 +61,16 @@ void Model::loadFromFile(string fileLocation) {
 
 				if (line[0] == 'v') {
 					float *v = new float[3];
-					BOOST_FOREACH (const string& t, tokens){
+					BOOST_FOREACH (const string& t, tokens) {
 						if (idx > 0) { // The first token is the vertice indicator
 							v[idx - 1] = atof(t.c_str());
 						}
 						++idx;
 					}
 					vertices->push_back(v);
-				}
-				else
-				{
+				} else {
 					int *v = new int[3];
-					BOOST_FOREACH (const string& t, tokens){
+					BOOST_FOREACH (const string& t, tokens) {
 						if (idx > 0) { // The first token is face indicator
 							v[idx - 1] = atoi(t.c_str());
 						}
@@ -84,7 +91,7 @@ void Model::loadFromFile(string fileLocation) {
 void Model::outputVertices() {
 	int vectorCount = vertices->size();
 	for (int idx = 0; idx != vectorCount; ++idx) {
-		cout << "Vertice:" << vertices->at(idx)[0] << " - "
+		cout << "Vertex:" << vertices->at(idx)[0] << " - "
 				<< vertices->at(idx)[1] << " - " << vertices->at(idx)[2]
 				<< endl;
 	}
@@ -112,6 +119,46 @@ void Model::outputFaces() {
 
 vector<int*>* Model::getFaces() {
 	return faces;
+}
+
+float* Model::getVertexData() {
+	if (vertexData == NULL) {
+		int numFaces = faces->size();
+		vertexData = new float[numFaces * 12]; // faces * num vertices per face * 4 (3 coords + 1)
+
+		vertexDataComponentCount = 0;
+		for (int faceIdx = 0; faceIdx != numFaces; ++faceIdx) {
+
+			for (int verticeIdx = 0; verticeIdx != 3; ++verticeIdx) {
+				for (int coordIdx = 0; coordIdx != 3; ++coordIdx) {
+
+					vertexData[vertexDataComponentCount] = vertices->at(
+							faces->at(faceIdx)[verticeIdx] - 1)[coordIdx];
+					++vertexDataComponentCount;
+
+					if (coordIdx == 2) {
+						vertexData[vertexDataComponentCount] = 1.0f;
+						++vertexDataComponentCount;
+					} // if coordIdx ...
+				} // third for
+			} // second for
+		} // first
+	} // if vertexData == NULL
+	return vertexData;
+}
+
+void Model::outputVertexData() {
+	cout << endl << "Number of faces: " << faces->size() << endl;
+	cout << "Total number of components: " << vertexDataComponentCount << endl;
+	for (int cnt = 0; cnt != vertexDataComponentCount; ++cnt) {
+		if (cnt % 4 == 0)
+			cout << endl;
+		cout << vertexData[cnt] << " ";
+	}
+}
+
+int Model::getVertexDataComponentCount() {
+	return vertexDataComponentCount;
 }
 
 }

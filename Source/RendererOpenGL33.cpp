@@ -81,45 +81,15 @@ void RendererOpenGL33::DrawScene(
 	for (std::vector<WorldObject>::iterator it = scene->begin();
 			it != scene->end(); it++) {
 
-		vector<float*>* vertices = it->getModel()->getVertices();
-		vector<int*>* faces = it->getModel()->getFaces();
+		float *positions = it->getModel()->getVertexData();
 
-		int numFaces = faces->size();
-		float *positions = new float[numFaces * 12]; // faces * num vertices per face * 4 (3 coords + 1)
-
-		int positionCnt = 0;
-		for (int faceIdx = 0; faceIdx != numFaces; ++faceIdx) {
-
-			for (int verticeIdx = 0; verticeIdx != 3; ++verticeIdx) {
-				for (int coordIdx = 0; coordIdx != 3; ++coordIdx) {
-
-					positions[positionCnt] = vertices->at(
-							faces->at(faceIdx)[verticeIdx] - 1)[coordIdx];
-					++positionCnt;
-
-					if (coordIdx == 2) {
-						positions[positionCnt] = 1.0f;
-						++positionCnt;
-					}
-				}
-			}
-		}
-
-//		int sz = positionCnt;
-//		cout << endl << "num faces " << numFaces << endl;
-//		cout << "Positions " << sz << endl;
-//		for (int cnt = 0; cnt != sz; ++cnt) {
-//			if (cnt % 4 == 0)
-//				cout << endl;
-//			cout << positions[cnt] << " ";
-//
-//		}
+		//it->getModel()->outputVertexData();
 
 		GLuint positionBufferObject;
 
 		glGenBuffers(1, &positionBufferObject);
 		glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject);
-		glBufferData(GL_ARRAY_BUFFER, numFaces * 12 * sizeof(float), positions,
+		glBufferData(GL_ARRAY_BUFFER, it->getModel()->getFaces()->size() * 12 * sizeof(float), positions,
 		GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -141,14 +111,13 @@ void RendererOpenGL33::DrawScene(
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
-		glDrawArrays(GL_TRIANGLES, 0, positionCnt);
+		glDrawArrays(GL_TRIANGLES, 0, it->getModel()->getVertexDataComponentCount());
 
 		glDisableVertexAttribArray(0);
 		glUseProgram(0);
 
 		// swap buffers to display, since we're double buffered.
 		SDL_GL_SwapBuffers();
-		delete[] positions;
 
 	} // for std::vector<WorldObject>::iterator
 }
