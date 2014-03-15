@@ -24,8 +24,8 @@ private:
 	boost::shared_ptr<GameLog> log;
 	void loadFromFile(string fileLocation);
 	float *vertexData;
-	int vertexDataComponentCount = 0;
-	bool multiColour = false;
+	int vertexDataComponentCount;
+	bool multiColour;
 public:
 	/**
 	 * Initialisation of the model.
@@ -92,6 +92,12 @@ public:
 	 */
 	int getVertexDataComponentCount();
 
+	/**
+	 * Set whether or not the vertex data that will be returned will
+	 * contain random colours for each face.
+	 * @param multiColour
+	 */
+	void setMultiColour(bool multiColour);
 };
 
 }

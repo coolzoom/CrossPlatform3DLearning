@@ -20,6 +20,8 @@ Model::Model(string filename, const boost::shared_ptr<Configuration> &cfg,
 	faces = new vector<int *>();
 	faces->clear();
 	vertexData = NULL;
+	vertexDataComponentCount = 0;
+	multiColour = false;
 	loadFromFile(filename);
 }
 
@@ -46,9 +48,9 @@ Model::~Model(void) {
 }
 
 void Model::loadFromFile(string fileLocation) {
-	if (vertices->size() != 0)
-	{
-		throw new GameException("Illegal attempt to reload model. Please use another object.");
+	if (vertices->size() != 0) {
+		throw new GameException(
+				"Illegal attempt to reload model. Please use another object.");
 	}
 	ifstream file((cfg->getHomeDirectory() + fileLocation).c_str());
 	string line;
@@ -124,26 +126,80 @@ vector<int*>* Model::getFaces() {
 float* Model::getVertexData() {
 	if (vertexData == NULL) {
 		int numFaces = faces->size();
-		vertexData = new float[numFaces * 12]; // faces * num vertices per face * 4 (3 coords + 1)
-
+		int numVertexComponents = numFaces * 12; // faces * num vertices per face * 4 (3 components + 1)
+		vertexData = new float[numVertexComponents * (multiColour ? 2 : 1)]; // components multiplied
+																			 // by 2 if random colours
+																			 // will be added
 		vertexDataComponentCount = 0;
+		int colourIndex = 0;
+		// Face
 		for (int faceIdx = 0; faceIdx != numFaces; ++faceIdx) {
-
+			// Vertex
 			for (int verticeIdx = 0; verticeIdx != 3; ++verticeIdx) {
+				// Coordinate
 				for (int coordIdx = 0; coordIdx != 3; ++coordIdx) {
 
 					vertexData[vertexDataComponentCount] = vertices->at(
 							faces->at(faceIdx)[verticeIdx] - 1)[coordIdx];
 					++vertexDataComponentCount;
 
+					// w component
 					if (coordIdx == 2) {
 						vertexData[vertexDataComponentCount] = 1.0f;
 						++vertexDataComponentCount;
-					} // if coordIdx ...
-				} // third for
-			} // second for
-		} // first
+
+						if (multiColour) {
+							// Add random colours for each face to the data.
+
+							// Colour rotation
+							if (verticeIdx == 0) {
+								if (colourIndex == 3) {
+									colourIndex = 0;
+								} else {
+									++colourIndex;
+								}
+							}
+
+							float colour[] = {0.0f, 0.0f, 0.0f, 0.0f};
+
+							switch (colourIndex) {
+
+								// Red
+								case 0:
+								colour[0] = 1.0f;
+								break;
+
+								// Yellow
+								case 1:
+									colour[0] = 1.0f;
+									colour[1] = 1.0f;
+								break;
+
+								// Blue
+								case 2:
+									colour[2] = 1.0f;
+								break;
+
+								// White
+								case 3:
+									colour[0] = 1.0f;
+									colour[1] = 1.0f;
+									colour[2] = 1.0f;
+								break;
+
+								// Green (should not appear)
+								default:
+									colour[1] = 1.0f;
+								break;
+							}
+							memcpy(&vertexData[vertexDataComponentCount - 1 + numVertexComponents], &colour, 4);
+						} // if multiColour
+					} // w component
+				} // Coordinate
+			} // Vertex
+		} // Face
 	} // if vertexData == NULL
+
 	return vertexData;
 }
 
@@ -159,6 +215,10 @@ void Model::outputVertexData() {
 
 int Model::getVertexDataComponentCount() {
 	return vertexDataComponentCount;
+}
+
+void Model::setMultiColour(bool multiColour) {
+	this->multiColour = multiColour;
 }
 
 }
