@@ -10,6 +10,7 @@
 
 #include "Renderer.h"
 #include <string>
+#include <glm/glm.hpp>
 
 using namespace std;
 
@@ -20,6 +21,12 @@ private:
 	GLuint program;
 	string loadShaderFromFile(string fileLocation);
 	GLuint compileShader(string shaderSource, GLenum shaderType);
+
+	boost::shared_ptr<float> zRotationMatrix;
+
+	void constructZRotationMatrix(float angle);
+
+	float angle;
 
 public:
 	RendererOpenGL33( boost::shared_ptr<Configuration> cfg,

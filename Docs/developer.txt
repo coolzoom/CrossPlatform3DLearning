@@ -44,6 +44,7 @@ sudo apt-get install libboost-filesystem-dev
 sudo apt-get install libboost-filesystem1.46.1 (Only needed this in Ubuntu)
 sudo apt-get install doxygen
 sudo apt-get install valgrind
+sudo apt-get install libglm-dev
 
 * Environment setup (Windows)
 -----------------------------

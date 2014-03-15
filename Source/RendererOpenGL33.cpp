@@ -15,6 +15,8 @@ RendererOpenGL33::RendererOpenGL33(boost::shared_ptr<Configuration> cfg,
 		boost::shared_ptr<GameLog> log) :
 		Renderer(cfg, log) {
 	program = 0;
+	zRotationMatrix = boost::shared_ptr<float>(new float[16]);
+	angle = 0.0f;
 
 }
 
@@ -23,8 +25,9 @@ void RendererOpenGL33::Init(int width, int height) {
 
 	glViewport(0, 0, (GLsizei) width, (GLsizei) height);
 
-	GLuint vertexShader = compileShader("/Game/Shaders/perspectiveMatrixShader.vert",
-	GL_VERTEX_SHADER);
+	GLuint vertexShader = compileShader(
+			"/Game/Shaders/perspectiveMatrixShader.vert",
+			GL_VERTEX_SHADER);
 	GLuint fragmentShader = compileShader("/Game/Shaders/simpleShader.frag",
 	GL_FRAGMENT_SHADER);
 
@@ -53,19 +56,27 @@ void RendererOpenGL33::Init(int width, int height) {
 		glUseProgram(program);
 
 		GLuint offsetUniform = glGetUniformLocation(program, "offset");
-		glUniform3f(offsetUniform, 0.0f, 0.0f, -2.0f);
+		glUniform3f(offsetUniform, 0.0f, 0.0f, -3.0f);
 
-		GLuint perspectiveMatrixUniform = glGetUniformLocation(program, "perspectiveMatrix");
+		GLuint perspectiveMatrixUniform = glGetUniformLocation(program,
+				"perspectiveMatrix");
 
 		float perspectiveMatrix[16];
 		memset(perspectiveMatrix, 0, sizeof(float) * 16);
 		perspectiveMatrix[0] = 1.0f; // frustum scale
 		perspectiveMatrix[5] = 1.0f; // frustum scale
-		perspectiveMatrix[10] =  (1.0f + 10.0f) / (1.0f - 10.0f) ; // (zNear + zFar) / (zNear - zFar)
-		perspectiveMatrix[14] = 2.0f * 1.0f * 10.0f / (1.0f - 10.0f) ; // 2 * zNear * zFar / (zNear - zFar);
+		perspectiveMatrix[10] = (1.0f + 10.0f) / (1.0f - 10.0f); // (zNear + zFar) / (zNear - zFar)
+		perspectiveMatrix[14] = 2.0f * 1.0f * 10.0f / (1.0f - 10.0f); // 2 * zNear * zFar / (zNear - zFar);
 		perspectiveMatrix[11] = -1.0f; //cameraPos.z? or just the -1 factor...
 
-		glUniformMatrix4fv(perspectiveMatrixUniform, 1, GL_FALSE, perspectiveMatrix);
+		glUniformMatrix4fv(perspectiveMatrixUniform, 1, GL_FALSE,
+				perspectiveMatrix);
+
+		GLuint rotationMatrixUniform = glGetUniformLocation(program,
+				"rotationMatrix");
+		constructZRotationMatrix(0.0);
+		glUniformMatrix4fv(rotationMatrixUniform, 1, GL_TRUE,
+				zRotationMatrix.get());
 
 		glUseProgram(0);
 	}
@@ -78,6 +89,11 @@ void RendererOpenGL33::Init(int width, int height) {
 
 void RendererOpenGL33::DrawScene(
 		boost::shared_ptr<vector<WorldObject> > scene) {
+
+	if (angle > 6.28)
+		angle = 0.0;
+	angle += 0.01;
+
 	for (std::vector<WorldObject>::iterator it = scene->begin();
 			it != scene->end(); it++) {
 
@@ -89,7 +105,8 @@ void RendererOpenGL33::DrawScene(
 
 		glGenBuffers(1, &positionBufferObject);
 		glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject);
-		glBufferData(GL_ARRAY_BUFFER, it->getModel()->getVertexDataSize(), positions, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, it->getModel()->getVertexDataSize(),
+				positions, GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 		GLuint vao;
@@ -106,15 +123,23 @@ void RendererOpenGL33::DrawScene(
 
 		glUseProgram(program);
 
+		GLuint rotationMatrixUniform = glGetUniformLocation(program,
+				"rotationMatrix");
+		constructZRotationMatrix(angle);
+		glUniformMatrix4fv(rotationMatrixUniform, 1, GL_TRUE,
+				zRotationMatrix.get());
+
 		glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject);
 
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 
 		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
-		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void*) (it->getModel()->getVertexDataSize() / 2));
+		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0,
+				(void*) (it->getModel()->getVertexDataSize() / 2));
 
-		glDrawArrays(GL_TRIANGLES, 0, it->getModel()->getVertexDataComponentCount());
+		glDrawArrays(GL_TRIANGLES, 0,
+				it->getModel()->getVertexDataComponentCount());
 
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
@@ -125,6 +150,28 @@ void RendererOpenGL33::DrawScene(
 		SDL_GL_SwapBuffers();
 
 	} // for std::vector<WorldObject>::iterator
+}
+
+void RendererOpenGL33::constructZRotationMatrix(float angle) {
+	zRotationMatrix.get()[0] = glm::cos(angle);
+	zRotationMatrix.get()[1] = -glm::sin(angle);
+	zRotationMatrix.get()[2] = 0;
+	zRotationMatrix.get()[3] = 0;
+
+	zRotationMatrix.get()[4] = glm::sin(angle);
+	zRotationMatrix.get()[5] = glm::cos(angle);
+	zRotationMatrix.get()[6] = 0;
+	zRotationMatrix.get()[7] = 0;
+
+	zRotationMatrix.get()[8] = 0;
+	zRotationMatrix.get()[9] = 0;
+	zRotationMatrix.get()[10] = 1.0f;
+	zRotationMatrix.get()[11] = 0;
+
+	zRotationMatrix.get()[12] = 0;
+	zRotationMatrix.get()[13] = 0;
+	zRotationMatrix.get()[14] = 0;
+	zRotationMatrix.get()[15] = 1.0f;
 }
 
 RendererOpenGL33::~RendererOpenGL33() {
