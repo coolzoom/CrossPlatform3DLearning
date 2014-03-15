@@ -70,6 +70,13 @@ From the source Boost folder, execute bootstrap.bat
 --with-system
 Set environment variable BOOST_ROOT to C:\boost_1_54_0_installed\
 Set environment variable BOOST_LIBRARYDIR to C:\boost_1_54_0_installed\lib\
+Download GLM (http://glm.g-truc.net) and unzip it to a folder.
+Set the environment variable GLM_ROOT_DIR to that folder, so that CMake can
+find it.
+CMake will also need the FingGLM module, in order to find GLM. If the module
+is not contained in your CMake distribution, you can copy it from the above 
+mentioned GLM archive, from the folder glm\util, to the modules directory
+of CMake.
 
 
 * Compiling and running (both systems)

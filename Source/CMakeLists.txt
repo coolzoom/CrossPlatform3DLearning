@@ -7,12 +7,12 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 PROJECT(game)
 
 # Boost
-if(WIN32)
+IF(WIN32)
 FIND_PACKAGE(Boost COMPONENTS date_time filesystem system REQUIRED)
-else()
+ELSE()
 # It seems that in Linux there is no need to link to the date_time library
 FIND_PACKAGE(Boost COMPONENTS filesystem system REQUIRED)
-endif()
+ENDIF()
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
 
 # SDL (Simple DirectMedia Layer)
@@ -33,9 +33,14 @@ IF(NOT OPENGL_FOUND)
     MESSAGE(ERROR " OPENGL not found!")
 ENDIF(NOT OPENGL_FOUND)
 
+# GLM
+IF(WIN32)
+FIND_PACKAGE(GLM REQUIRED)
+INCLUDE_DIRECTORIES(${GLM_INCLUDE_DIRS})
+ENDIF()
 
 # GLEW (OpenGL Extension Wrangler Library)
-find_package(GLEW REQUIRED)
+FIND_PACKAGE(GLEW REQUIRED)
 IF(NOT GLEW_FOUND)
    MESSAGE(ERROR "GLEW not found!")
 ENDIF(NOT GLEW_FOUND)
@@ -58,7 +63,7 @@ if (WIN32)
 TARGET_LINK_LIBRARIES(game
                ${Boost_DATE_TIME_LIBRARY}
               )
-endif()
+ENDIF()
 
 # Unit tests compiled separately
 ADD_SUBDIRECTORY(UnitTesting)
