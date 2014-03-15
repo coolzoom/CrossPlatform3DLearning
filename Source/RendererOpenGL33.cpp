@@ -92,7 +92,7 @@ void RendererOpenGL33::DrawScene(
 
 	if (angle > 6.28)
 		angle = 0.0;
-	angle += 0.01;
+	angle += 0.03;
 
 	for (std::vector<WorldObject>::iterator it = scene->begin();
 			it != scene->end(); it++) {
