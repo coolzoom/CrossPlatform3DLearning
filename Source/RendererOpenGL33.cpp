@@ -25,7 +25,7 @@ void RendererOpenGL33::Init(int width, int height) {
 
 	GLuint vertexShader = compileShader("/Game/Shaders/perspectiveMatrixShader.vert",
 	GL_VERTEX_SHADER);
-	GLuint fragmentShader = compileShader("/Game/Shaders/testShader.frag",
+	GLuint fragmentShader = compileShader("/Game/Shaders/simpleShader.frag",
 	GL_FRAGMENT_SHADER);
 
 	program = glCreateProgram();
@@ -83,14 +83,13 @@ void RendererOpenGL33::DrawScene(
 
 		float *positions = it->getModel()->getVertexData();
 
-		//it->getModel()->outputVertexData();
+		it->getModel()->outputVertexData();
 
 		GLuint positionBufferObject;
 
 		glGenBuffers(1, &positionBufferObject);
 		glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject);
-		glBufferData(GL_ARRAY_BUFFER, it->getModel()->getFaces()->size() * 12 * sizeof(float), positions,
-		GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, it->getModel()->getVertexDataSize(), positions, GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 		GLuint vao;
@@ -108,12 +107,18 @@ void RendererOpenGL33::DrawScene(
 		glUseProgram(program);
 
 		glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject);
+
 		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
+
 		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void*) (it->getModel()->getVertexDataSize() / 2));
 
 		glDrawArrays(GL_TRIANGLES, 0, it->getModel()->getVertexDataComponentCount());
 
 		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
+
 		glUseProgram(0);
 
 		// swap buffers to display, since we're double buffered.

@@ -20,7 +20,7 @@ BOOST_AUTO_TEST_CASE( model_test ) {
 	Configuration *cfgPtr = new Configuration(log);
 	boost::shared_ptr<Configuration> cfg(cfgPtr);
 
-	Model *modelPtr = new Model("/Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj", cfg, log);
+	Model *modelPtr = new Model("/Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj", false, cfg, log);
 	boost::scoped_ptr<Model> model(modelPtr);
 
 	BOOST_CHECK_EQUAL(model->getNumVertices() > 0, true);

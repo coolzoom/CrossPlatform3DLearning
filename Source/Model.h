@@ -24,6 +24,7 @@ private:
 	boost::shared_ptr<GameLog> log;
 	void loadFromFile(string fileLocation);
 	float *vertexData;
+	int vertexDataSize;
 	int vertexDataComponentCount;
 	bool multiColour;
 public:
@@ -31,10 +32,11 @@ public:
 	 * Initialisation of the model.
 	 * @param fileLocation The model file location. This must be a Wavefront .obj file and it must have been
 	 * exported from Blender with the options "Triangulate faces" and "Keep Vertex Order" checked
+	 * @param multiColour Whether or not each face will be rendered with a random colour
 	 * @param cfg The game configuration
 	 * @param log The log
 	 */
-	Model(string fileLocation, const boost::shared_ptr<Configuration> &cfg, const boost::shared_ptr<GameLog> &log);
+	Model(string fileLocation, bool multiColour, const boost::shared_ptr<Configuration> &cfg, const boost::shared_ptr<GameLog> &log);
 	~Model(void);
 
 	/**
@@ -93,11 +95,10 @@ public:
 	int getVertexDataComponentCount();
 
 	/**
-	 * Set whether or not the vertex data that will be returned will
-	 * contain random colours for each face.
-	 * @param multiColour
+	 * Get the size of the vertex data, in bytes.
+	 * @return The size of the vertex data
 	 */
-	void setMultiColour(bool multiColour);
+	int getVertexDataSize();
 };
 
 }

@@ -10,7 +10,7 @@ using namespace std;
 using namespace boost;
 namespace AvoidTheBug3D {
 
-Model::Model(string filename, const boost::shared_ptr<Configuration> &cfg,
+Model::Model(string filename, bool multiColour, const boost::shared_ptr<Configuration> &cfg,
 		const boost::shared_ptr<GameLog> &log) {
 	this->cfg = cfg;
 	this->log = log;
@@ -20,8 +20,9 @@ Model::Model(string filename, const boost::shared_ptr<Configuration> &cfg,
 	faces = new vector<int *>();
 	faces->clear();
 	vertexData = NULL;
+	vertexDataSize = 0;
 	vertexDataComponentCount = 0;
-	multiColour = false;
+	this->multiColour = multiColour;
 	loadFromFile(filename);
 }
 
@@ -127,9 +128,13 @@ float* Model::getVertexData() {
 	if (vertexData == NULL) {
 		int numFaces = faces->size();
 		int numVertexComponents = numFaces * 12; // faces * num vertices per face * 4 (3 components + 1)
-		vertexData = new float[numVertexComponents * (multiColour ? 2 : 1)]; // components multiplied
-																			 // by 2 if random colours
-																			 // will be added
+		int vertexDataNumElements = numVertexComponents * (multiColour ? 2 : 1); // components multiplied
+																				 // by 2 if random colours
+																				 // will be added
+		vertexData = new float[vertexDataNumElements];
+
+		vertexDataSize = vertexDataNumElements * sizeof(float);
+
 		vertexDataComponentCount = 0;
 		int colourIndex = 0;
 		// Face
@@ -160,44 +165,50 @@ float* Model::getVertexData() {
 								}
 							}
 
-							float colour[] = {0.0f, 0.0f, 0.0f, 0.0f};
+							float colour[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 
 							switch (colourIndex) {
 
-								// Red
-								case 0:
+							// Red
+							case 0:
 								colour[0] = 1.0f;
 								break;
 
 								// Yellow
-								case 1:
-									colour[0] = 1.0f;
-									colour[1] = 1.0f;
+							case 1:
+								colour[0] = 1.0f;
+								colour[1] = 1.0f;
 								break;
 
 								// Blue
-								case 2:
-									colour[2] = 1.0f;
+							case 2:
+								colour[2] = 1.0f;
 								break;
 
 								// White
-								case 3:
-									colour[0] = 1.0f;
-									colour[1] = 1.0f;
-									colour[2] = 1.0f;
+							case 3:
+								colour[0] = 1.0f;
+								colour[1] = 1.0f;
+								colour[2] = 1.0f;
 								break;
 
 								// Green (should not appear)
-								default:
-									colour[1] = 1.0f;
+							default:
+								colour[1] = 1.0f;
 								break;
 							}
-							memcpy(&vertexData[vertexDataComponentCount - 1 + numVertexComponents], &colour, 4);
+							memcpy(
+									&vertexData[vertexDataComponentCount - 4 // -4 to correspond to the
+									            							 // vector just added (back
+									            							 // 4 places in the second
+									            							 // half of the data array
+											+ numVertexComponents], colour, 4*sizeof(float));
 						} // if multiColour
 					} // w component
 				} // Coordinate
 			} // Vertex
 		} // Face
+
 	} // if vertexData == NULL
 
 	return vertexData;
@@ -206,19 +217,22 @@ float* Model::getVertexData() {
 void Model::outputVertexData() {
 	cout << endl << "Number of faces: " << faces->size() << endl;
 	cout << "Total number of components: " << vertexDataComponentCount << endl;
-	for (int cnt = 0; cnt != vertexDataComponentCount; ++cnt) {
+	cout << "Multi-colour: " << multiColour << endl;
+	int iterations = vertexDataComponentCount * (multiColour ? 2 : 1);
+	for (int cnt = 0; cnt != iterations; ++cnt) {
 		if (cnt % 4 == 0)
 			cout << endl;
 		cout << vertexData[cnt] << " ";
 	}
+	cout << endl;
 }
 
 int Model::getVertexDataComponentCount() {
 	return vertexDataComponentCount;
 }
 
-void Model::setMultiColour(bool multiColour) {
-	this->multiColour = multiColour;
+int Model::getVertexDataSize() {
+	return vertexDataSize;
 }
 
 }
