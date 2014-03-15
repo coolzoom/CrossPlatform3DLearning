@@ -83,7 +83,7 @@ void RendererOpenGL33::DrawScene(
 
 		float *positions = it->getModel()->getVertexData();
 
-		it->getModel()->outputVertexData();
+		//it->getModel()->outputVertexData();
 
 		GLuint positionBufferObject;
 
