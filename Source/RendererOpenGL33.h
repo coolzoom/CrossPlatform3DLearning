@@ -22,11 +22,17 @@ private:
 	string loadShaderFromFile(string fileLocation);
 	GLuint compileShader(string shaderSource, GLenum shaderType);
 
+	boost::shared_ptr<float> xRotationMatrix;
+	boost::shared_ptr<float> yRotationMatrix;
 	boost::shared_ptr<float> zRotationMatrix;
 
+	void constructXRotationMatrix(float angle);
+	void constructYRotationMatrix(float angle);
 	void constructZRotationMatrix(float angle);
 
-	float angle;
+	float xAngle;
+	float yAngle;
+	float zAngle;
 
 public:
 	RendererOpenGL33( boost::shared_ptr<Configuration> cfg,

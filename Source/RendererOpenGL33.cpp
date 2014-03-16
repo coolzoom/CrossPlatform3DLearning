@@ -14,9 +14,16 @@ namespace AvoidTheBug3D {
 RendererOpenGL33::RendererOpenGL33(boost::shared_ptr<Configuration> cfg,
 		boost::shared_ptr<GameLog> log) :
 		Renderer(cfg, log) {
+
 	program = 0;
+
+	xRotationMatrix = boost::shared_ptr<float>(new float[16]);
+	yRotationMatrix = boost::shared_ptr<float>(new float[16]);
 	zRotationMatrix = boost::shared_ptr<float>(new float[16]);
-	angle = 0.0f;
+
+	xAngle = 0.0f;
+	yAngle = 0.0f;
+	zAngle = 0.0f;
 
 }
 
@@ -56,7 +63,7 @@ void RendererOpenGL33::Init(int width, int height) {
 		glUseProgram(program);
 
 		GLuint offsetUniform = glGetUniformLocation(program, "offset");
-		glUniform3f(offsetUniform, 0.0f, 0.0f, -3.0f);
+		glUniform3f(offsetUniform, 0.0f, -1.0f, -4.0f);
 
 		GLuint perspectiveMatrixUniform = glGetUniformLocation(program,
 				"perspectiveMatrix");
@@ -72,12 +79,6 @@ void RendererOpenGL33::Init(int width, int height) {
 		glUniformMatrix4fv(perspectiveMatrixUniform, 1, GL_FALSE,
 				perspectiveMatrix);
 
-		GLuint rotationMatrixUniform = glGetUniformLocation(program,
-				"rotationMatrix");
-		constructZRotationMatrix(0.0);
-		glUniformMatrix4fv(rotationMatrixUniform, 1, GL_TRUE,
-				zRotationMatrix.get());
-
 		glUseProgram(0);
 	}
 	glDetachShader(program, vertexShader);
@@ -90,9 +91,17 @@ void RendererOpenGL33::Init(int width, int height) {
 void RendererOpenGL33::DrawScene(
 		boost::shared_ptr<vector<WorldObject> > scene) {
 
-	if (angle > 6.28)
-		angle = 0.0;
-	angle += 0.03;
+	if (xAngle > 6.28)
+		xAngle = 0.0;
+	xAngle += 0.03;
+
+	if (yAngle > 6.28)
+		yAngle = 0.0;
+	yAngle += 0.03;
+
+//	if (zAngle > 6.28)
+//			zAngle = 0.0;
+//		zAngle += 0.03;
 
 	for (std::vector<WorldObject>::iterator it = scene->begin();
 			it != scene->end(); it++) {
@@ -123,10 +132,22 @@ void RendererOpenGL33::DrawScene(
 
 		glUseProgram(program);
 
-		GLuint rotationMatrixUniform = glGetUniformLocation(program,
-				"rotationMatrix");
-		constructZRotationMatrix(angle);
-		glUniformMatrix4fv(rotationMatrixUniform, 1, GL_TRUE,
+		GLuint xRotationMatrixUniform = glGetUniformLocation(program,
+				"xRotationMatrix");
+		GLuint yRotationMatrixUniform = glGetUniformLocation(program,
+				"yRotationMatrix");
+		GLuint zRotationMatrixUniform = glGetUniformLocation(program,
+				"zRotationMatrix");
+
+		constructXRotationMatrix(xAngle);
+		constructYRotationMatrix(yAngle);
+		constructZRotationMatrix(zAngle);
+
+		glUniformMatrix4fv(xRotationMatrixUniform, 1, GL_TRUE,
+				xRotationMatrix.get());
+		glUniformMatrix4fv(yRotationMatrixUniform, 1, GL_TRUE,
+				yRotationMatrix.get());
+		glUniformMatrix4fv(zRotationMatrixUniform, 1, GL_TRUE,
 				zRotationMatrix.get());
 
 		glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject);
@@ -150,6 +171,50 @@ void RendererOpenGL33::DrawScene(
 		SDL_GL_SwapBuffers();
 
 	} // for std::vector<WorldObject>::iterator
+}
+
+void RendererOpenGL33::constructXRotationMatrix(float angle) {
+	xRotationMatrix.get()[0] = 1;
+	xRotationMatrix.get()[1] = 0;
+	xRotationMatrix.get()[2] = 0;
+	xRotationMatrix.get()[3] = 0;
+
+	xRotationMatrix.get()[4] = 0;
+	xRotationMatrix.get()[5] = glm::cos(angle);
+	xRotationMatrix.get()[6] = -glm::sin(angle);
+	xRotationMatrix.get()[7] = 0;
+
+	xRotationMatrix.get()[8] = 0;
+	xRotationMatrix.get()[9] = glm::sin(angle);
+	xRotationMatrix.get()[10] = glm::cos(angle);
+	xRotationMatrix.get()[11] = 0;
+
+	xRotationMatrix.get()[12] = 0;
+	xRotationMatrix.get()[13] = 0;
+	xRotationMatrix.get()[14] = 0;
+	xRotationMatrix.get()[15] = 1.0f;
+}
+
+void RendererOpenGL33::constructYRotationMatrix(float angle) {
+	yRotationMatrix.get()[0] = glm::cos(angle);
+	yRotationMatrix.get()[1] = 0;
+	yRotationMatrix.get()[2] = glm::sin(angle);
+	yRotationMatrix.get()[3] = 0;
+
+	yRotationMatrix.get()[4] = 0;
+	yRotationMatrix.get()[5] = 1;
+	yRotationMatrix.get()[6] = 0;
+	yRotationMatrix.get()[7] = 0;
+
+	yRotationMatrix.get()[8] = -glm::sin(angle);
+	yRotationMatrix.get()[9] = 0;
+	yRotationMatrix.get()[10] = glm::cos(angle);
+	yRotationMatrix.get()[11] = 0;
+
+	yRotationMatrix.get()[12] = 0;
+	yRotationMatrix.get()[13] = 0;
+	yRotationMatrix.get()[14] = 0;
+	yRotationMatrix.get()[15] = 1.0f;
 }
 
 void RendererOpenGL33::constructZRotationMatrix(float angle) {
