@@ -60,7 +60,7 @@ public:
 	/**
 	 * Draw the scene
 	 */
-	virtual void DrawScene(boost::shared_ptr<vector<WorldObject> > scene) = 0;
+	virtual void DrawScene(boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene) = 0;
 
 	/**
 	 * Destructor

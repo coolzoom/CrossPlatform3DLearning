@@ -58,7 +58,7 @@ void RendererOpenGL14::Init(int width, int height) {
 }
 
 void RendererOpenGL14::DrawScene(
-		boost::shared_ptr<vector<WorldObject> > scene) {
+		boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene) {
 	if (angle > 360)
 		angle = 0;
 	angle += 3;
@@ -70,13 +70,13 @@ void RendererOpenGL14::DrawScene(
 
 	glRotatef(angle, 1.0f, 1.0f, 0.0f);
 
-	for (std::vector<WorldObject>::iterator it = scene->begin();
+	for (std::vector<boost::shared_ptr<WorldObject> >::iterator it = scene->begin();
 			it != scene->end(); it++) {
 
 		glBegin(GL_TRIANGLES);
 
-		vector<float*>* vertices = it->getModel()->getVertices();
-		vector<int*>* faces = it->getModel()->getFaces();
+		vector<float*>* vertices = it->get()->getModel()->getVertices();
+		vector<int*>* faces = it->get()->getModel()->getFaces();
 
 		int numFaces = faces->size();
 		for (int idx = 0; idx != numFaces; ++idx) {

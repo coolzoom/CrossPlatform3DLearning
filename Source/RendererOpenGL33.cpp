@@ -89,7 +89,7 @@ void RendererOpenGL33::Init(int width, int height) {
 }
 
 void RendererOpenGL33::DrawScene(
-		boost::shared_ptr<vector<WorldObject> > scene) {
+		boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene) {
 
 	if (xAngle > 6.28)
 		xAngle = 0.0;
@@ -103,10 +103,10 @@ void RendererOpenGL33::DrawScene(
 //			zAngle = 0.0;
 //		zAngle += 0.03;
 
-	for (std::vector<WorldObject>::iterator it = scene->begin();
+	for (std::vector<boost::shared_ptr<WorldObject> >::iterator it = scene->begin();
 			it != scene->end(); it++) {
 
-		float *positions = it->getModel()->getVertexData();
+		float *positions = it->get()->getModel()->getVertexData();
 
 		//it->getModel()->outputVertexData();
 
@@ -114,7 +114,7 @@ void RendererOpenGL33::DrawScene(
 
 		glGenBuffers(1, &positionBufferObject);
 		glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject);
-		glBufferData(GL_ARRAY_BUFFER, it->getModel()->getVertexDataSize(),
+		glBufferData(GL_ARRAY_BUFFER, it->get()->getModel()->getVertexDataSize(),
 				positions, GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -157,10 +157,10 @@ void RendererOpenGL33::DrawScene(
 
 		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
 		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0,
-				(void*) (it->getModel()->getVertexDataSize() / 2));
+				(void*) (it->get()->getModel()->getVertexDataSize() / 2));
 
 		glDrawArrays(GL_TRIANGLES, 0,
-				it->getModel()->getVertexDataComponentCount());
+				it->get()->getModel()->getVertexDataComponentCount());
 
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
