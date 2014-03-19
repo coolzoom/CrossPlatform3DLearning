@@ -32,6 +32,11 @@ void RendererOpenGL33::Init(int width, int height) {
 
 	glViewport(0, 0, (GLsizei) width, (GLsizei) height);
 
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
+	glDepthFunc(GL_LEQUAL);
+	glDepthRange(0.0f, 10.0f);
+
 	GLuint vertexShader = compileShader(
 			"/Game/Shaders/perspectiveMatrixShader.vert",
 			GL_VERTEX_SHADER);
@@ -91,9 +96,9 @@ void RendererOpenGL33::Init(int width, int height) {
 void RendererOpenGL33::DrawScene(
 		boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene) {
 
-	if (xAngle > 6.28)
-		xAngle = 0.0;
-	xAngle += 0.03;
+//	if (xAngle > 6.28)
+//		xAngle = 0.0;
+//	xAngle += 0.03;
 
 	if (yAngle > 6.28)
 		yAngle = 0.0;
@@ -127,8 +132,12 @@ void RendererOpenGL33::DrawScene(
 		glCullFace(GL_BACK);
 		glFrontFace(GL_CCW);
 
+
+
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+		glClearDepth(10.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glUseProgram(program);
 
