@@ -96,9 +96,9 @@ void RendererOpenGL33::Init(int width, int height) {
 void RendererOpenGL33::DrawScene(
 		boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene) {
 
-//	if (xAngle > 6.28)
-//		xAngle = 0.0;
-//	xAngle += 0.03;
+	if (xAngle > 6.28)
+		xAngle = 0.0;
+	xAngle += 0.03;
 
 	if (yAngle > 6.28)
 		yAngle = 0.0;
