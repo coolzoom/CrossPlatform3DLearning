@@ -27,6 +27,8 @@ private:
 	int vertexDataSize;
 	int vertexDataComponentCount;
 	bool multiColour;
+	bool indexedDrawing;
+	int facesIndexCount;
 public:
 	/**
 	 * Initialisation of the model.
@@ -36,7 +38,8 @@ public:
 	 * @param cfg The game configuration
 	 * @param log The log
 	 */
-	Model(string fileLocation, bool multiColour, const boost::shared_ptr<Configuration> &cfg, const boost::shared_ptr<GameLog> &log);
+	Model(string fileLocation, bool multiColour, bool indexedDrawing,
+			const boost::shared_ptr<Configuration> &cfg, const boost::shared_ptr<GameLog> &log);
 	~Model(void);
 
 	/**

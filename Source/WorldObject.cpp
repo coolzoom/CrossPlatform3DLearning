@@ -14,7 +14,7 @@ WorldObject::WorldObject(string name, string modelPath, boost::shared_ptr<Config
 		boost::shared_ptr<GameLog> log) {
 	this->name = name;
 	this->log = log;
-	this->model = boost::shared_ptr<Model>(new Model(modelPath, true, cfg, log ));
+	this->model = boost::shared_ptr<Model>(new Model(modelPath, true, false, cfg, log ));
 
 }
 

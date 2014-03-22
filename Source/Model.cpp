@@ -10,7 +10,8 @@ using namespace std;
 using namespace boost;
 namespace AvoidTheBug3D {
 
-Model::Model(string filename, bool multiColour, const boost::shared_ptr<Configuration> &cfg,
+Model::Model(string filename, bool multiColour, bool indexedDrawing,
+		const boost::shared_ptr<Configuration> &cfg,
 		const boost::shared_ptr<GameLog> &log) {
 	this->cfg = cfg;
 	this->log = log;
@@ -23,6 +24,7 @@ Model::Model(string filename, bool multiColour, const boost::shared_ptr<Configur
 	vertexDataSize = 0;
 	vertexDataComponentCount = 0;
 	this->multiColour = multiColour;
+	this->indexedDrawing = indexedDrawing;
 	loadFromFile(filename);
 }
 
@@ -125,7 +127,39 @@ vector<int*>* Model::getFaces() {
 }
 
 float* Model::getVertexData() {
-	if (vertexData == NULL) {
+	if (vertexData == NULL && indexedDrawing) {
+		if (multiColour)
+		{
+			throw new GameException(
+							"Multicolour not supported in combination with indexed drawing");
+		}
+		int numFaces = faces->size();
+		int numVertexComponents = vertices->size() * 4;
+		// don't forget about facesIndexCount
+		vertexDataComponentCount = 0;
+		facesIndexCount = 0;
+
+		BOOST_FOREACH(const float* vertex, *vertices) {
+			for (int coordIdx = 0; coordIdx != 3; ++coordIdx) {
+				vertexData[vertexDataComponentCount] = vertex[coordIdx];
+				++vertexDataComponentCount;
+			}
+			vertexData[vertexDataComponentCount] = 1.0f;
+			++vertexDataComponentCount;
+		}
+
+		BOOST_FOREACH(const int* face, *faces) {
+			for (int indexIdx = 0; indexIdx != 3; ++indexIdx) {
+				vertexData[vertexDataComponentCount + facesIndexCount] = face[indexIdx];
+				// Careful: No - 1 because vertexDataComponentCount is also the
+				// index of the first faceIndex.
+				++facesIndexCount;
+			}
+			vertexData[vertexDataComponentCount + facesIndexCount] = 1.0f;
+			++facesIndexCount;
+		}
+
+	} else if (vertexData == NULL) {
 		int numFaces = faces->size();
 		int numVertexComponents = numFaces * 12; // faces * num vertices per face * 4 (3 components + 1)
 		int vertexDataNumElements = numVertexComponents * (multiColour ? 2 : 1); // components multiplied
@@ -140,12 +174,12 @@ float* Model::getVertexData() {
 		// Face
 		for (int faceIdx = 0; faceIdx != numFaces; ++faceIdx) {
 			// Vertex
-			for (int verticeIdx = 0; verticeIdx != 3; ++verticeIdx) {
+			for (int vertexIdx = 0; vertexIdx != 3; ++vertexIdx) {
 				// Coordinate
 				for (int coordIdx = 0; coordIdx != 3; ++coordIdx) {
 
 					vertexData[vertexDataComponentCount] = vertices->at(
-							faces->at(faceIdx)[verticeIdx] - 1)[coordIdx];
+							faces->at(faceIdx)[vertexIdx] - 1)[coordIdx];
 					++vertexDataComponentCount;
 
 					// w component
@@ -157,7 +191,7 @@ float* Model::getVertexData() {
 							// Add random colours for each face to the data.
 
 							// Colour rotation
-							if (verticeIdx == 0) {
+							if (vertexIdx == 0) {
 								if (colourIndex == 3) {
 									colourIndex = 0;
 								} else {
@@ -197,12 +231,11 @@ float* Model::getVertexData() {
 								colour[1] = 1.0f;
 								break;
 							}
-							memcpy(
-									&vertexData[vertexDataComponentCount - 4 // -4 to correspond to the
-									            							 // vector just added (back
-									            							 // 4 places in the second
-									            							 // half of the data array
-											+ numVertexComponents], colour, 4*sizeof(float));
+							memcpy(&vertexData[vertexDataComponentCount - 4 // -4 to correspond to the
+																			// vector just added (back
+																			// 4 places in the second
+																			// half of the data array
+							+ numVertexComponents], colour, 4 * sizeof(float));
 						} // if multiColour
 					} // w component
 				} // Coordinate
