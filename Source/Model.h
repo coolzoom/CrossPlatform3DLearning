@@ -28,7 +28,10 @@ private:
 	int vertexDataComponentCount;
 	bool multiColour;
 	bool indexedDrawing;
-	int facesIndexCount;
+	int *indexData;
+	int indexDataSize;
+	int indexDataIndexCount;
+
 public:
 	/**
 	 * Initialisation of the model.
@@ -76,6 +79,12 @@ public:
 	 */
 	vector<int*>* getFaces();
 
+	/**
+	 * Get the index data, i.e. the indexes of each vertex to be drawn
+	 * when the indexed drawing flag has been set.
+	 * @return
+	 */
+	int * getIndexData();
 
 	/**
 	 * Get the vertex data, e.g. to be sent to glBindBuffer.
@@ -102,6 +111,24 @@ public:
 	 * @return The size of the vertex data
 	 */
 	int getVertexDataSize();
+
+	/**
+	 * Is the model in indexed drawing mode?
+	 * @return True if in indexed drawing mode, false otherwise
+	 */
+	bool isIndexedDrawing() const;
+
+	/**
+	 * Get the size of the index data
+	 * @return The size of the index data
+	 */
+	int getIndexDataSize() const;
+
+	/**
+	 * Has the model been set to be drawn in random multiple colours?
+	 * @return True if the model has been set to be drawn in random multiple colours, false otherwise
+	 */
+	bool isMultiColour() const;
 };
 
 }

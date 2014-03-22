@@ -23,6 +23,9 @@ Model::Model(string filename, bool multiColour, bool indexedDrawing,
 	vertexData = NULL;
 	vertexDataSize = 0;
 	vertexDataComponentCount = 0;
+	indexData = NULL;
+	indexDataSize = 0;
+	indexDataIndexCount = 0;
 	this->multiColour = multiColour;
 	this->indexedDrawing = indexedDrawing;
 	loadFromFile(filename);
@@ -47,6 +50,10 @@ Model::~Model(void) {
 
 	if (vertexData != NULL) {
 		delete[] vertexData;
+	}
+
+	if (indexData != NULL) {
+		delete[] indexData;
 	}
 }
 
@@ -128,16 +135,17 @@ vector<int*>* Model::getFaces() {
 
 float* Model::getVertexData() {
 	if (vertexData == NULL && indexedDrawing) {
-		if (multiColour)
-		{
+		if (multiColour) {
 			throw new GameException(
-							"Multicolour not supported in combination with indexed drawing");
+					"Multicolour not supported in combination with indexed drawing");
 		}
-		int numFaces = faces->size();
-		int numVertexComponents = vertices->size() * 4;
-		// don't forget about facesIndexCount
+
+		int vertexDataNumElements = vertices->size() * 4;
+		vertexDataSize = vertexDataNumElements * sizeof(float);
+
+		vertexData = new float[vertexDataNumElements];
+
 		vertexDataComponentCount = 0;
-		facesIndexCount = 0;
 
 		BOOST_FOREACH(const float* vertex, *vertices) {
 			for (int coordIdx = 0; coordIdx != 3; ++coordIdx) {
@@ -146,17 +154,6 @@ float* Model::getVertexData() {
 			}
 			vertexData[vertexDataComponentCount] = 1.0f;
 			++vertexDataComponentCount;
-		}
-
-		BOOST_FOREACH(const int* face, *faces) {
-			for (int indexIdx = 0; indexIdx != 3; ++indexIdx) {
-				vertexData[vertexDataComponentCount + facesIndexCount] = face[indexIdx];
-				// Careful: No - 1 because vertexDataComponentCount is also the
-				// index of the first faceIndex.
-				++facesIndexCount;
-			}
-			vertexData[vertexDataComponentCount + facesIndexCount] = 1.0f;
-			++facesIndexCount;
 		}
 
 	} else if (vertexData == NULL) {
@@ -247,6 +244,25 @@ float* Model::getVertexData() {
 	return vertexData;
 }
 
+int * Model::getIndexData() {
+
+	int numIndexes = faces->size() * 3;
+	indexDataSize = numIndexes * sizeof(int);
+
+	indexData = new int[numIndexes];
+
+	indexDataIndexCount = 0;
+
+	BOOST_FOREACH(const int* face, *faces) {
+		for (int indexIdx = 0; indexIdx != 3; ++indexIdx) {
+			vertexData[indexDataIndexCount] =
+					face[indexIdx];
+			++indexDataIndexCount;
+		}
+	}
+	return indexData;
+}
+
 void Model::outputVertexData() {
 	cout << endl << "Number of faces: " << faces->size() << endl;
 	cout << "Total number of components: " << vertexDataComponentCount << endl;
@@ -266,6 +282,18 @@ int Model::getVertexDataComponentCount() {
 
 int Model::getVertexDataSize() {
 	return vertexDataSize;
+}
+
+bool Model::isIndexedDrawing() const {
+	return indexedDrawing;
+}
+
+int Model::getIndexDataSize() const {
+	return indexDataSize;
+}
+
+bool Model::isMultiColour() const {
+	return multiColour;
 }
 
 }

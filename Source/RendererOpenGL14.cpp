@@ -73,6 +73,11 @@ void RendererOpenGL14::DrawScene(
 	for (std::vector<boost::shared_ptr<WorldObject> >::iterator it = scene->begin();
 			it != scene->end(); it++) {
 
+		if (it->get()->getModel()->isIndexedDrawing())
+		{
+			throw new GameException("OpenGL 1.4 renderer does not support models in indexed drawing mode.");
+		}
+
 		glBegin(GL_TRIANGLES);
 
 		vector<float*>* vertices = it->get()->getModel()->getVertices();
