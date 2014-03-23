@@ -244,20 +244,21 @@ float* Model::getVertexData() {
 	return vertexData;
 }
 
-int * Model::getIndexData() {
+unsigned int * Model::getIndexData() {
 
-	int numIndexes = faces->size() * 3;
-	indexDataSize = numIndexes * sizeof(int);
+	if (indexData == NULL && indexedDrawing) {
+		int numIndexes = faces->size() * 3;
+		indexDataSize = numIndexes * sizeof(int);
 
-	indexData = new int[numIndexes];
+		indexData = new unsigned int[numIndexes];
 
-	indexDataIndexCount = 0;
+		indexDataIndexCount = 0;
 
-	BOOST_FOREACH(const int* face, *faces) {
-		for (int indexIdx = 0; indexIdx != 3; ++indexIdx) {
-			vertexData[indexDataIndexCount] =
-					face[indexIdx];
-			++indexDataIndexCount;
+		BOOST_FOREACH(const int* face, *faces) {
+			for (int indexIdx = 0; indexIdx != 3; ++indexIdx) {
+				indexData[indexDataIndexCount] = face[indexIdx];
+				++indexDataIndexCount;
+			}
 		}
 	}
 	return indexData;
@@ -272,6 +273,16 @@ void Model::outputVertexData() {
 		if (cnt % 4 == 0)
 			cout << endl;
 		cout << vertexData[cnt] << " ";
+	}
+	cout << endl;
+}
+
+void Model::outputIndexData() {
+	cout << endl << "Index data element count: " << indexDataIndexCount << endl;
+	for (int cnt = 0; cnt != indexDataIndexCount; ++cnt) {
+		if (cnt % 3 == 0)
+			cout << endl;
+		cout << indexData[cnt] << " ";
 	}
 	cout << endl;
 }
@@ -296,5 +307,10 @@ bool Model::isMultiColour() const {
 	return multiColour;
 }
 
+int Model::getIndexDataIndexCount() const {
+	return indexDataIndexCount;
 }
+
+}
+
 

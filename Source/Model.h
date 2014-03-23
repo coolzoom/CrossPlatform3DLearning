@@ -28,7 +28,7 @@ private:
 	int vertexDataComponentCount;
 	bool multiColour;
 	bool indexedDrawing;
-	int *indexData;
+	unsigned int *indexData;
 	int indexDataSize;
 	int indexDataIndexCount;
 
@@ -84,7 +84,7 @@ public:
 	 * when the indexed drawing flag has been set.
 	 * @return
 	 */
-	int * getIndexData();
+	unsigned int * getIndexData();
 
 	/**
 	 * Get the vertex data, e.g. to be sent to glBindBuffer.
@@ -99,6 +99,11 @@ public:
 	 * via the Model's state.
 	 */
 	void outputVertexData();
+
+	/**
+	 * Output the index data.
+	 */
+	void outputIndexData();
 
 	/**
 	 * Get the number of components in the vertex data array
@@ -129,6 +134,12 @@ public:
 	 * @return True if the model has been set to be drawn in random multiple colours, false otherwise
 	 */
 	bool isMultiColour() const;
+
+	/**
+	 * Get the number of index data elements
+	 * @return The number of index data elements
+	 */
+	int getIndexDataIndexCount() const;
 };
 
 }

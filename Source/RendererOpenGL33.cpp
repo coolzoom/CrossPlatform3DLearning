@@ -116,7 +116,6 @@ void RendererOpenGL33::DrawScene(
 		glFrontFace(GL_CCW);
 
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
 		glClearDepth(10.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -140,6 +139,11 @@ void RendererOpenGL33::DrawScene(
 		glUniformMatrix4fv(zRotationMatrixUniform, 1, GL_TRUE,
 				zRotationMatrix.get());
 
+		// Generate VAO
+		GLuint vao;
+		glGenVertexArrays(1, &vao);
+		glBindVertexArray(vao);
+
 		GLuint positionBufferObject;
 		glGenBuffers(1, &positionBufferObject);
 
@@ -148,9 +152,8 @@ void RendererOpenGL33::DrawScene(
 				it->get()->getModel()->getVertexDataSize(),
 				it->get()->getModel()->getVertexData(),
 				GL_STATIC_DRAW);
-
-		//glBindBuffer(GL_ARRAY_BUFFER, 0);
-		//glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
 		if (it->get()->getModel()->isIndexedDrawing()) {
 			GLuint indexBufferObject;
@@ -160,16 +163,8 @@ void RendererOpenGL33::DrawScene(
 					it->get()->getModel()->getIndexDataSize(),
 					it->get()->getModel()->getIndexData(),
 					GL_STATIC_DRAW);
-
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
 		}
-
-		// Generate VAO
-		GLuint vao;
-		glGenVertexArrays(1, &vao);
-		glBindVertexArray(vao);
-
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
 		if (it->get()->getModel()->isMultiColour()) {
 			glEnableVertexAttribArray(1);
@@ -177,8 +172,14 @@ void RendererOpenGL33::DrawScene(
 					(void*) (it->get()->getModel()->getVertexDataSize() / 2));
 		}
 
-		glDrawArrays(GL_TRIANGLES, 0,
-				it->get()->getModel()->getVertexDataComponentCount());
+		if (it->get()->getModel()->isIndexedDrawing()) {
+			glDrawElements(GL_TRIANGLES,
+					it->get()->getModel()->getIndexDataIndexCount(),
+					GL_UNSIGNED_INT, 0);
+		} else {
+			glDrawArrays(GL_TRIANGLES, 0,
+					it->get()->getModel()->getVertexDataComponentCount());
+		}
 
 		glDisableVertexAttribArray(0);
 
