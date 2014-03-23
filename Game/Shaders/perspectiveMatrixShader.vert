@@ -5,6 +5,7 @@ layout(location = 1) in vec4 colour;
 
 smooth out vec4 fragColour;
 
+uniform uint multiColourBool;
 uniform vec3 offset;
 uniform mat4 perspectiveMatrix;
 
@@ -21,5 +22,8 @@ void main()
     
     gl_Position = perspectiveMatrix * cameraPos;
 
-    fragColour = colour;
+    if (multiColourBool == uint(0))
+        fragColour = vec4(1.0, 1.0, 1.0, 1.0);
+    else
+        fragColour = colour;
 }
