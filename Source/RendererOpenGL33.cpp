@@ -124,7 +124,7 @@ void RendererOpenGL33::DrawScene(
 
 		GLuint multiColourBoolUniform = glGetUniformLocation(program,
 				"multiColourBool");
-		glUniform1ui(multiColourBoolUniform, (uint)(it->get()->getModel()->isMultiColour() ? 1 : 0));
+		glUniform1ui(multiColourBoolUniform, (it->get()->getModel()->isMultiColour() ? 1 : 0));
 
 		GLuint xRotationMatrixUniform = glGetUniformLocation(program,
 				"xRotationMatrix");
