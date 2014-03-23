@@ -256,7 +256,8 @@ unsigned int * Model::getIndexData() {
 
 		BOOST_FOREACH(const int* face, *faces) {
 			for (int indexIdx = 0; indexIdx != 3; ++indexIdx) {
-				indexData[indexDataIndexCount] = face[indexIdx];
+				indexData[indexDataIndexCount] = face[indexIdx] -1; // -1 because Wavefront indexes
+																	// are not 0 based
 				++indexDataIndexCount;
 			}
 		}

@@ -27,7 +27,8 @@ int main(int argc, char** argv) {
 
 		boost::shared_ptr<Configuration> cfg(new Configuration(log));
 
-		//OpenGL v1.4 or v3.3. Uncomment accordingly
+		//OpenGL v1.4 or v3.3. Uncomment accordingly. Modify in combination with
+		// WorldObject constructor (indexed drawing, multicolour params to Model)
 		//boost::shared_ptr<Renderer> renderer(new RendererOpenGL14(cfg, log));
 		boost::shared_ptr<Renderer> renderer(new RendererOpenGL33(cfg, log));
 

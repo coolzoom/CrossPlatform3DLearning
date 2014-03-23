@@ -91,6 +91,13 @@ void RendererOpenGL33::Init(int width, int height) {
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CCW);
+
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClearDepth(10.0f);
+
 }
 
 void RendererOpenGL33::DrawScene(
@@ -111,12 +118,6 @@ void RendererOpenGL33::DrawScene(
 	for (std::vector<boost::shared_ptr<WorldObject> >::iterator it =
 			scene->begin(); it != scene->end(); it++) {
 
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
-		glFrontFace(GL_CCW);
-
-		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		glClearDepth(10.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glUseProgram(program);
