@@ -20,6 +20,7 @@ class Model {
 private:
 	vector<float*> *vertices;
 	vector<int*> *faces;
+	vector<float*> *normals;
 	boost::shared_ptr<Configuration> cfg;
 	boost::shared_ptr<GameLog> log;
 	void loadFromFile(string fileLocation);
@@ -31,6 +32,9 @@ private:
 	unsigned int *indexData;
 	int indexDataSize;
 	int indexDataIndexCount;
+	float *normalsData;
+	int normalsDataSize;
+	int normalsDataComponentCount;
 
 public:
 	/**

@@ -20,12 +20,17 @@ Model::Model(string filename, bool multiColour, bool indexedDrawing,
 	vertices->clear();
 	faces = new vector<int *>();
 	faces->clear();
+	normals = new vector<float *>();
+	normals->clear();
 	vertexData = NULL;
 	vertexDataSize = 0;
 	vertexDataComponentCount = 0;
 	indexData = NULL;
 	indexDataSize = 0;
 	indexDataIndexCount = 0;
+	normalsData = NULL;
+	normalsDataSize = 0;
+	normalsDataComponentCount = 0;
 	this->multiColour = multiColour;
 	this->indexedDrawing = indexedDrawing;
 	loadFromFile(filename);
@@ -48,12 +53,24 @@ Model::~Model(void) {
 		delete faces;
 	}
 
+	if (normals != NULL) {
+		for (int i = 0; i != normals->size(); ++i) {
+			delete[] normals->at(i);
+		}
+		normals->clear();
+		delete normals;
+	}
+
 	if (vertexData != NULL) {
 		delete[] vertexData;
 	}
 
 	if (indexData != NULL) {
 		delete[] indexData;
+	}
+
+	if (normalsData != NULL) {
+		delete[] normalsData;
 	}
 }
 
@@ -71,16 +88,28 @@ void Model::loadFromFile(string fileLocation) {
 				tokenizer<char_separator<char> > tokens(line, sep);
 				int idx = 0;
 
-				if (line[0] == 'v') {
+				if (line[0] == 'v' && line[1] == 'n') {
+					// get vertex normal
+					float *vn = new float[3];
+					BOOST_FOREACH (const string& t, tokens) {
+						if (idx > 0) { // The first token is the vertex normal indicator
+							vn[idx - 1] = atof(t.c_str());
+						}
+						++idx;
+					}
+					normals->push_back(vn);
+				} else if (line[0] == 'v') {
+					// get vertex
 					float *v = new float[3];
 					BOOST_FOREACH (const string& t, tokens) {
-						if (idx > 0) { // The first token is the vertice indicator
+						if (idx > 0) { // The first token is the vertex indicator
 							v[idx - 1] = atof(t.c_str());
 						}
 						++idx;
 					}
 					vertices->push_back(v);
 				} else {
+					// get vertex index
 					int *v = new int[3];
 					BOOST_FOREACH (const string& t, tokens) {
 						if (idx > 0) { // The first token is face indicator
@@ -256,8 +285,8 @@ unsigned int * Model::getIndexData() {
 
 		BOOST_FOREACH(const int* face, *faces) {
 			for (int indexIdx = 0; indexIdx != 3; ++indexIdx) {
-				indexData[indexDataIndexCount] = face[indexIdx] -1; // -1 because Wavefront indexes
-																	// are not 0 based
+				indexData[indexDataIndexCount] = face[indexIdx] - 1; // -1 because Wavefront indexes
+																	 // are not 0 based
 				++indexDataIndexCount;
 			}
 		}
@@ -313,5 +342,4 @@ int Model::getIndexDataIndexCount() const {
 }
 
 }
-
 
