@@ -21,6 +21,7 @@ private:
 	vector<float*> *vertices;
 	vector<int*> *faces;
 	vector<float*> *normals;
+	vector<int*> *facesNormals;
 	boost::shared_ptr<Configuration> cfg;
 	boost::shared_ptr<GameLog> log;
 	void loadFromFile(string fileLocation);

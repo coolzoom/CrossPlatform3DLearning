@@ -22,6 +22,8 @@ Model::Model(string filename, bool multiColour, bool indexedDrawing,
 	faces->clear();
 	normals = new vector<float *>();
 	normals->clear();
+	facesNormals = new vector<int *>();
+	facesNormals->clear();
 	vertexData = NULL;
 	vertexDataSize = 0;
 	vertexDataComponentCount = 0;
@@ -59,6 +61,14 @@ Model::~Model(void) {
 		}
 		normals->clear();
 		delete normals;
+	}
+
+	if (facesNormals != NULL) {
+		for (int i = 0; i != facesNormals->size(); ++i) {
+			delete[] facesNormals->at(i);
+		}
+		facesNormals->clear();
+		delete facesNormals;
 	}
 
 	if (vertexData != NULL) {
@@ -111,13 +121,23 @@ void Model::loadFromFile(string fileLocation) {
 				} else {
 					// get vertex index
 					int *v = new int[3];
+					int *n = NULL;
 					BOOST_FOREACH (const string& t, tokens) {
+
 						if (idx > 0) { // The first token is face indicator
-							v[idx - 1] = atoi(t.c_str());
+							if (t.find("//") > 0) { // normal index contained in the string
+								n = new int[3];
+
+								v[idx - 1] = atoi(t.substr(0, t.find("//")).c_str());
+								n[idx - 1] = atoi(t.substr(t.find("//") + 2).c_str());
+							} else { // just the vertex index is contained
+								v[idx - 1] = atoi(t.c_str());
+							}
 						}
 						++idx;
 					}
 					faces->push_back(v);
+					if (n != NULL) facesNormals->push_back(n);
 				}
 			}
 		}
