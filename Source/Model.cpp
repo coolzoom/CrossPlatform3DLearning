@@ -126,7 +126,7 @@ void Model::loadFromFile(string fileLocation) {
 
 						if (idx > 0) { // The first token is face indicator
 							if (t.find("//") > 0) { // normal index contained in the string
-								n = new int[3];
+								if (n == NULL) n = new int[3];
 
 								v[idx - 1] = atoi(t.substr(0, t.find("//")).c_str());
 								n[idx - 1] = atoi(t.substr(t.find("//") + 2).c_str());

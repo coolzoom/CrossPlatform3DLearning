@@ -1,0 +1,3 @@
+When exporting the models to Wavefront .obj files,
+make sure you set the options "Triangulate Faces"
+and "Keep Vertex Order".
