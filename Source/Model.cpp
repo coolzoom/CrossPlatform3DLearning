@@ -361,5 +361,31 @@ int Model::getIndexDataIndexCount() const {
 	return indexDataIndexCount;
 }
 
+float* Model::getNormalsData() {
+	if (normalsData == NULL) {
+		int numComponents = normals->size() * 3;
+		normalsDataSize = numComponents * sizeof(float);
+
+		normalsData = new float[numComponents];
+
+		normalsDataComponentCount = 0;
+
+		BOOST_FOREACH(const float* normal, *normals) {
+			for (int componentIdx = 0; componentIdx != 3; ++componentIdx) {
+				normalsData[componentIdx] = normal[componentIdx];
+				++normalsDataComponentCount;
+			}
+		}
+	}
+	return normalsData;
 }
 
+int Model::getNormalsDataComponentCount() const {
+	return normalsDataComponentCount;
+}
+
+int Model::getNormalsDataSize() const {
+	return normalsDataSize;
+}
+
+}

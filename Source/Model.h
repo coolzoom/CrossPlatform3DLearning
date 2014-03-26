@@ -145,6 +145,25 @@ public:
 	 * @return The number of index data elements
 	 */
 	int getIndexDataIndexCount() const;
+
+	/**
+	 * Get the normals data
+	 * @return The normals data
+	 */
+	float* getNormalsData();
+
+	/**
+	 * Get the total number of components in the normals data
+	 * @return The normals data component count
+	 */
+	int getNormalsDataComponentCount() const;
+
+	/**
+	 * Get the size of the normals data (in bytes)
+	 * @return The size of the normals data in bytes
+	 */
+	int getNormalsDataSize() const;
+
 };
 
 }
