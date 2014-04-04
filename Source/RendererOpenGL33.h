@@ -11,6 +11,7 @@
 #include "Renderer.h"
 #include <string>
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 using namespace std;
 

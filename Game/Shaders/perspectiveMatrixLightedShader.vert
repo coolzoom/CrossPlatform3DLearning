@@ -14,6 +14,8 @@ uniform mat4 xRotationMatrix;
 uniform mat4 yRotationMatrix;
 uniform mat4 zRotationMatrix;
 
+uniform vec3 lightDirection;
+
 void main()
 {
     vec4 cameraPos = position * xRotationMatrix 
@@ -23,8 +25,5 @@ void main()
     
     gl_Position = perspectiveMatrix * cameraPos;
 
-    if (multiColourBool == uint(0))
-        fragColour = vec4(1.0, 1.0, 1.0, 1.0);
-    else
-        fragColour = colour;
+    fragColour = clamp(dot(normal, lightDirection), 0, 1) * vec4(1.0, 1.0, 1.0, 1.0);
 }
