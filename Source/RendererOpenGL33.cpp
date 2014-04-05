@@ -126,7 +126,8 @@ void RendererOpenGL33::DrawScene(
 
 		GLuint multiColourBoolUniform = glGetUniformLocation(program,
 				"multiColourBool");
-		glUniform1ui(multiColourBoolUniform, (it->get()->getModel()->isMultiColour() ? 1 : 0));
+		glUniform1ui(multiColourBoolUniform,
+				(it->get()->getModel()->isMultiColour() ? 1 : 0));
 
 		GLuint xRotationMatrixUniform = glGetUniformLocation(program,
 				"xRotationMatrix");
@@ -177,20 +178,24 @@ void RendererOpenGL33::DrawScene(
 			glEnableVertexAttribArray(1);
 			glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0,
 					(void*) (it->get()->getModel()->getVertexDataSize() / 2));
-		}
-		else
-		{
+		} else {
 			glm::vec3 lightDirection(0.866f, 0.5f, 0.0f);
-			GLuint lightDirectionUniform = glGetUniformLocation(program, "lightDirection");
+			GLuint lightDirectionUniform = glGetUniformLocation(program,
+					"lightDirection");
 			glUniformMatrix3fv(lightDirectionUniform, 1, GL_TRUE,
 					glm::value_ptr(lightDirection));
 
 			GLuint normalsBufferObject;
 			glGenBuffers(1, &normalsBufferObject);
-			glBindBuffer(GL_UNIFORM_BUFFER, normalsBufferObject);
-			glBufferData(GL_UNIFORM_BUFFER, it->get()->getModel()->getNormalsDataSize(),
-					NULL, GL_DYNAMIC_DRAW);
-			glBindBuffer(GL_UNIFORM_BUFFER, 0);
+			glBindBuffer(GL_ARRAY_BUFFER, normalsBufferObject);
+			glBufferData(GL_ARRAY_BUFFER,
+					it->get()->getModel()->getNormalsDataSize(),
+					it->get()->getModel()->getNormalsData(), GL_STATIC_DRAW);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+			//glEnableVertexAttribArray(1);
+			//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0,
+			//		(void*) (it->get()->getModel()->getNormalsDataSize()));
 
 		}
 

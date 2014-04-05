@@ -1,8 +1,7 @@
 #version 330
 
 layout(location = 0) in vec4 position;
-layout(location = 1) in vec4 colour;
-layout(location = 2) in vec3 normal;
+layout(location = 1) in vec3 normal;
 
 smooth out vec4 fragColour;
 
@@ -25,5 +24,9 @@ void main()
     
     gl_Position = perspectiveMatrix * cameraPos;
 
-    fragColour = clamp(dot(normal, lightDirection), 0, 1) * vec4(1.0, 1.0, 1.0, 1.0);
+    vec4 lightDirectionCameraSpace = perspectiveMatrix * vec4(lightDirection, 1.0);
+    
+    vec4 normalCameraSpace = perspectiveMatrix * vec4(normal, 1.0);
+
+    fragColour = clamp(dot(normalCameraSpace, lightDirectionCameraSpace), 0, 1) * vec4(1.0, 1.0, 1.0, 1.0);
 }
