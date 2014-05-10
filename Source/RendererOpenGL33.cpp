@@ -178,7 +178,7 @@ void RendererOpenGL33::DrawScene(
 			glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0,
 					(void*) (it->get()->getModel()->getVertexDataSize() / 2));
 		} else {
-			glm::vec3 lightDirection(0.866f, 0.5f, 0.0f);
+			glm::vec3 lightDirection(0.866f, -0.5f, 0.2f);
 			GLuint lightDirectionUniform = glGetUniformLocation(program,
 					"lightDirection");
 			glUniformMatrix3fv(lightDirectionUniform, 1, GL_TRUE,
