@@ -37,6 +37,10 @@ private:
 	int normalsDataSize;
 	int normalsDataComponentCount;
 
+	unsigned int *normalsIndexData;
+	int normalsIndexDataSize;
+	int normalsIndexDataIndexCount;
+
 public:
 	/**
 	 * Initialisation of the model.
@@ -153,6 +157,18 @@ public:
 	float* getNormalsData();
 
 	/**
+	 * Get the normals index data
+	 * @return The normals index data
+	 */
+	unsigned int* getNormalsIndexData();
+
+	/**
+	 * Get the size of the normals index data
+	 * @return The size of the normals index data
+	 */
+	int getNormalsIndexDataSize() const;
+
+	/**
 	 * Get the total number of components in the normals data
 	 * @return The normals data component count
 	 */
@@ -163,6 +179,12 @@ public:
 	 * @return The size of the normals data in bytes
 	 */
 	int getNormalsDataSize() const;
+
+	/**
+	 * Get the total number of normals indices
+	 * @return The total number of normals indices
+	 */
+	int getNormalsIndexDataIndexCount() const;
 
 };
 

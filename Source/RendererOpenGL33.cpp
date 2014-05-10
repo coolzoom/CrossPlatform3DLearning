@@ -192,8 +192,19 @@ void RendererOpenGL33::DrawScene(
 					it->get()->getModel()->getNormalsData(), GL_STATIC_DRAW);
 			glBindBuffer(GL_ARRAY_BUFFER, normalsBufferObject);
 
-			glVertexAttribPointer(1, 3, GL_UNSIGNED_BYTE, GL_FALSE, 0,
+			glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0,
 					(void*) 0);
+
+			if (it->get()->getModel()->isIndexedDrawing()) {
+						GLuint normalsIndexBufferObject;
+						glGenBuffers(1, &normalsIndexBufferObject);
+						glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, normalsIndexBufferObject);
+						glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+								it->get()->getModel()->getNormalsIndexDataSize(),
+								it->get()->getModel()->getNormalsIndexData(),
+								GL_STATIC_DRAW);
+						glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, normalsIndexBufferObject);
+					}
 
 		}
 

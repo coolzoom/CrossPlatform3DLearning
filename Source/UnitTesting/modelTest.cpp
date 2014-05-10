@@ -20,11 +20,23 @@ BOOST_AUTO_TEST_CASE( model_test ) {
 	Configuration *cfgPtr = new Configuration(log);
 	boost::shared_ptr<Configuration> cfg(cfgPtr);
 
-	Model *modelPtr = new Model("/Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj", false, false, cfg, log);
+	Model *modelPtr = new Model(
+			"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithNormals.obj", false, true,
+			cfg, log);
 	boost::scoped_ptr<Model> model(modelPtr);
 
 	BOOST_CHECK_EQUAL(model->getNumVertices() > 0, true);
 	BOOST_CHECK_EQUAL(model->getNumFaces() > 0, true);
+
+	model->getVertexData();
+	model->getIndexData();
+	model->getNormalsData();
+	model->getNormalsIndexData();
+
+	cout << "Normals count: " << model->getNormalsIndexDataIndexCount() << endl
+			<< "Index count: " << model->getIndexDataIndexCount() << endl;
+	BOOST_CHECK_EQUAL(model->getNormalsIndexDataIndexCount(),
+			model->getIndexDataIndexCount());
 
 }
 BOOST_AUTO_TEST_SUITE_END()

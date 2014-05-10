@@ -33,6 +33,9 @@ Model::Model(string filename, bool multiColour, bool indexedDrawing,
 	normalsData = NULL;
 	normalsDataSize = 0;
 	normalsDataComponentCount = 0;
+	normalsIndexData = NULL;
+	normalsIndexDataSize = 0;
+	normalsIndexDataIndexCount = 0;
 	this->multiColour = multiColour;
 	this->indexedDrawing = indexedDrawing;
 	loadFromFile(filename);
@@ -82,6 +85,10 @@ Model::~Model(void) {
 	if (normalsData != NULL) {
 		delete[] normalsData;
 	}
+
+	if (normalsIndexData != NULL) {
+		delete [] normalsIndexData;
+	}
 }
 
 void Model::loadFromFile(string fileLocation) {
@@ -121,7 +128,7 @@ void Model::loadFromFile(string fileLocation) {
 				} else {
 					// get vertex index
 					int *v = new int[3];
-					int *n = NULL;
+					int *n = NULL; // PROBABLE POINT FOR CORRECTION
 					BOOST_FOREACH (const string& t, tokens) {
 
 						if (idx > 0) { // The first token is face indicator
@@ -380,6 +387,31 @@ float* Model::getNormalsData() {
 	return normalsData;
 }
 
+unsigned int * Model::getNormalsIndexData() {
+
+	if (normalsIndexData == NULL && indexedDrawing) {
+		int numIndexes = normals->size() * 3;
+		normalsIndexDataSize = numIndexes * sizeof(int);
+
+		normalsIndexData = new unsigned int[numIndexes];
+
+		normalsIndexDataIndexCount = 0;
+
+		BOOST_FOREACH(const int* faceNormal, *facesNormals) {
+			for (int indexIdx = 0; indexIdx != 3; ++indexIdx) {
+				normalsIndexData[indexDataIndexCount] = faceNormal[indexIdx] - 1; // -1 because Wavefront indexes
+																	 // are not 0 based
+				++normalsIndexDataIndexCount;
+			}
+		}
+	}
+	return indexData;
+}
+
+int Model::getNormalsIndexDataSize() const {
+	return normalsIndexDataSize;
+}
+
 int Model::getNormalsDataComponentCount() const {
 	return normalsDataComponentCount;
 }
@@ -388,4 +420,10 @@ int Model::getNormalsDataSize() const {
 	return normalsDataSize;
 }
 
+int Model::getNormalsIndexDataIndexCount() const {
+	return normalsIndexDataIndexCount;
 }
+
+}
+
+
