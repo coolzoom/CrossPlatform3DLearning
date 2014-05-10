@@ -118,8 +118,6 @@ void RendererOpenGL33::DrawScene(
 	for (std::vector<boost::shared_ptr<WorldObject> >::iterator it =
 			scene->begin(); it != scene->end(); it++) {
 
-		it->get()->getModel()->outputIndexData();
-
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glUseProgram(program);
@@ -174,8 +172,9 @@ void RendererOpenGL33::DrawScene(
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
 		}
 
+		glEnableVertexAttribArray(1);
+
 		if (it->get()->getModel()->isMultiColour()) {
-			glEnableVertexAttribArray(1);
 			glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0,
 					(void*) (it->get()->getModel()->getVertexDataSize() / 2));
 		} else {
@@ -191,11 +190,10 @@ void RendererOpenGL33::DrawScene(
 			glBufferData(GL_ARRAY_BUFFER,
 					it->get()->getModel()->getNormalsDataSize(),
 					it->get()->getModel()->getNormalsData(), GL_STATIC_DRAW);
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindBuffer(GL_ARRAY_BUFFER, normalsBufferObject);
 
-			//glEnableVertexAttribArray(1);
-			//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0,
-			//		(void*) (it->get()->getModel()->getNormalsDataSize()));
+			glVertexAttribPointer(1, 3, GL_UNSIGNED_BYTE, GL_FALSE, 0,
+					(void*) 0);
 
 		}
 
@@ -208,11 +206,8 @@ void RendererOpenGL33::DrawScene(
 					it->get()->getModel()->getVertexDataComponentCount());
 		}
 
+		glDisableVertexAttribArray(1);
 		glDisableVertexAttribArray(0);
-
-		if (it->get()->getModel()->isMultiColour()) {
-			glDisableVertexAttribArray(1);
-		}
 
 		glUseProgram(0);
 

@@ -26,7 +26,7 @@ void main()
 
     vec4 lightDirectionCameraSpace = perspectiveMatrix * vec4(lightDirection, 1.0);
     
-    vec4 normalCameraSpace = perspectiveMatrix * vec4(normal, 1.0);
+    vec4 normalCameraSpace = normalize(perspectiveMatrix * vec4(normal, 1.0));
 
-    fragColour = clamp(dot(normalCameraSpace, lightDirectionCameraSpace), 0, 1) * vec4(1.0, 1.0, 1.0, 1.0);
+    fragColour = dot(vec3(normalCameraSpace.x, normalCameraSpace.y, normalCameraSpace.z), vec3(lightDirectionCameraSpace.x, lightDirectionCameraSpace.y, lightDirectionCameraSpace.z)) * vec4(1.0, 1.0, 1.0, 1.0);
 }
