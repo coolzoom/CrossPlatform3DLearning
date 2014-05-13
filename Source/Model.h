@@ -15,31 +15,45 @@ using namespace std;
 
 namespace AvoidTheBug3D {
 
-/// A game character
+/// A model. It can be a simple object or a game character. It is loaded from a Wavefront .obj file.
 class Model {
 private:
-	vector<float*> *vertices;
-	vector<int*> *faces;
-	vector<float*> *normals;
-	vector<int*> *facesNormals;
+	// Configuration & logging objects
 	boost::shared_ptr<Configuration> cfg;
 	boost::shared_ptr<GameLog> log;
-	void loadFromFile(string fileLocation);
+
+	// Settings
+	bool multiColour;
+	bool indexedDrawing;
+
+	// Basic data read from .obj file
+	vector<float*> *vertices;
+	vector<int*> *facesVertexIndexes;
+	vector<float*> *normals;
+	vector<int*> *facesNormalIndexes;
+
+	// Vertex data
 	float *vertexData;
 	int vertexDataSize;
 	int vertexDataComponentCount;
-	bool multiColour;
-	bool indexedDrawing;
+
+	// Vertex index data
 	unsigned int *indexData;
 	int indexDataSize;
 	int indexDataIndexCount;
+
+	// Normals data (will probably soon be removed)
 	float *normalsData;
 	int normalsDataSize;
 	int normalsDataComponentCount;
 
+	// Normals index data (will probably soon be removed)
 	unsigned int *normalsIndexData;
 	int normalsIndexDataSize;
 	int normalsIndexDataIndexCount;
+
+	// Load model from a Wavefront .obj file
+	void loadFromFile(string fileLocation);
 
 public:
 	/**
@@ -51,7 +65,8 @@ public:
 	 * @param log The log
 	 */
 	Model(string fileLocation, bool multiColour, bool indexedDrawing,
-			const boost::shared_ptr<Configuration> &cfg, const boost::shared_ptr<GameLog> &log);
+			const boost::shared_ptr<Configuration> &cfg,
+			const boost::shared_ptr<GameLog> &log);
 	~Model(void);
 
 	/**
@@ -101,7 +116,6 @@ public:
 	 * @return The vertex data
 	 */
 	float * getVertexData();
-
 
 	/**
 	 * Output the vertex data. The structure of the data can be defined

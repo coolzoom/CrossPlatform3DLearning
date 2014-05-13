@@ -18,12 +18,12 @@ Model::Model(string filename, bool multiColour, bool indexedDrawing,
 
 	vertices = new vector<float *>();
 	vertices->clear();
-	faces = new vector<int *>();
-	faces->clear();
+	facesVertexIndexes = new vector<int *>();
+	facesVertexIndexes->clear();
 	normals = new vector<float *>();
 	normals->clear();
-	facesNormals = new vector<int *>();
-	facesNormals->clear();
+	facesNormalIndexes = new vector<int *>();
+	facesNormalIndexes->clear();
 	vertexData = NULL;
 	vertexDataSize = 0;
 	vertexDataComponentCount = 0;
@@ -50,12 +50,12 @@ Model::~Model(void) {
 		delete vertices;
 	}
 
-	if (faces != NULL) {
-		for (int i = 0; i != faces->size(); ++i) {
-			delete[] faces->at(i);
+	if (facesVertexIndexes != NULL) {
+		for (int i = 0; i != facesVertexIndexes->size(); ++i) {
+			delete[] facesVertexIndexes->at(i);
 		}
-		faces->clear();
-		delete faces;
+		facesVertexIndexes->clear();
+		delete facesVertexIndexes;
 	}
 
 	if (normals != NULL) {
@@ -66,12 +66,12 @@ Model::~Model(void) {
 		delete normals;
 	}
 
-	if (facesNormals != NULL) {
-		for (int i = 0; i != facesNormals->size(); ++i) {
-			delete[] facesNormals->at(i);
+	if (facesNormalIndexes != NULL) {
+		for (int i = 0; i != facesNormalIndexes->size(); ++i) {
+			delete[] facesNormalIndexes->at(i);
 		}
-		facesNormals->clear();
-		delete facesNormals;
+		facesNormalIndexes->clear();
+		delete facesNormalIndexes;
 	}
 
 	if (vertexData != NULL) {
@@ -143,8 +143,8 @@ void Model::loadFromFile(string fileLocation) {
 						}
 						++idx;
 					}
-					faces->push_back(v);
-					if (n != NULL) facesNormals->push_back(n);
+					facesVertexIndexes->push_back(v);
+					if (n != NULL) facesNormalIndexes->push_back(n);
 				}
 			}
 		}
@@ -170,7 +170,7 @@ int Model::getNumVertices() {
 }
 
 int Model::getNumFaces() {
-	return (int) this->faces->size();
+	return (int) this->facesVertexIndexes->size();
 }
 
 vector<float*>* Model::getVertices() {
@@ -178,15 +178,15 @@ vector<float*>* Model::getVertices() {
 }
 
 void Model::outputFaces() {
-	int vectorCount = faces->size();
+	int vectorCount = facesVertexIndexes->size();
 	for (int idx = 0; idx != vectorCount; ++idx) {
-		cout << "Face:" << faces->at(idx)[0] << " - " << faces->at(idx)[1]
-				<< " - " << faces->at(idx)[2] << endl;
+		cout << "Face:" << facesVertexIndexes->at(idx)[0] << " - " << facesVertexIndexes->at(idx)[1]
+				<< " - " << facesVertexIndexes->at(idx)[2] << endl;
 	}
 }
 
 vector<int*>* Model::getFaces() {
-	return faces;
+	return facesVertexIndexes;
 }
 
 float* Model::getVertexData() {
@@ -213,7 +213,7 @@ float* Model::getVertexData() {
 		}
 
 	} else if (vertexData == NULL) {
-		int numFaces = faces->size();
+		int numFaces = facesVertexIndexes->size();
 		int numVertexComponents = numFaces * 12; // faces * num vertices per face * 4 (3 components + 1)
 		int vertexDataNumElements = numVertexComponents * (multiColour ? 2 : 1); // components multiplied
 																				 // by 2 if random colours
@@ -232,7 +232,7 @@ float* Model::getVertexData() {
 				for (int coordIdx = 0; coordIdx != 3; ++coordIdx) {
 
 					vertexData[vertexDataComponentCount] = vertices->at(
-							faces->at(faceIdx)[vertexIdx] - 1)[coordIdx];
+							facesVertexIndexes->at(faceIdx)[vertexIdx] - 1)[coordIdx];
 					++vertexDataComponentCount;
 
 					// w component
@@ -303,14 +303,14 @@ float* Model::getVertexData() {
 unsigned int * Model::getIndexData() {
 
 	if (indexData == NULL && indexedDrawing) {
-		int numIndexes = faces->size() * 3;
+		int numIndexes = facesVertexIndexes->size() * 3;
 		indexDataSize = numIndexes * sizeof(int);
 
 		indexData = new unsigned int[numIndexes];
 
 		indexDataIndexCount = 0;
 
-		BOOST_FOREACH(const int* face, *faces) {
+		BOOST_FOREACH(const int* face, *facesVertexIndexes) {
 			for (int indexIdx = 0; indexIdx != 3; ++indexIdx) {
 				indexData[indexDataIndexCount] = face[indexIdx] - 1; // -1 because Wavefront indexes
 																	 // are not 0 based
@@ -322,7 +322,7 @@ unsigned int * Model::getIndexData() {
 }
 
 void Model::outputVertexData() {
-	cout << endl << "Number of faces: " << faces->size() << endl;
+	cout << endl << "Number of faces: " << facesVertexIndexes->size() << endl;
 	cout << "Total number of components: " << vertexDataComponentCount << endl;
 	cout << "Multi-colour: " << multiColour << endl;
 	int iterations = vertexDataComponentCount * (multiColour ? 2 : 1);
@@ -397,7 +397,7 @@ unsigned int * Model::getNormalsIndexData() {
 
 		normalsIndexDataIndexCount = 0;
 
-		BOOST_FOREACH(const int* faceNormal, *facesNormals) {
+		BOOST_FOREACH(const int* faceNormal, *facesNormalIndexes) {
 			for (int indexIdx = 0; indexIdx != 3; ++indexIdx) {
 				normalsIndexData[indexDataIndexCount] = faceNormal[indexIdx] - 1; // -1 because Wavefront indexes
 																	 // are not 0 based
