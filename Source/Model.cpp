@@ -128,7 +128,7 @@ void Model::loadFromFile(string fileLocation) {
 				} else {
 					// get vertex index
 					int *v = new int[3];
-					int *n = NULL; // PROBABLE POINT FOR CORRECTION
+					int *n = NULL;
 					BOOST_FOREACH (const string& t, tokens) {
 
 						if (idx > 0) { // The first token is face indicator
@@ -369,6 +369,9 @@ int Model::getIndexDataIndexCount() const {
 }
 
 float* Model::getNormalsData() {
+	// need to create an array with the same number of components
+	// as that containing the vertex data, so that they work with
+	// the same index
 	if (normalsData == NULL) {
 		int numComponents = normals->size() * 3;
 		normalsDataSize = numComponents * sizeof(float);
