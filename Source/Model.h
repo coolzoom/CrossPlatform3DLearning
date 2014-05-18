@@ -42,15 +42,8 @@ private:
 	int indexDataSize;
 	int indexDataIndexCount;
 
-	// Normals data (will probably soon be removed)
+	// Normals data
 	float *normalsData;
-	int normalsDataSize;
-	int normalsDataComponentCount;
-
-	// Normals index data (will probably soon be removed)
-	unsigned int *normalsIndexData;
-	int normalsIndexDataSize;
-	int normalsIndexDataIndexCount;
 
 	// Load model from a Wavefront .obj file
 	void loadFromFile(string fileLocation);
@@ -171,34 +164,10 @@ public:
 	float* getNormalsData();
 
 	/**
-	 * Get the normals index data
-	 * @return The normals index data
+	 * Output the normals data
 	 */
-	unsigned int* getNormalsIndexData();
+	void outputNormalsData();
 
-	/**
-	 * Get the size of the normals index data
-	 * @return The size of the normals index data
-	 */
-	int getNormalsIndexDataSize() const;
-
-	/**
-	 * Get the total number of components in the normals data
-	 * @return The normals data component count
-	 */
-	int getNormalsDataComponentCount() const;
-
-	/**
-	 * Get the size of the normals data (in bytes)
-	 * @return The size of the normals data in bytes
-	 */
-	int getNormalsDataSize() const;
-
-	/**
-	 * Get the total number of normals indices
-	 * @return The total number of normals indices
-	 */
-	int getNormalsIndexDataIndexCount() const;
 
 };
 

@@ -31,11 +31,6 @@ Model::Model(string filename, bool multiColour, bool indexedDrawing,
 	indexDataSize = 0;
 	indexDataIndexCount = 0;
 	normalsData = NULL;
-	normalsDataSize = 0;
-	normalsDataComponentCount = 0;
-	normalsIndexData = NULL;
-	normalsIndexDataSize = 0;
-	normalsIndexDataIndexCount = 0;
 	this->multiColour = multiColour;
 	this->indexedDrawing = indexedDrawing;
 	loadFromFile(filename);
@@ -85,10 +80,6 @@ Model::~Model(void) {
 	if (normalsData != NULL) {
 		delete[] normalsData;
 	}
-
-	if (normalsIndexData != NULL) {
-		delete [] normalsIndexData;
-	}
 }
 
 void Model::loadFromFile(string fileLocation) {
@@ -133,10 +124,13 @@ void Model::loadFromFile(string fileLocation) {
 
 						if (idx > 0) { // The first token is face indicator
 							if (t.find("//") > 0) { // normal index contained in the string
-								if (n == NULL) n = new int[3];
+								if (n == NULL)
+									n = new int[3];
 
-								v[idx - 1] = atoi(t.substr(0, t.find("//")).c_str());
-								n[idx - 1] = atoi(t.substr(t.find("//") + 2).c_str());
+								v[idx - 1] = atoi(
+										t.substr(0, t.find("//")).c_str());
+								n[idx - 1] = atoi(
+										t.substr(t.find("//") + 2).c_str());
 							} else { // just the vertex index is contained
 								v[idx - 1] = atoi(t.c_str());
 							}
@@ -144,7 +138,8 @@ void Model::loadFromFile(string fileLocation) {
 						++idx;
 					}
 					facesVertexIndexes->push_back(v);
-					if (n != NULL) facesNormalIndexes->push_back(n);
+					if (n != NULL)
+						facesNormalIndexes->push_back(n);
 				}
 			}
 		}
@@ -180,8 +175,9 @@ vector<float*>* Model::getVertices() {
 void Model::outputFaces() {
 	int vectorCount = facesVertexIndexes->size();
 	for (int idx = 0; idx != vectorCount; ++idx) {
-		cout << "Face:" << facesVertexIndexes->at(idx)[0] << " - " << facesVertexIndexes->at(idx)[1]
-				<< " - " << facesVertexIndexes->at(idx)[2] << endl;
+		cout << "Face:" << facesVertexIndexes->at(idx)[0] << " - "
+				<< facesVertexIndexes->at(idx)[1] << " - "
+				<< facesVertexIndexes->at(idx)[2] << endl;
 	}
 }
 
@@ -231,8 +227,10 @@ float* Model::getVertexData() {
 				// Coordinate
 				for (int coordIdx = 0; coordIdx != 3; ++coordIdx) {
 
-					vertexData[vertexDataComponentCount] = vertices->at(
-							facesVertexIndexes->at(faceIdx)[vertexIdx] - 1)[coordIdx];
+					vertexData[vertexDataComponentCount] =
+							vertices->at(
+									facesVertexIndexes->at(faceIdx)[vertexIdx]
+											- 1)[coordIdx];
 					++vertexDataComponentCount;
 
 					// w component
@@ -369,64 +367,51 @@ int Model::getIndexDataIndexCount() const {
 }
 
 float* Model::getNormalsData() {
-	// need to create an array with the same number of components
-	// as that containing the vertex data, so that they work with
-	// the same index
+
+	// Create an array of normal components which corresponds
+	// by index to the array of vertex components
 	if (normalsData == NULL) {
-		int numComponents = normals->size() * 3;
-		normalsDataSize = numComponents * sizeof(float);
 
-		normalsData = new float[numComponents];
+		if (vertexDataComponentCount == 0) {
+			throw new GameException(
+					"There are no vertices or vertex data has not yet been created.");
+		}
 
-		normalsDataComponentCount = 0;
+		normalsData = new float[vertexDataComponentCount];
 
-		BOOST_FOREACH(const float* normal, *normals) {
-			for (int componentIdx = 0; componentIdx != 3; ++componentIdx) {
-				normalsData[componentIdx] = normal[componentIdx];
-				++normalsDataComponentCount;
+		int faceVertexArrayIndex = 0;
+
+		BOOST_FOREACH(const int* faceVertexIndex, *facesVertexIndexes) {
+			for (int vertexIndex = 0; vertexIndex != 3; ++vertexIndex) {
+				for (int vertexComponent = 0; vertexComponent != 3;
+						++vertexComponent) {
+					normalsData[faceVertexIndex[vertexIndex] - 1
+							+ vertexComponent] =
+							normals->at(
+									*facesNormalIndexes->at(
+											faceVertexArrayIndex) - 1)[vertexComponent];
+				}
 			}
+			++faceVertexArrayIndex;
 		}
 	}
 	return normalsData;
 }
 
-unsigned int * Model::getNormalsIndexData() {
+void Model::outputNormalsData() {
+	if (!multiColour) {
+		cout << "Normals:" << endl;
 
-	if (normalsIndexData == NULL && indexedDrawing) {
-		int numIndexes = normals->size() * 3;
-		normalsIndexDataSize = numIndexes * sizeof(int);
-
-		normalsIndexData = new unsigned int[numIndexes];
-
-		normalsIndexDataIndexCount = 0;
-
-		BOOST_FOREACH(const int* faceNormal, *facesNormalIndexes) {
-			for (int indexIdx = 0; indexIdx != 3; ++indexIdx) {
-				normalsIndexData[indexDataIndexCount] = faceNormal[indexIdx] - 1; // -1 because Wavefront indexes
-																	 // are not 0 based
-				++normalsIndexDataIndexCount;
-			}
+		for (int cnt = 0; cnt != vertexDataComponentCount; ++cnt) {
+			if (cnt % 4 == 0)
+				cout << endl;
+			cout << normalsData[cnt] << " ";
 		}
+		cout << endl;
+	} else {
+		cout << "No normals in random colours model" << endl;
 	}
-	return indexData;
-}
-
-int Model::getNormalsIndexDataSize() const {
-	return normalsIndexDataSize;
-}
-
-int Model::getNormalsDataComponentCount() const {
-	return normalsDataComponentCount;
-}
-
-int Model::getNormalsDataSize() const {
-	return normalsDataSize;
-}
-
-int Model::getNormalsIndexDataIndexCount() const {
-	return normalsIndexDataIndexCount;
 }
 
 }
-
 

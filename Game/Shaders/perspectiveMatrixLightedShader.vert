@@ -30,7 +30,5 @@ void main()
 
     float cosAngIncidence = clamp(dot(normalCameraSpace, lightDirectionCameraSpace), 0, 1);
 
-//cosAngIncidence *
-
-    fragColour =  vec4(1.0, 1.0, 1.0, 1.0);
+    fragColour =  cosAngIncidence * vec4(1.0, 1.0, 1.0, 1.0);
 }
