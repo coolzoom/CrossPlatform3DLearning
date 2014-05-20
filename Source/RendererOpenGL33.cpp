@@ -178,7 +178,7 @@ void RendererOpenGL33::DrawScene(
 			glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0,
 					(void*) (it->get()->getModel()->getVertexDataSize() / 2));
 		} else {
-			glm::vec3 lightDirection(0.866f, -0.5f, -0.2f);
+			glm::vec3 lightDirection(0.6f, -0.5f, -0.2f);
 			GLuint lightDirectionUniform = glGetUniformLocation(program,
 					"lightDirection");
 			glUniformMatrix3fv(lightDirectionUniform, 1, GL_TRUE,
@@ -188,11 +188,11 @@ void RendererOpenGL33::DrawScene(
 			glGenBuffers(1, &normalsBufferObject);
 			glBindBuffer(GL_ARRAY_BUFFER, normalsBufferObject);
 			glBufferData(GL_ARRAY_BUFFER,
-					it->get()->getModel()->getIndexDataSize(),
+					it->get()->getModel()->getNormalsDataSize(),
 					it->get()->getModel()->getNormalsData(), GL_STATIC_DRAW);
 			glBindBuffer(GL_ARRAY_BUFFER, normalsBufferObject);
 
-			glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0,
+			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0,
 					(void*) 0);
 
 		}
@@ -212,6 +212,7 @@ void RendererOpenGL33::DrawScene(
 		glUseProgram(0);
 
 		it->get()->getModel()->outputNormalsData();
+		it->get()->getModel()->outputVertexData();
 
 		// swap buffers to display, since we're double buffered.
 		SDL_GL_SwapBuffers();

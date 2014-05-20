@@ -44,6 +44,9 @@ private:
 
 	// Normals data
 	float *normalsData;
+	int normalsDataSize;
+	int normalsDataComponentCount;
+
 
 	// Load model from a Wavefront .obj file
 	void loadFromFile(string fileLocation);
@@ -167,6 +170,20 @@ public:
 	 * Output the normals data
 	 */
 	void outputNormalsData();
+
+	/**
+	 * Get the size of the normals data, in bytes
+	 * @return The size of the normals data, in bytes
+	 */
+	int getNormalsDataSize() const;
+
+	/**
+	 * Get the total number of normals data components
+	 * @return The total number of normals data components
+	 */
+	int getNormalsDataComponentCount() const;
+
+
 
 
 };

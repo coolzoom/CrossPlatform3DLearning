@@ -1,3 +1,12 @@
 When exporting the models to Wavefront .obj files,
 make sure you set the options "Include Normals",
 "Triangulate Faces", and "Keep Vertex Order".
+The model has to have been set to have smooth
+shading in Blender and double vertices have
+to have been deleted before the export.
+Otherwise, when rendering with shaders, lighting
+will not work, since there will be multiple
+normals for each vertex and, with indexed drawing,
+the normals listed later in the exported file
+for some vertices will overwrite the previous
+ones.

@@ -21,14 +21,18 @@ void main()
 			* yRotationMatrix
 			* zRotationMatrix
 			+ vec4(offset.x, offset.y, offset.z, 0.0);
-    
+
     gl_Position = perspectiveMatrix * cameraPos;
 
-    vec4 normalCameraSpace = normalize(perspectiveMatrix * vec4(normal, 1));
+    vec4 normalRotated = vec4(normal, 1) * xRotationMatrix 
+			* yRotationMatrix
+			* zRotationMatrix;
+
+    vec4 normalCameraSpace = normalize(perspectiveMatrix * normalRotated);    
     
-    vec4 lightDirectionCameraSpace = perspectiveMatrix * vec4(lightDirection, 1);
+    vec4 lightDirectionCameraSpace = normalize(perspectiveMatrix * vec4(lightDirection, 1));
 
     float cosAngIncidence = clamp(dot(normalCameraSpace, lightDirectionCameraSpace), 0, 1);
 
-    fragColour =  cosAngIncidence * vec4(1.0, 1.0, 1.0, 1.0);
+    fragColour =  cosAngIncidence * 0.8 * vec4(1.0, 1.0, 1.0, 1.0);
 }

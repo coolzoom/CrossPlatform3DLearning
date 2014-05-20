@@ -31,6 +31,8 @@ Model::Model(string filename, bool multiColour, bool indexedDrawing,
 	indexDataSize = 0;
 	indexDataIndexCount = 0;
 	normalsData = NULL;
+	normalsDataSize = 0;
+	normalsDataComponentCount = 0;
 	this->multiColour = multiColour;
 	this->indexedDrawing = indexedDrawing;
 	loadFromFile(filename);
@@ -377,19 +379,30 @@ float* Model::getNormalsData() {
 					"There are no vertices or vertex data has not yet been created.");
 		}
 
-		normalsData = new float[vertexDataComponentCount];
+		// -1 for each vertex data component, because the normals data has three components
+		// per row
+		normalsDataComponentCount = vertexDataComponentCount
+				- vertexDataComponentCount / 4;
+		normalsDataSize = normalsDataComponentCount * sizeof(float);
+
+		normalsData = new float[normalsDataComponentCount];
 
 		int faceVertexArrayIndex = 0;
 
 		BOOST_FOREACH(const int* faceVertexIndex, *facesVertexIndexes) {
 			for (int vertexIndex = 0; vertexIndex != 3; ++vertexIndex) {
+				cout << "Setting normal at " << 3 * (faceVertexIndex[vertexIndex] - 1)
+						<< " to normal index "
+						<< facesNormalIndexes->at(faceVertexArrayIndex)[vertexIndex]
+						<< endl;
 				for (int vertexComponent = 0; vertexComponent != 3;
 						++vertexComponent) {
-					normalsData[faceVertexIndex[vertexIndex] - 1
-							+ vertexComponent] =
-							normals->at(
-									*facesNormalIndexes->at(
-											faceVertexArrayIndex) - 1)[vertexComponent];
+					normalsData[3 * (faceVertexIndex[vertexIndex] - 1) + vertexComponent] =
+							normals->at(facesNormalIndexes->at(faceVertexArrayIndex)[vertexIndex] - 1)[vertexComponent];
+
+					cout << "  * Setting at " << 3 * (faceVertexIndex[vertexIndex] - 1)
+							+ vertexComponent << " to " << normals->at(facesNormalIndexes->at(faceVertexArrayIndex)[vertexIndex] - 1)[vertexComponent] << endl;
+
 				}
 			}
 			++faceVertexArrayIndex;
@@ -400,10 +413,11 @@ float* Model::getNormalsData() {
 
 void Model::outputNormalsData() {
 	if (!multiColour) {
-		cout << "Normals:" << endl;
+		cout << "Normals data" << endl;
+		cout << "Component count: " << normalsDataComponentCount;
 
-		for (int cnt = 0; cnt != vertexDataComponentCount; ++cnt) {
-			if (cnt % 4 == 0)
+		for (int cnt = 0; cnt != normalsDataComponentCount; ++cnt) {
+			if (cnt % 3 == 0)
 				cout << endl;
 			cout << normalsData[cnt] << " ";
 		}
@@ -411,6 +425,14 @@ void Model::outputNormalsData() {
 	} else {
 		cout << "No normals in random colours model" << endl;
 	}
+}
+
+int Model::getNormalsDataSize() const {
+	return normalsDataSize;
+}
+
+int Model::getNormalsDataComponentCount() const {
+	return normalsDataComponentCount;
 }
 
 }
