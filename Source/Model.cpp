@@ -391,17 +391,17 @@ float* Model::getNormalsData() {
 
 		BOOST_FOREACH(const int* faceVertexIndex, *facesVertexIndexes) {
 			for (int vertexIndex = 0; vertexIndex != 3; ++vertexIndex) {
-				cout << "Setting normal at " << 3 * (faceVertexIndex[vertexIndex] - 1)
-						<< " to normal index "
-						<< facesNormalIndexes->at(faceVertexArrayIndex)[vertexIndex]
-						<< endl;
+//				cout << "Setting normal at " << 3 * (faceVertexIndex[vertexIndex] - 1)
+//						<< " to normal index "
+//						<< facesNormalIndexes->at(faceVertexArrayIndex)[vertexIndex]
+//						<< endl;
 				for (int vertexComponent = 0; vertexComponent != 3;
 						++vertexComponent) {
 					normalsData[3 * (faceVertexIndex[vertexIndex] - 1) + vertexComponent] =
 							normals->at(facesNormalIndexes->at(faceVertexArrayIndex)[vertexIndex] - 1)[vertexComponent];
 
-					cout << "  * Setting at " << 3 * (faceVertexIndex[vertexIndex] - 1)
-							+ vertexComponent << " to " << normals->at(facesNormalIndexes->at(faceVertexArrayIndex)[vertexIndex] - 1)[vertexComponent] << endl;
+//					cout << "  * Setting at " << 3 * (faceVertexIndex[vertexIndex] - 1)
+//							+ vertexComponent << " to " << normals->at(facesNormalIndexes->at(faceVertexArrayIndex)[vertexIndex] - 1)[vertexComponent] << endl;
 
 				}
 			}

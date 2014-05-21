@@ -211,9 +211,6 @@ void RendererOpenGL33::DrawScene(
 
 		glUseProgram(0);
 
-		it->get()->getModel()->outputNormalsData();
-		it->get()->getModel()->outputVertexData();
-
 		// swap buffers to display, since we're double buffered.
 		SDL_GL_SwapBuffers();
 
