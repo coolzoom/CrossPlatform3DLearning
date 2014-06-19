@@ -10,3 +10,5 @@ normals for each vertex and, with indexed drawing,
 the normals listed later in the exported file
 for some vertices will overwrite the previous
 ones.
+If a texture has been created, the option "Include
+UVs" must also be set.
