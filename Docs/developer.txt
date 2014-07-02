@@ -19,6 +19,7 @@ sudo yum install boost-devel boost-test
 sudo yum install doxygen
 sudo yum install valgrind
 sudo yum install glm-devel
+sudo yum install libpng-devel
 
 * Environment setup (Ubuntu / Debian)
 ----------------------------
