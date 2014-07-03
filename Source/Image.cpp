@@ -2,10 +2,11 @@
  * Image.cpp
  *
  *  Created on: 2 Jul 2014
- *      Author: me
+ *      Author: Dimitri Kourkoulis
  */
 
 #include "Image.h"
+#include <png.h>
 
 Image::Image() {
 	// TODO Auto-generated constructor stub
