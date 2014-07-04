@@ -11,4 +11,6 @@ the normals listed later in the exported file
 for some vertices will overwrite the previous
 ones.
 If a texture has been created, the option "Include
-UVs" must also be set.
+UVs" must also be set.The texture should be saved
+as a PNG file since this is the format that can
+be read by the program.
