@@ -8,12 +8,17 @@
 #include "Image.h"
 #include <png.h>
 
-Image::Image() {
-	// TODO Auto-generated constructor stub
 
+namespace AvoidTheBug3D {
+
+
+Image::Image(string fileLocation, const boost::shared_ptr<Configuration>& cfg,
+		const boost::shared_ptr<GameLog>& log) {
 }
 
 Image::~Image() {
 	// TODO Auto-generated destructor stub
 }
 
+
+}
