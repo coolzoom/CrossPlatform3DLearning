@@ -14,6 +14,7 @@
 #include <boost/smart_ptr.hpp>
 #include "GameLog.h"
 #include "Configuration.h"
+#include <png.h>
 
 using namespace std;
 
@@ -24,6 +25,11 @@ private:
 	// Configuration & logging objects
 	boost::shared_ptr<Configuration> cfg;
 	boost::shared_ptr<GameLog> log;
+
+	int width, height;
+	png_byte colorType;
+	png_byte bitDepth;
+	int numberOfPasses;
 
 	// Load image from a .png file
 	void loadFromFile(string fileLocation);

@@ -6,7 +6,7 @@
  */
 
 #include "Image.h"
-#include <png.h>
+
 #include <stdio.h>
 #include "GameException.h"
 
@@ -69,13 +69,29 @@ void Image::loadFromFile(string fileLocation) {
 		delete pngInformation;
 		delete pngStructure;
 		fclose(fp);
-		throw GameException("Could not setjmp.");
+		throw GameException("Error calling setjmp.");
 	}
 
 	png_init_io(pngStructure, fp);
 	png_set_sig_bytes(pngStructure, 8);
 
 	png_read_info(pngStructure, pngInformation);
+
+	width = png_get_image_width(pngStructure, pngInformation);
+	height = png_get_image_height(pngStructure, pngInformation);
+	colorType = png_get_color_type(pngStructure, pngInformation);
+	bitDepth = png_get_bit_depth(pngStructure, pngInformation);
+
+	numberOfPasses = png_set_interlace_handling(pngStructure);
+	png_read_update_info(pngStructure, pngInformation);
+
+	if (setjmp(png_jmpbuf(pngStructure))) {
+		delete pngInformation;
+		delete pngStructure;
+		fclose(fp);
+		throw GameException("Error calling setjmp.");
+	}
+
 
 
 	delete pngInformation;
