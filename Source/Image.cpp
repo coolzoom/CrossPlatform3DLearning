@@ -19,12 +19,37 @@ Image::Image(string fileLocation, const boost::shared_ptr<Configuration>& cfg,
 	this->cfg = cfg;
 	this->log = log;
 
+	pngInformation = NULL;
+	pngStructure = NULL;
+
+	width = 0;
+	height = 0;
+	colorType = (png_byte) 0;
+	bitDepth = (png_byte) 0;
+	numberOfPasses = 0;
+
+	rowPointers = NULL;
+
 	this->loadFromFile(fileLocation);
 
 }
 
 Image::~Image() {
-	// TODO Auto-generated destructor stub
+
+	if (rowPointers != NULL) {
+		for (int y = 0; y < height; y++) {
+			delete[] rowPointers[y];
+		}
+		delete[] rowPointers;
+	}
+
+	if (pngInformation != NULL) {
+		delete pngInformation;
+	}
+
+	if (pngStructure != NULL) {
+		delete pngStructure;
+	}
 }
 
 void Image::loadFromFile(string fileLocation) {
@@ -49,7 +74,7 @@ void Image::loadFromFile(string fileLocation) {
 						+ " is not recognised as a PNG file.");
 	}
 
-	png_structp pngStructure = png_create_read_struct(PNG_LIBPNG_VER_STRING,
+	pngStructure = png_create_read_struct(PNG_LIBPNG_VER_STRING,
 	NULL, NULL, NULL);
 
 	if (!pngStructure) {
@@ -58,7 +83,7 @@ void Image::loadFromFile(string fileLocation) {
 		throw GameException("Could not create PNG read structure.");
 	}
 
-	png_infop pngInformation = png_create_info_struct(pngStructure);
+	pngInformation = png_create_info_struct(pngStructure);
 
 	if (!pngInformation) {
 		fclose(fp);
@@ -69,7 +94,7 @@ void Image::loadFromFile(string fileLocation) {
 		delete pngInformation;
 		delete pngStructure;
 		fclose(fp);
-		throw GameException("Error calling setjmp.");
+		throw GameException("PNG read: Error calling setjmp. (1)");
 	}
 
 	png_init_io(pngStructure, fp);
@@ -89,13 +114,18 @@ void Image::loadFromFile(string fileLocation) {
 		delete pngInformation;
 		delete pngStructure;
 		fclose(fp);
-		throw GameException("Error calling setjmp.");
+		throw GameException("PNG read: Error calling setjmp. (2)");
 	}
 
+	rowPointers = new png_bytep[sizeof(png_bytep) * height];
 
+	for (int y = 0; y < height; y++) {
+		rowPointers[y] = new png_byte[png_get_rowbytes(pngStructure,
+				pngInformation)];
+	}
 
-	delete pngInformation;
-	delete pngStructure;
+	png_read_image(pngStructure, rowPointers);
+
 	fclose(fp);
 }
 

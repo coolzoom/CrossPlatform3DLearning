@@ -26,10 +26,15 @@ private:
 	boost::shared_ptr<Configuration> cfg;
 	boost::shared_ptr<GameLog> log;
 
+	png_infop pngInformation;
+	png_structp pngStructure;
+
 	int width, height;
 	png_byte colorType;
 	png_byte bitDepth;
 	int numberOfPasses;
+
+	png_bytep* rowPointers;
 
 	// Load image from a .png file
 	void loadFromFile(string fileLocation);
