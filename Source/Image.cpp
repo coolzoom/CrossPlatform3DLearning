@@ -49,15 +49,36 @@ void Image::loadFromFile(string fileLocation) {
 						+ " is not recognised as a PNG file.");
 	}
 
-	png_structp pngStructure = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+	png_structp pngStructure = png_create_read_struct(PNG_LIBPNG_VER_STRING,
+	NULL, NULL, NULL);
 
-	if (!pngStructure)
-	{
+	if (!pngStructure) {
+		delete pngStructure;
 		fclose(fp);
 		throw GameException("Could not create PNG read structure.");
 	}
 
+	png_infop pngInformation = png_create_info_struct(pngStructure);
 
+	if (!pngInformation) {
+		fclose(fp);
+		throw GameException("Could not create PNG information structure.");
+	}
+
+	if (setjmp(png_jmpbuf(pngStructure))) {
+		delete pngInformation;
+		delete pngStructure;
+		fclose(fp);
+		throw GameException("Could not setjmp.");
+	}
+
+	png_init_io(pngStructure, fp);
+	png_set_sig_bytes(pngStructure, 8);
+
+	png_read_info(pngStructure, pngInformation);
+
+
+	delete pngInformation;
 	delete pngStructure;
 	fclose(fp);
 }
