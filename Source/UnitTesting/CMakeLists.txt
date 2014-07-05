@@ -13,7 +13,13 @@ else()
 # It seems that in Linux there is no need to link to the date_time library
 FIND_PACKAGE(Boost COMPONENTS unit_test_framework filesystem system REQUIRED)
 endif()
-INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
+
+# libpng
+FIND_PACKAGE(PNG REQUIRED)
+
+INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR} ${PNG_INCLUDE_DIRS})
+
+add_definitions(${PNG_DEFINITIONS})
 
 # Create the executable
 ADD_EXECUTABLE(unittest mainTest.cpp gameLogTest.cpp gameLogDebugTest.cpp modelTest.cpp 
@@ -26,6 +32,7 @@ TARGET_LINK_LIBRARIES(unittest
                ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
                ${Boost_FILESYSTEM_LIBRARIES}
                ${Boost_SYSTEM_LIBRARIES}
+               ${PNG_LIBRARIES}
 )
 
 # Only when building on Windows, also link to the Boost date_time library (see above)

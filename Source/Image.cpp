@@ -28,7 +28,10 @@ Image::~Image() {
 }
 
 void Image::loadFromFile(string fileLocation) {
-	FILE *fp = fopen((cfg->getHomeDirectory() + fileLocation).c_str(), "fb");
+	// function developed based on example at
+	// http://zarb.org/~gc/html/libpng.html
+
+	FILE *fp = fopen((cfg->getHomeDirectory() + fileLocation).c_str(), "rb");
 
 	if (!fp) {
 		throw GameException(
@@ -36,6 +39,26 @@ void Image::loadFromFile(string fileLocation) {
 						+ fileLocation);
 	}
 
+	unsigned char header[8]; // Using maximum size that can be checked
+
+	fread(header, 1, 8, fp);
+
+	if (png_sig_cmp(header, 0, 8)) {
+		throw GameException(
+				"File " + cfg->getHomeDirectory() + fileLocation
+						+ " is not recognised as a PNG file.");
+	}
+
+	png_structp pngStructure = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+
+	if (!pngStructure)
+	{
+		fclose(fp);
+		throw GameException("Could not create PNG read structure.");
+	}
+
+
+	delete pngStructure;
 	fclose(fp);
 }
 

@@ -18,8 +18,7 @@ BOOST_AUTO_TEST_CASE( imageTest )
 	Configuration *cfgPtr = new Configuration(log);
 	boost::shared_ptr<Configuration> cfg(cfgPtr);
 
-	Image *imagePtr = new Image("/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTexture.png", cfg, log);
-	boost::scoped_ptr<Image> image(imagePtr);
+	boost::scoped_ptr<Image> image(new Image("/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTexture.png", cfg, log));
 
 }
 BOOST_AUTO_TEST_SUITE_END()

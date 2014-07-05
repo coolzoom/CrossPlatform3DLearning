@@ -47,6 +47,11 @@ ENDIF(NOT GLEW_FOUND)
 INCLUDE_DIRECTORIES(${GLEW_INCLUDE_PATH})
 MESSAGE(${GLEW_LIBRARIES})
 
+# libpng
+FIND_PACKAGE(PNG REQUIRED)
+INCLUDE_DIRECTORIES(${PNG_INCLUDE_DIRS})
+ADD_DEFINITIONS(${PNG_DEFINITIONS})
+
 # Create the executable
 ADD_EXECUTABLE(game main.cpp GameLog.cpp Model.cpp GameLogic.cpp
  WorldObject.cpp Character.cpp 
@@ -56,7 +61,7 @@ ADD_EXECUTABLE(game main.cpp GameLog.cpp Model.cpp GameLogic.cpp
 
 # Link to the required libraries
 TARGET_LINK_LIBRARIES(game ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${SDL_LIBRARY} ${Boost_FILESYSTEM_LIBRARIES}
-               ${Boost_SYSTEM_LIBRARIES}) 
+               ${Boost_SYSTEM_LIBRARIES} ${PNG_LIBRARIES}) 
 
 # Only when building on Windows, also link to the Boost date_time library (see above)
 if (WIN32)
