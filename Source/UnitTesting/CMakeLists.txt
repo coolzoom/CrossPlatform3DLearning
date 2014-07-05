@@ -17,8 +17,9 @@ INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
 
 # Create the executable
 ADD_EXECUTABLE(unittest mainTest.cpp gameLogTest.cpp gameLogDebugTest.cpp modelTest.cpp 
- ../Model.cpp ../GameLogic.cpp ../WorldObject.cpp ../Character.cpp ../PlayerView.cpp 
- ../GameLog.cpp ../Configuration.cpp configurationTest.cpp ../GameException.cpp)
+ imageTest.cpp ../Model.cpp ../GameLogic.cpp ../WorldObject.cpp ../Character.cpp  
+ ../PlayerView.cpp ../GameLog.cpp ../Configuration.cpp configurationTest.cpp 
+ ../GameException.cpp ../Image.cpp)
 
 # Link to the required libraries
 TARGET_LINK_LIBRARIES(unittest
