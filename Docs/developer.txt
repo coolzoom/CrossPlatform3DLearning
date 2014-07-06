@@ -91,6 +91,28 @@ CMake will also need the FingGLM module, in order to find GLM. If the module
 is not contained in your CMake distribution, you can copy it from the above 
 mentioned GLM archive, from the folder glm\util, to the modules directory
 of CMake.
+Download the libpng binaries and developer files for Windows. Links for the
+packages can be found here:
+http://gnuwin32.sourceforge.net/packages/libpng.htm
+Then decompress the archives.
+Download the zlib binaries and developer files for Windows. Links for the
+packages can be found here:
+http://gnuwin32.sourceforge.net/packages/zlib.htm
+Then decompress the archives.
+Set an environment variable called CMAKE_PREFIX_PATH to point to the
+list of decompressed root directories of the libpng and zlib developer
+files, for example "C:\libraries\zlib-1.2.3-lib;C:\libraries\libpng-1.2.37-lib"
+(The same could have been done for the other libraries mentioned above,
+like boost for example, instead of setting individual environment variables
+for each, but I only found out about it when I got to this point :/ )
+WARNING: Even though the instructions have been updated for using libpng in
+Windows and the project can be compiled, on my system, I keep getting an
+access violation when I run the unit tests since I started using the library
+and I have not yet been able to resolve the problem. I have found some
+information that suggests that this is due to the way the project and the
+libpng library are compiled (they both need to be compiled as multi-threaded
+or something like that):
+http://sourceforge.net/p/gnuwin32/discussion/74807/thread/294c9343
 
 
 * Compiling and running (both systems)
@@ -109,7 +131,8 @@ and edit the Additional Dependencies.
 Locate the library that cannot be found and, if it does not start by "lib", add 
 that prefix to it.
 In Windows you will probably need to copy the dlls of the libraries we are using 
-(SDL, Boost, GLEW etc) to the output directory (Release or Debug), unless they 
+(SDL, Boost, GLEW, libpng (from the binaries package), zlib (from the binaries
+package) etc) to the output directory (Release or Debug), unless they 
 are already accessible in your system (e.g.  if they have been installed to the 
 System directory or if their directories have been included in the PATH 
 environment variable.) You will also need to add /NODEFAULTLIB:MSVCRT to each
@@ -118,6 +141,11 @@ Additional Options). Otherwise you will see warnings like the following one when
 linking:
 warning LNK4098: defaultlib 'msvcrt.lib' conflicts with use of other libs; use 
 /NODEFAULTLIB:library
+If, while compiling in Windows you receive an error that looks like the following:
+"c:\libraries\zlib-1.2.3-lib\include\zconf.h(289): fatal error C1083: Cannot open 
+include file: 'unistd.h': No such file or directory",
+just comment out the unistd.h include statement in zconf.h. I do not know what
+repercussions this can potentially have, but it seems to work for me.
 To create an Eclipse project in Linux, run the following command from the Temp 
 directory, mentioned above:
 cmake -G "Eclipse CDT4 - Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug 
