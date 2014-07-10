@@ -31,6 +31,7 @@ private:
 	vector<int*> *facesVertexIndexes;
 	vector<float*> *normals;
 	vector<int*> *facesNormalIndexes;
+	vector<float*> *textureCoords;
 
 	// Vertex data
 	float *vertexData;

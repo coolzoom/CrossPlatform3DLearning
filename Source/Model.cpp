@@ -24,6 +24,8 @@ Model::Model(string filename, bool multiColour, bool indexedDrawing,
 	normals->clear();
 	facesNormalIndexes = new vector<int *>();
 	facesNormalIndexes->clear();
+	textureCoords = new vector<float *>();
+	textureCoords->clear();
 	vertexData = NULL;
 	vertexDataSize = 0;
 	vertexDataComponentCount = 0;
@@ -71,6 +73,14 @@ Model::~Model(void) {
 		delete facesNormalIndexes;
 	}
 
+	if (textureCoords != NULL) {
+		for (int i = 0; i != textureCoords->size(); ++i) {
+			delete[] textureCoords->at(i);
+		}
+		textureCoords->clear();
+		delete textureCoords;
+	}
+
 	if (vertexData != NULL) {
 		delete[] vertexData;
 	}
@@ -108,7 +118,17 @@ void Model::loadFromFile(string fileLocation) {
 						++idx;
 					}
 					normals->push_back(vn);
-				} else if (line[0] == 'v') {
+				} else if (line[0] == 'v' && line[1] == 't') {
+					float *vt = new float[2];
+					BOOST_FOREACH (const string& t, tokens){
+						if (idx > 0) { // The first token is the vertex texture coordinate indicator
+							vt[idx -1] = atof(t.c_str());
+						}
+						++idx;
+					}
+					textureCoords->push_back(vt);
+				}
+				else if (line[0] == 'v') {
 					// get vertex
 					float *v = new float[3];
 					BOOST_FOREACH (const string& t, tokens) {
@@ -397,8 +417,11 @@ float* Model::getNormalsData() {
 //						<< endl;
 				for (int vertexComponent = 0; vertexComponent != 3;
 						++vertexComponent) {
-					normalsData[3 * (faceVertexIndex[vertexIndex] - 1) + vertexComponent] =
-							normals->at(facesNormalIndexes->at(faceVertexArrayIndex)[vertexIndex] - 1)[vertexComponent];
+					normalsData[3 * (faceVertexIndex[vertexIndex] - 1)
+							+ vertexComponent] =
+							normals->at(
+									facesNormalIndexes->at(faceVertexArrayIndex)[vertexIndex]
+											- 1)[vertexComponent];
 
 //					cout << "  * Setting at " << 3 * (faceVertexIndex[vertexIndex] - 1)
 //							+ vertexComponent << " to " << normals->at(facesNormalIndexes->at(faceVertexArrayIndex)[vertexIndex] - 1)[vertexComponent] << endl;
