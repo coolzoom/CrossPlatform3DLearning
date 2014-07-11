@@ -26,6 +26,8 @@ Model::Model(string filename, bool multiColour, bool indexedDrawing,
 	facesNormalIndexes->clear();
 	textureCoords = new vector<float *>();
 	textureCoords->clear();
+	textureCoordsIndexes = new vector<int *>();
+	textureCoordsIndexes->clear();
 	vertexData = NULL;
 	vertexDataSize = 0;
 	vertexDataComponentCount = 0;
@@ -35,6 +37,9 @@ Model::Model(string filename, bool multiColour, bool indexedDrawing,
 	normalsData = NULL;
 	normalsDataSize = 0;
 	normalsDataComponentCount = 0;
+	textureCoordsData = NULL;
+	textureCoordsDataSize = 0;
+	textureCoordsDataComponentCount = 0;
 	this->multiColour = multiColour;
 	this->indexedDrawing = indexedDrawing;
 	loadFromFile(filename);
@@ -81,6 +86,14 @@ Model::~Model(void) {
 		delete textureCoords;
 	}
 
+	if (textureCoordsIndexes != NULL) {
+		for (int i = 0; i != textureCoordsIndexes->size(); ++i) {
+			delete[] textureCoordsIndexes->at(i);
+		}
+		textureCoordsIndexes->clear();
+		delete textureCoordsIndexes;
+	}
+
 	if (vertexData != NULL) {
 		delete[] vertexData;
 	}
@@ -91,6 +104,10 @@ Model::~Model(void) {
 
 	if (normalsData != NULL) {
 		delete[] normalsData;
+	}
+
+	if (textureCoordsData != NULL) {
+		delete[] textureCoordsData;
 	}
 }
 
@@ -120,15 +137,14 @@ void Model::loadFromFile(string fileLocation) {
 					normals->push_back(vn);
 				} else if (line[0] == 'v' && line[1] == 't') {
 					float *vt = new float[2];
-					BOOST_FOREACH (const string& t, tokens){
+					BOOST_FOREACH (const string& t, tokens) {
 						if (idx > 0) { // The first token is the vertex texture coordinate indicator
-							vt[idx -1] = atof(t.c_str());
+							vt[idx - 1] = atof(t.c_str());
 						}
 						++idx;
 					}
 					textureCoords->push_back(vt);
-				}
-				else if (line[0] == 'v') {
+				} else if (line[0] == 'v') {
 					// get vertex
 					float *v = new float[3];
 					BOOST_FOREACH (const string& t, tokens) {
@@ -415,13 +431,13 @@ float* Model::getNormalsData() {
 //						<< " to normal index "
 //						<< facesNormalIndexes->at(faceVertexArrayIndex)[vertexIndex]
 //						<< endl;
-				for (int vertexComponent = 0; vertexComponent != 3;
-						++vertexComponent) {
+				for (int normalsDataComponent = 0; normalsDataComponent != 3;
+						++normalsDataComponent) {
 					normalsData[3 * (faceVertexIndex[vertexIndex] - 1)
-							+ vertexComponent] =
+							+ normalsDataComponent] =
 							normals->at(
 									facesNormalIndexes->at(faceVertexArrayIndex)[vertexIndex]
-											- 1)[vertexComponent];
+											- 1)[normalsDataComponent];
 
 //					cout << "  * Setting at " << 3 * (faceVertexIndex[vertexIndex] - 1)
 //							+ vertexComponent << " to " << normals->at(facesNormalIndexes->at(faceVertexArrayIndex)[vertexIndex] - 1)[vertexComponent] << endl;
@@ -456,6 +472,68 @@ int Model::getNormalsDataSize() const {
 
 int Model::getNormalsDataComponentCount() const {
 	return normalsDataComponentCount;
+}
+
+float* Model::getTextureCoordsData() {
+	// Create an array of texture coordinates components which corresponds
+	// by index to the array of vertex components
+	if (textureCoordsData == NULL) {
+
+		if (vertexDataComponentCount == 0) {
+			throw new GameException(
+					"There are no vertices or vertex data has not yet been created.");
+		}
+
+		// -2 for each vertex data component, because the texture coorddinates data
+		// has two components per row
+		textureCoordsDataComponentCount = vertexDataComponentCount
+				- 2 * (vertexDataComponentCount / 4);
+		textureCoordsDataSize = textureCoordsDataComponentCount * sizeof(float);
+
+		textureCoordsData = new float[textureCoordsDataComponentCount];
+
+		int faceVertexArrayIndex = 0;
+
+		BOOST_FOREACH(const int* faceVertexIndex, *facesVertexIndexes) {
+			for (int vertexIndex = 0; vertexIndex != 3; ++vertexIndex) {
+
+				for (int textureCoordsComponent = 0;
+						textureCoordsComponent != 2; ++textureCoordsComponent) {
+					textureCoordsData[2 * (faceVertexIndex[vertexIndex] - 1)
+							+ textureCoordsComponent] =
+							textureCoords->at(
+									facesNormalIndexes->at(faceVertexArrayIndex)[vertexIndex]
+											- 1)[textureCoordsComponent];
+				}
+			}
+			++faceVertexArrayIndex;
+		}
+	}
+	return textureCoordsData;
+}
+
+void Model::outputTextureCoordsData() {
+	if (!multiColour) {
+		cout << "Texture coordinates data" << endl;
+		cout << "Component count: " << textureCoordsDataComponentCount;
+
+		for (int cnt = 0; cnt != textureCoordsDataComponentCount; ++cnt) {
+			if (cnt % 2 == 0)
+				cout << endl;
+			cout << textureCoordsData[cnt] << " ";
+		}
+		cout << endl;
+	} else {
+		cout << "No texture coordinates in random colours model" << endl;
+	}
+}
+
+int Model::getTextureCoordsDataSize() const {
+	return textureCoordsDataSize;
+}
+
+int Model::getTextureCoordsDataComponentCount() const {
+	return textureCoordsDataComponentCount;
 }
 
 }

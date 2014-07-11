@@ -32,6 +32,7 @@ private:
 	vector<float*> *normals;
 	vector<int*> *facesNormalIndexes;
 	vector<float*> *textureCoords;
+	vector<int*> *textureCoordsIndexes;
 
 	// Vertex data
 	float *vertexData;
@@ -48,6 +49,10 @@ private:
 	int normalsDataSize;
 	int normalsDataComponentCount;
 
+	// Texture coordinates data
+	float *textureCoordsData;
+	int textureCoordsDataSize;
+	int textureCoordsDataComponentCount;
 
 	// Load model from a Wavefront .obj file
 	void loadFromFile(string fileLocation);
@@ -184,8 +189,28 @@ public:
 	 */
 	int getNormalsDataComponentCount() const;
 
+	/**
+	 * Get the texture coordinates data
+	 * @return The texture coordinates data
+	 */
+	float* getTextureCoordsData();
 
+	/**
+	 * Output the texture coordinates data
+	 */
+	void outputTextureCoordsData();
 
+	/**
+	 * Get the size of the texture coordinates data, in bytes
+	 * @return The size of the texture coordinates data, in bytes
+	 */
+	int getTextureCoordsDataSize() const;
+
+	/**
+	 * Get the total number of texture coordinates data components
+	 * @return The total number of texture coordinates data components
+	 */
+	int getTextureCoordsDataComponentCount() const;
 
 };
 
