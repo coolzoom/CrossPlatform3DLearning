@@ -158,10 +158,12 @@ void Model::loadFromFile(string fileLocation) {
 					// get vertex index
 					int *v = new int[3];
 					int *n = NULL;
+					int *textC = NULL;
 					BOOST_FOREACH (const string& t, tokens) {
 
 						if (idx > 0) { // The first token is face indicator
-							if (t.find("//") > 0) { // normal index contained in the string
+							if (t.find("//") != string::npos) { // normal index contained in the string
+													// and texture coordinate index is missing
 								if (n == NULL)
 									n = new int[3];
 
@@ -169,7 +171,34 @@ void Model::loadFromFile(string fileLocation) {
 										t.substr(0, t.find("//")).c_str());
 								n[idx - 1] = atoi(
 										t.substr(t.find("//") + 2).c_str());
-							} else { // just the vertex index is contained
+							} else if (t.find("/") != string::npos && t.find("//") == string::npos) { // normal and texture coordinate index are
+																			   // contained in the string
+								if (n == NULL)
+									n = new int[3];
+								if (textC == NULL)
+									textC = new int[3];
+								char_separator<char> compsep("/");
+								tokenizer<char_separator<char> > components(t,
+										compsep);
+								int componentIdx = 0;
+
+								BOOST_FOREACH(const string &component, components) {
+									switch (componentIdx) {
+									case 0:
+										v[idx - 1] = atoi(component.c_str());
+										break;
+									case 1:
+										textC[idx - 1] = atoi(component.c_str());
+										break;
+									case 2:
+										n[idx - 1] = atoi(component.c_str());
+										break;
+									}
+									++componentIdx;
+								}
+							}
+
+							else { // just the vertex index is contained in the string
 								v[idx - 1] = atoi(t.c_str());
 							}
 						}
@@ -178,6 +207,8 @@ void Model::loadFromFile(string fileLocation) {
 					facesVertexIndexes->push_back(v);
 					if (n != NULL)
 						facesNormalIndexes->push_back(n);
+					if (textC != NULL)
+						textureCoordsIndexes->push_back(textC);
 				}
 			}
 		}
@@ -406,8 +437,8 @@ int Model::getIndexDataIndexCount() const {
 
 float* Model::getNormalsData() {
 
-	// Create an array of normal components which corresponds
-	// by index to the array of vertex components
+// Create an array of normal components which corresponds
+// by index to the array of vertex components
 	if (normalsData == NULL) {
 
 		if (vertexDataComponentCount == 0) {
@@ -475,8 +506,8 @@ int Model::getNormalsDataComponentCount() const {
 }
 
 float* Model::getTextureCoordsData() {
-	// Create an array of texture coordinates components which corresponds
-	// by index to the array of vertex components
+// Create an array of texture coordinates components which corresponds
+// by index to the array of vertex components
 	if (textureCoordsData == NULL) {
 
 		if (vertexDataComponentCount == 0) {
