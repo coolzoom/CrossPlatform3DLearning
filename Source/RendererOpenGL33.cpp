@@ -180,8 +180,16 @@ void RendererOpenGL33::DrawScene(
 			glBindTexture(GL_TEXTURE_2D, texture);
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureObj->getWidth(),
 					textureObj->getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE,
-					&textureObj->getData()[0]);
-			glBindTexture(GL_TEXTURE_2D, 0);
+					textureObj->getData());
+
+			glActiveTexture(GL_TEXTURE0);
+//			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+//			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 4);
+//
+//			glGenerateMipmap(GL_TEXTURE_2D);
+			//glBindTexture(GL_TEXTURE_2D, 0);
+
+
 		}
 
 		glEnableVertexAttribArray(1);

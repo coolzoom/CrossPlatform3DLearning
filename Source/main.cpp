@@ -44,7 +44,8 @@ int main(int argc, char** argv) {
 
 
 		boost::shared_ptr<WorldObject> object = boost::shared_ptr<WorldObject>(new WorldObject("animal",
-				"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithNormals.obj", cfg, log));
+				"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTexture.obj",
+				"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTexture.png", cfg, log));
 
 		boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene(new vector<boost::shared_ptr<WorldObject> >());
 		scene->push_back(object);
