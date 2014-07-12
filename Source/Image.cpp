@@ -30,6 +30,8 @@ Image::Image(string fileLocation, const boost::shared_ptr<Configuration>& cfg,
 
 	rowPointers = NULL;
 
+	imageData = NULL;
+
 	this->loadFromFile(fileLocation);
 
 }
@@ -49,6 +51,10 @@ Image::~Image() {
 
 	if (pngStructure != NULL) {
 		delete pngStructure;
+	}
+
+	if (imageData != NULL) {
+		delete[] imageData;
 	}
 }
 
@@ -131,7 +137,35 @@ void Image::loadFromFile(string fileLocation) {
 				"For now, only PNG_COLOR_TYPE_RGB is supported for PNG images.");
 	}
 
+	imageData = new unsigned short[width * height * 3];
+
+	for (int y = 0; y < height; y++) {
+
+		png_byte* row = rowPointers[y];
+
+		for (int x = 0; x < width; x++) {
+
+			png_byte* ptr = &(row[x * 3]);
+			imageData[y * width * 3 + x * 3] = ptr[0];
+			imageData[y * width * 3 + x * 3 + 1] = ptr[1];
+			imageData[y * width * 3 + x * 3 + 2] = ptr[2];
+
+		}
+	}
+
 	fclose(fp);
+}
+
+int Image::getWidth() const {
+	return width;
+}
+
+int Image::getHeight() const {
+	return height;
+}
+
+unsigned short *Image::getData() const {
+	return imageData;
 }
 
 }
