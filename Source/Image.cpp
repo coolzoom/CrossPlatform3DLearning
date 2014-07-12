@@ -126,6 +126,11 @@ void Image::loadFromFile(string fileLocation) {
 
 	png_read_image(pngStructure, rowPointers);
 
+	if (png_get_color_type(pngStructure, pngInformation) != PNG_COLOR_TYPE_RGB) {
+		throw GameException(
+				"For now, only PNG_COLOR_TYPE_RGB is supported for PNG images.");
+	}
+
 	fclose(fp);
 }
 
