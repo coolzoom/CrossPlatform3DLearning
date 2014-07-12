@@ -75,7 +75,7 @@ void RendererOpenGL14::DrawScene(
 
 		if (it->get()->getModel()->isIndexedDrawing())
 		{
-			throw new GameException("OpenGL 1.4 renderer does not support models in indexed drawing mode.");
+			throw GameException("OpenGL 1.4 renderer does not support models in indexed drawing mode.");
 		}
 
 		glBegin(GL_TRIANGLES);

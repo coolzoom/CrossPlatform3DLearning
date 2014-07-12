@@ -6,6 +6,19 @@
 #include <cstdlib>
 #include <iostream>
 
+#ifndef SDLANDOPENGL
+#define SDLANDOPENGL
+//#define GLEW_STATIC
+#define NO_SDL_GLEXT
+#include "GL/glew.h" // It seems that, when using glew,
+                      // we do not need to include gl.h,
+                      // glext.h or glu.h (if we do include
+					  // them, they need to be included after
+                      // glew.
+#include "SDL_opengl.h"
+#include "SDL.h"
+#endif //SDLANDOPENGL
+
 #include "GameLog.h"
 #include "Renderer.h"
 #include "RendererOpenGL14.h"
@@ -29,8 +42,8 @@ int main(int argc, char** argv) {
 
 		//OpenGL v1.4 or v3.3. Uncomment accordingly. Modify in combination with
 		// WorldObject constructor (indexed drawing, multicolour params to Model)
-		//boost::shared_ptr<Renderer> renderer(new RendererOpenGL14(cfg, log));
-		boost::shared_ptr<Renderer> renderer(new RendererOpenGL33(cfg, log));
+		boost::shared_ptr<Renderer> renderer(new RendererOpenGL14(cfg, log));
+		//boost::shared_ptr<Renderer> renderer(new RendererOpenGL33(cfg, log));
 
 		renderer->Init(1024, 768);
 
@@ -43,9 +56,12 @@ int main(int argc, char** argv) {
 		GLuint ticksInterval = 1000 / frameRate;
 
 
-		boost::shared_ptr<WorldObject> object = boost::shared_ptr<WorldObject>(new WorldObject("animal",
+		/*boost::shared_ptr<WorldObject> object = boost::shared_ptr<WorldObject>(new WorldObject("animal",
 				"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTexture.obj",
 				"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTexture.png", cfg, log));
+*/
+		boost::shared_ptr<WorldObject> object = boost::shared_ptr<WorldObject>(new WorldObject("animal",
+						"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj", false, false, cfg, log));
 
 		boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene(new vector<boost::shared_ptr<WorldObject> >());
 		scene->push_back(object);

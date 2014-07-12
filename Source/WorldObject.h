@@ -36,11 +36,13 @@ public:
 	 * Constructor for object without texture
 	 * @param name The name of the object
 	 * @param modelPath The path to the file containing the object's model
+	 * @param multiColour Should random colours be added to the model?
+	 * @param indexedDrawing Will indexed drawing be used?
 	 * @param cfg The game configuration file
 	 * @param log The game log
 	 */
-	WorldObject(string name, string modelPath,
-			boost::shared_ptr<Configuration> cfg,
+	WorldObject(string name, string modelPath, bool multiColour,
+			bool indexedDrawing, boost::shared_ptr<Configuration> cfg,
 			boost::shared_ptr<GameLog> log);
 
 	/**
@@ -48,10 +50,13 @@ public:
 	 * @param name The name of the object
 	 * @param modelPath The path to the file containing the object's model
 	 * @param texturePath The path to the file containing the object's texture
+	 * @param multiColour Should random colours be added to the model?
+	 * @param indexedDrawing Will indexed drawing be used?
 	 * @param cfg The game configuration file
 	 * @param log The game log
 	 */
 	WorldObject(string name, string modelPath, string texturePath,
+			bool multiColour, bool indexedDrawing,
 			boost::shared_ptr<Configuration> cfg,
 			boost::shared_ptr<GameLog> log);
 

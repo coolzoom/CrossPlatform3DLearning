@@ -113,7 +113,7 @@ Model::~Model(void) {
 
 void Model::loadFromFile(string fileLocation) {
 	if (vertices->size() != 0) {
-		throw new GameException(
+		throw GameException(
 				"Illegal attempt to reload model. Please use another object.");
 	}
 	ifstream file((cfg->getHomeDirectory() + fileLocation).c_str());
@@ -163,7 +163,7 @@ void Model::loadFromFile(string fileLocation) {
 
 						if (idx > 0) { // The first token is face indicator
 							if (t.find("//") != string::npos) { // normal index contained in the string
-													// and texture coordinate index is missing
+								// and texture coordinate index is missing
 								if (n == NULL)
 									n = new int[3];
 
@@ -171,8 +171,9 @@ void Model::loadFromFile(string fileLocation) {
 										t.substr(0, t.find("//")).c_str());
 								n[idx - 1] = atoi(
 										t.substr(t.find("//") + 2).c_str());
-							} else if (t.find("/") != string::npos && t.find("//") == string::npos) { // normal and texture coordinate index are
-																			   // contained in the string
+							} else if (t.find("/") != string::npos
+									&& t.find("//") == string::npos) { // normal and texture coordinate index are
+									// contained in the string
 								if (n == NULL)
 									n = new int[3];
 								if (textC == NULL)
@@ -188,7 +189,8 @@ void Model::loadFromFile(string fileLocation) {
 										v[idx - 1] = atoi(component.c_str());
 										break;
 									case 1:
-										textC[idx - 1] = atoi(component.c_str());
+										textC[idx - 1] = atoi(
+												component.c_str());
 										break;
 									case 2:
 										n[idx - 1] = atoi(component.c_str());
@@ -257,7 +259,7 @@ vector<int*>* Model::getFaces() {
 float* Model::getVertexData() {
 	if (vertexData == NULL && indexedDrawing) {
 		if (multiColour) {
-			throw new GameException(
+			throw GameException(
 					"Multicolour not supported in combination with indexed drawing");
 		}
 
@@ -442,7 +444,7 @@ float* Model::getNormalsData() {
 	if (normalsData == NULL) {
 
 		if (vertexDataComponentCount == 0) {
-			throw new GameException(
+			throw GameException(
 					"There are no vertices or vertex data has not yet been created.");
 		}
 
@@ -511,7 +513,7 @@ float* Model::getTextureCoordsData() {
 	if (textureCoordsData == NULL) {
 
 		if (vertexDataComponentCount == 0) {
-			throw new GameException(
+			throw GameException(
 					"There are no vertices or vertex data has not yet been created.");
 		}
 

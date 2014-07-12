@@ -10,22 +10,25 @@
 
 namespace AvoidTheBug3D {
 
-WorldObject::WorldObject(string name, string modelPath,
-		boost::shared_ptr<Configuration> cfg, boost::shared_ptr<GameLog> log) {
+WorldObject::WorldObject(string name, string modelPath, bool multiColour,
+		bool indexedDrawing, boost::shared_ptr<Configuration> cfg,
+		boost::shared_ptr<GameLog> log) {
 	this->name = name;
 	this->log = log;
 	this->model = boost::shared_ptr<Model>(
-			new Model(modelPath, false, true, cfg, log));
+			new Model(modelPath, multiColour, indexedDrawing, cfg, log));
 
 }
 
 WorldObject::WorldObject(string name, string modelPath, string texturePath,
+		bool multiColour, bool indexedDrawing,
 		boost::shared_ptr<Configuration> cfg, boost::shared_ptr<GameLog> log) {
 	this->name = name;
 	this->log = log;
 	this->model = boost::shared_ptr<Model>(
 			new Model(modelPath, false, true, cfg, log));
-	this->texture = boost::shared_ptr<Image>(new Image(texturePath, cfg, log));
+	this->texture = boost::shared_ptr<Image>(
+			new Image(texturePath, cfg, log));
 }
 
 WorldObject::~WorldObject() {
