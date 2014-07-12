@@ -172,6 +172,18 @@ void RendererOpenGL33::DrawScene(
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
 		}
 
+		boost::shared_ptr<Image> textureObj = it->get()->getTexture();
+
+		if (textureObj) {
+			GLuint texture;
+			glGenTextures(1, &texture);
+			glBindTexture(GL_TEXTURE_2D, texture);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureObj->getWidth(),
+					textureObj->getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE,
+					&textureObj->getData()[0]);
+			glBindTexture(GL_TEXTURE_2D, 0);
+		}
+
 		glEnableVertexAttribArray(1);
 
 		if (it->get()->getModel()->isMultiColour()) {
@@ -192,8 +204,7 @@ void RendererOpenGL33::DrawScene(
 					it->get()->getModel()->getNormalsData(), GL_STATIC_DRAW);
 			glBindBuffer(GL_ARRAY_BUFFER, normalsBufferObject);
 
-			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0,
-					(void*) 0);
+			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
 
 		}
 
