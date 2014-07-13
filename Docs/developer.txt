@@ -119,7 +119,7 @@ More details on this issue and how to resolve it can be found here:
 
 http://signbit01.wordpress.com/2012/05/27/libpng-1-5-10-access-violation-on-visual-studio-2010/
 
-* Compiling and running (both systems)
+* Compiling and running (all systems)
 --------------------------------------
 
 Create a directory, called "Temp" in the root folder of the project. Then go to 
