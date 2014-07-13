@@ -174,7 +174,7 @@ cmake :) )
 * Compiling the documentation (both systems)
 --------------------------------------------
 
-Go to the Source/Game directory
+Go to the Source directory
 Execute:
   doxygen doxygen.cfg
 The documentation will be created and placed in the Docs/SourceCodeDoc/html 
