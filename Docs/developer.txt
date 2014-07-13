@@ -171,7 +171,7 @@ gcc -lglut -lGL -lGLEW -lGLU main.cpp -o OpenGLExample
 cmake :) )
 
 
-* Compiling the documentation (both systems)
+* Compiling the documentation (all systems)
 --------------------------------------------
 
 Go to the Source directory
