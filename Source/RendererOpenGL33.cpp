@@ -40,7 +40,7 @@ void RendererOpenGL33::Init(int width, int height) {
 	GLuint vertexShader = compileShader(
 			"/Game/Shaders/perspectiveMatrixLightedShader.vert",
 			GL_VERTEX_SHADER);
-	GLuint fragmentShader = compileShader("/Game/Shaders/simpleShader.frag",
+	GLuint fragmentShader = compileShader("/Game/Shaders/textureShader.frag",
 	GL_FRAGMENT_SHADER);
 
 	program = glCreateProgram();
@@ -172,26 +172,6 @@ void RendererOpenGL33::DrawScene(
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
 		}
 
-		boost::shared_ptr<Image> textureObj = it->get()->getTexture();
-
-		if (textureObj) {
-			GLuint texture;
-			glGenTextures(1, &texture);
-			glBindTexture(GL_TEXTURE_2D, texture);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureObj->getWidth(),
-					textureObj->getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE,
-					textureObj->getData());
-
-			glActiveTexture(GL_TEXTURE0);
-//			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-//			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 4);
-//
-//			glGenerateMipmap(GL_TEXTURE_2D);
-			//glBindTexture(GL_TEXTURE_2D, 0);
-
-
-		}
-
 		glEnableVertexAttribArray(1);
 
 		if (it->get()->getModel()->isMultiColour()) {
@@ -213,6 +193,22 @@ void RendererOpenGL33::DrawScene(
 			glBindBuffer(GL_ARRAY_BUFFER, normalsBufferObject);
 
 			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+
+		}
+
+		boost::shared_ptr<Image> textureObj = it->get()->getTexture();
+
+		if (textureObj) {
+			GLuint texture;
+			glGenTextures(1, &texture);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, textureObj->getWidth(),
+								textureObj->getHeight(), 0, GL_RGB, GL_UNSIGNED_SHORT,
+								textureObj->getData());
+			glBindTexture(GL_TEXTURE_2D, texture);
+
+			GLuint sampler;
+			glGenSamplers(1, &sampler);
+			glBindSampler(texture, sampler);
 
 		}
 
