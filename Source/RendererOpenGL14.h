@@ -19,9 +19,7 @@ const GLfloat LightAmbient[] = { 0.5f, 0.5f, 0.5f, 1.0f };
 const GLfloat LightDiffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 const GLfloat LightPosition[] = { -5.0f, 0.0f, 2.0f, 1.0f };
 
-/**
- * Rendering class
- */
+/// OpenGL v1.4 rendering class
 class RendererOpenGL14 : public Renderer {
 private:
 	float angle;

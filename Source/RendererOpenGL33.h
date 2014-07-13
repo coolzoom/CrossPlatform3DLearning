@@ -17,6 +17,7 @@ using namespace std;
 
 namespace AvoidTheBug3D {
 
+/// OpenGL v3.3 rendering class
 class RendererOpenGL33: public Renderer {
 private:
 	GLuint program;

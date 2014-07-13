@@ -10,11 +10,12 @@
 #define SDLANDOPENGL
 //#define GLEW_STATIC
 #define NO_SDL_GLEXT
-#include "GL/glew.h" // It seems that, when using glew,
+// It seems that, when using glew,
 // we do not need to include gl.h,
 // glext.h or glu.h (if we do include
 // them, they need to be included after
 // glew.
+#include "GL/glew.h"
 #include "SDL_opengl.h"
 #include "SDL.h"
 #endif //SDLANDOPENGL
@@ -152,7 +153,10 @@ int main(int argc, char** argv) {
 
 	} catch (GameException &e) {
 		LOGERROR(e.what());
-//return 1;
+		SDL_FreeSurface(icon);
+		SDL_FreeSurface(screen);
+		SDL_Quit();
+		return 1;
 	}
 
 	SDL_FreeSurface(icon);
