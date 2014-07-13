@@ -35,8 +35,7 @@ namespace AvoidTheBug3D {
 class Renderer {
 
 protected:
-	SDL_Surface *screen;
-	SDL_Surface *icon;
+
 	boost::shared_ptr<Configuration> cfg;
 	boost::shared_ptr<GameLog> log;
 

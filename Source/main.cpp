@@ -11,10 +11,10 @@
 //#define GLEW_STATIC
 #define NO_SDL_GLEXT
 #include "GL/glew.h" // It seems that, when using glew,
-                      // we do not need to include gl.h,
-                      // glext.h or glu.h (if we do include
-					  // them, they need to be included after
-                      // glew.
+// we do not need to include gl.h,
+// glext.h or glu.h (if we do include
+// them, they need to be included after
+// glew.
 #include "SDL_opengl.h"
 #include "SDL.h"
 #endif //SDLANDOPENGL
@@ -25,27 +25,97 @@
 #include "RendererOpenGL33.h"
 #include "GameException.h"
 #include <boost/smart_ptr.hpp>
+#include "WorldObject.h"
 
 using namespace std;
 using namespace AvoidTheBug3D;
 
 const GLuint frameRate = 60;
 
+SDL_Surface *screen;
+SDL_Surface *icon;
+
 int main(int argc, char** argv) {
 
 	GameLog *logPtr = new GameLog(cout);
 	boost::shared_ptr<GameLog> log(logPtr);
 
+	boost::shared_ptr<Configuration> cfg(new Configuration(log));
+
 	try {
 
-		boost::shared_ptr<Configuration> cfg(new Configuration(log));
+		// initialize SDL video
+		if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+			LOGERROR(SDL_GetError());
+			throw GameException(string("Unable to initialise SDL"));
+		}
 
-		//OpenGL v1.4 or v3.3. Uncomment accordingly. Modify in combination with
-		// WorldObject constructor (indexed drawing, multicolour params to Model)
-		boost::shared_ptr<Renderer> renderer(new RendererOpenGL14(cfg, log));
-		//boost::shared_ptr<Renderer> renderer(new RendererOpenGL33(cfg, log));
+		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+		SDL_WM_SetCaption("SDL Application", "SDL Test");
+
+		icon = SDL_LoadBMP("ONLINE32.BMP");
+		SDL_WM_SetIcon(icon, NULL);
+		screen = SDL_SetVideoMode(1024, 768, 32, SDL_OPENGL); // *** SDL_HWSURFACE //DL_OPENGL |SDL_FULLSCREEN SDL_HWSURFACE SDL_DOUBLEBUF | );
+
+		if (!screen) {
+
+			LOGERROR(SDL_GetError());
+			throw GameException("Unable to set video");
+		}
+
+		if (glewInit() != GLEW_OK) {
+			throw GameException("Error initialising GLEW");
+		} else {
+			string glewVersion = (char*) glewGetString(GLEW_VERSION);
+			LOGINFO("Using GLEW version " + glewVersion);
+		}
+
+		string glVersion = (char*) glGetString(GL_VERSION);
+		glVersion = "OpenGL version supported by machine: " + glVersion;
+		LOGINFO(glVersion);
+
+		boost::shared_ptr<Renderer> renderer;
+		boost::shared_ptr<WorldObject> object;
+		if (glewIsSupported("GL_VERSION_3_3")) {
+			LOGINFO("Ready for OpenGL 3.3");
+			renderer = boost::shared_ptr<Renderer>(
+					new RendererOpenGL33(cfg, log));
+
+			object =
+					boost::shared_ptr<WorldObject>(
+							new WorldObject("animal",
+									"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTexture.obj",
+									"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTexture.png",
+									false, true, cfg, log));
+
+		} else {
+			LOGINFO("OpenGL 3.3 is not supported");
+			if (glewIsSupported("GL_VERSION_2_1")) {
+				LOGINFO("Ready for OpenGL 2.1");
+				renderer = boost::shared_ptr<Renderer>(
+						new RendererOpenGL14(cfg, log));
+				object =
+						boost::shared_ptr<WorldObject>(
+								new WorldObject("animal",
+										"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj",
+										false, false, cfg, log));
+
+			} else {
+				LOGINFO("OpenGL 2.1 is not supported");
+				throw GameException(
+						"None of the supported OpenGL versions are available.");
+			}
+		}
 
 		renderer->Init(1024, 768);
+
+		boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene(
+				new vector<boost::shared_ptr<WorldObject> >());
+		scene->push_back(object);
 
 		// program main loop
 		bool done = false;
@@ -54,17 +124,6 @@ int main(int argc, char** argv) {
 		GLuint ticks = SDL_GetTicks();
 		GLuint prevTicks = ticks;
 		GLuint ticksInterval = 1000 / frameRate;
-
-
-		/*boost::shared_ptr<WorldObject> object = boost::shared_ptr<WorldObject>(new WorldObject("animal",
-				"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTexture.obj",
-				"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTexture.png", cfg, log));
-*/
-		boost::shared_ptr<WorldObject> object = boost::shared_ptr<WorldObject>(new WorldObject("animal",
-						"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj", false, false, cfg, log));
-
-		boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene(new vector<boost::shared_ptr<WorldObject> >());
-		scene->push_back(object);
 
 		while (!done) {
 
@@ -93,8 +152,12 @@ int main(int argc, char** argv) {
 
 	} catch (GameException &e) {
 		LOGERROR(e.what());
-		return 1;
+//return 1;
 	}
+
+	SDL_FreeSurface(icon);
+	SDL_FreeSurface(screen);
+	SDL_Quit();
 
 	return 0;
 }
