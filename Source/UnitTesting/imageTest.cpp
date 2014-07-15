@@ -25,21 +25,29 @@ BOOST_AUTO_TEST_CASE( imageTest ) {
 	BOOST_CHECK_NE(0, image->getWidth());
 	BOOST_CHECK_NE(0, image->getHeight());
 
-	cout << "Image data:" << endl;
+	//cout << "Image data:" << endl;
 
 	unsigned short *imageData = image->getData();
 
 	int x = 0, y = 0;
 
-	while (y <= image->getHeight()) {
+	while (y < image->getHeight()) {
 		x = 0;
-		while (x <= image->getWidth()) {
+		while (x < image->getWidth()) {
 			unsigned short *colour = &(imageData[y * image->getWidth() * 3
 					+ x * 3]);
-			if (colour[0] + colour[1] + colour[2] > 0 ) {
-				cout << "At (" << x << ", " << y << "): " << "R:" << colour[0]
-						<< " G:" << colour[1] << " B:" << colour[2] << endl;
-			}
+
+			BOOST_CHECK_GE(colour[0], 0);
+			BOOST_CHECK_LT(colour[0], 256);
+			BOOST_CHECK_GE(colour[1], 0);
+			BOOST_CHECK_LT(colour[1], 256);
+			BOOST_CHECK_GE(colour[2], 0);
+			BOOST_CHECK_LT(colour[2], 256);
+
+//			if (colour[0] + colour[1] + colour[2] > 0 ) {
+//				cout << "At (" << x << ", " << y << "): " << "R:" << colour[0]
+//						<< " G:" << colour[1] << " B:" << colour[2] << endl;
+//			}
 			++x;
 		}
 		++y;
