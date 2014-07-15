@@ -203,7 +203,7 @@ void RendererOpenGL33::DrawScene(
 			glGenTextures(1, &texture);
 			glBindTexture(GL_TEXTURE_2D, texture);
 
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, textureObj->getWidth(),
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureObj->getWidth(),
 					textureObj->getHeight(), 0, GL_RGB, GL_UNSIGNED_SHORT,
 					textureObj->getData());
 //			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
