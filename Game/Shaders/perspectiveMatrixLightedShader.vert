@@ -3,7 +3,7 @@
 layout(location = 0) in vec4 position;
 layout(location = 1) in vec3 normal;
 
-smooth out vec4 fragColour;
+smooth out float cosAngIncidence;
 
 uniform uint multiColourBool;
 uniform vec3 offset;
@@ -14,6 +14,8 @@ uniform mat4 yRotationMatrix;
 uniform mat4 zRotationMatrix;
 
 uniform vec3 lightDirection;
+
+
 
 void main()
 {
@@ -32,7 +34,6 @@ void main()
     
     vec4 lightDirectionCameraSpace = normalize(perspectiveMatrix * vec4(lightDirection, 1));
 
-    float cosAngIncidence = clamp(dot(normalCameraSpace, lightDirectionCameraSpace), 0, 1);
-
-    fragColour =  cosAngIncidence * 0.8 * vec4(1.0, 1.0, 1.0, 1.0);
+    cosAngIncidence = clamp(dot(normalCameraSpace, lightDirectionCameraSpace), 0, 1);
+    
 }

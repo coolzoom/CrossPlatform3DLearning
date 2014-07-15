@@ -205,13 +205,18 @@ void RendererOpenGL33::DrawScene(
 
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, textureObj->getWidth(),
 					textureObj->getHeight(), 0, GL_RGB, GL_UNSIGNED_SHORT,
-					&textureObj->getData()[0]);
+					textureObj->getData());
 //			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
 //			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+
+			GLuint sampler;
+			glGenSamplers(1, &sampler);
+			glBindSampler(texture, sampler);
+
+			GLuint textureUniformLoc = glGetUniformLocation(program, "textureImage");
+			glUniform1i(textureUniformLoc, sampler);
 			glBindTexture(GL_TEXTURE_2D, 0);
-//			GLuint sampler;
-//			glGenSamplers(1, &sampler);
-//			glBindSampler(texture, sampler);
+
 
 		}
 
