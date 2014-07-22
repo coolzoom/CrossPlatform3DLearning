@@ -20,9 +20,6 @@ namespace AvoidTheBug3D {
 /// OpenGL v3.3 rendering class
 class RendererOpenGL33: public Renderer {
 private:
-	GLuint program;
-	string loadShaderFromFile(string fileLocation);
-	GLuint compileShader(string shaderSource, GLenum shaderType);
 
 	boost::shared_ptr<float> xRotationMatrix;
 	boost::shared_ptr<float> yRotationMatrix;
@@ -37,12 +34,13 @@ private:
 	float zAngle;
 
 public:
-	RendererOpenGL33( boost::shared_ptr<Configuration> cfg,
-			 boost::shared_ptr<GameLog> log);
+	RendererOpenGL33(boost::shared_ptr<Configuration> cfg,
+			boost::shared_ptr<GameLog> log);
 
 	void Init(int width, int height);
 
-	void DrawScene(boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene);
+	void DrawScene(
+			boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene);
 
 	virtual ~RendererOpenGL33();
 };
