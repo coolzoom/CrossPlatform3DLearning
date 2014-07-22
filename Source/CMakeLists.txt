@@ -55,8 +55,8 @@ ADD_DEFINITIONS(${PNG_DEFINITIONS})
 # Create the executable
 ADD_EXECUTABLE(game main.cpp GameLog.cpp Model.cpp GameLogic.cpp
  WorldObject.cpp Character.cpp 
- PlayerView.cpp Renderer.cpp RendererOpenGL14.cpp RendererOpenGL33.cpp GameException.cpp
- Configuration.cpp Image.cpp
+ PlayerView.cpp Renderer.cpp RendererOpenGL14.cpp RendererOpenGL33.cpp
+ RendererOpenGL21.cpp GameException.cpp Configuration.cpp Image.cpp
  )
 
 # Link to the required libraries
