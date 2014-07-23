@@ -15,6 +15,12 @@ class RendererOpenGL21: public Renderer {
 public:
 	RendererOpenGL21(boost::shared_ptr<Configuration> cfg,
 			boost::shared_ptr<GameLog> log);
+
+	void Init(int width, int height);
+
+	void DrawScene(
+			boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene);
+
 	virtual ~RendererOpenGL21();
 };
 }

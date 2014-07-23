@@ -23,6 +23,7 @@
 #include "GameLog.h"
 #include "Renderer.h"
 #include "RendererOpenGL14.h"
+#include "RendererOpenGL21.h"
 #include "RendererOpenGL33.h"
 #include "GameException.h"
 #include <boost/smart_ptr.hpp>
@@ -93,23 +94,29 @@ int main(int argc, char** argv) {
 									"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTextureWhite.png",
 									false, true, cfg, log));
 
-		} else {
-			LOGINFO("OpenGL 3.3 is not supported");
-			if (glewIsSupported("GL_VERSION_2_1")) {
-				LOGINFO("Ready for OpenGL 2.1");
-				renderer = boost::shared_ptr<Renderer>(
-						new RendererOpenGL14(cfg, log));
-				object =
-						boost::shared_ptr<WorldObject>(
-								new WorldObject("animal",
-										"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj",
-										false, false, cfg, log));
+		} else if (glewIsSupported("GL_VERSION_2_1")) {
+			LOGINFO("Ready for OpenGL 2.1");
+			renderer = boost::shared_ptr<Renderer>(
+					new RendererOpenGL21(cfg, log));
+			object =
+					boost::shared_ptr<WorldObject>(
+							new WorldObject("animal",
+									"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj",
+									false, false, cfg, log));
 
-			} else {
-				LOGINFO("OpenGL 2.1 is not supported");
-				throw GameException(
-						"None of the supported OpenGL versions are available.");
-			}
+		} else if (glewIsSupported("GL_VERSION_1_4")) {
+			LOGINFO("Ready for OpenGL 1.4");
+			renderer = boost::shared_ptr<Renderer>(
+					new RendererOpenGL14(cfg, log));
+			object =
+					boost::shared_ptr<WorldObject>(
+							new WorldObject("animal",
+									"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj",
+									false, false, cfg, log));
+
+		} else {
+			throw GameException(
+					"None of the supported OpenGL versions (3.3, 2.1 or 1.4) are available.");
 		}
 
 		renderer->Init(1024, 768);

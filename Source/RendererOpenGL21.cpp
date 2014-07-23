@@ -15,6 +15,13 @@ RendererOpenGL21::RendererOpenGL21(boost::shared_ptr<Configuration> cfg,
 
 }
 
+void RendererOpenGL21::Init(int width, int height) {
+}
+
+void RendererOpenGL21::DrawScene(
+		boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene) {
+}
+
 RendererOpenGL21::~RendererOpenGL21() {
 	// TODO Auto-generated destructor stub
 }
