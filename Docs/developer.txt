@@ -154,6 +154,9 @@ To create an Eclipse project in Linux, run the following command from the Temp
 directory, mentioned above:
 cmake -G "Eclipse CDT4 - Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug 
 -DCMAKE_ECLIPSE_MAKE_ARGUMENTS=-j8 ../Source/
+In order to create a Code::Blocks project, run the following command from the
+Temp directory, mentioned above:
+cmake ../Source -G "CodeBlocks - Unix Makefiles"
 If you are using debian, you might need to add a FindGLEW module to your
 cmake installation. I have found one that works here:
   https://gitorious.org/imageutilities/imageutilities/source/
