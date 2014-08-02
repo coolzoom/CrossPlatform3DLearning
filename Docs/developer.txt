@@ -65,29 +65,27 @@ sudo apt-get install libglm-dev
 -----------------------------
 
 Download and install cmake (http://www.cmake.org/). I am using version 2.8.
-Download SDL and unzip it to a folder (http://www.libsdl.org/). I am using 
-version 1.2.
-Create an SDLDIR environment variable and set it to that folder.
+Create a folder where all the libraries and include files found by cmake
+will be placed, e.g. C:\cmakerefs
+Download SDL (http://www.libsdl.org - VC development libraries) and unzip it to
+a folder within C:\cmakerefs. I am using version 1.2.
 In the lib subdirectory of SDL, copy the contents of the 32 bit subdirectory one 
 level up.
 Download GLEW for windows (http://glew.sourceforge.net/) and unzip it to a 
-folder.
-Create GLEW_ROOT_DIR environment variable and set it to that folder.
-Download and install Doxygen (http://www.stack.nl/~dimitri/doxygen/)
+folder within C:\cmakerefs. Then copy the library files from the
+lib\Release\Win32 directory of the unzipped archive to the lib
+directory.
 Download the Boost libraries (http://www.boost.org/) and unzip them in a folder.  
-I am using version 1.54.  (In Ubuntu I am using an earlier version because it 
+I am using version 1.55.  (In Ubuntu I am using an earlier version because it 
 was the latest available for my package manager)
-Create a folder to install the built version of the libraries of Boost, e.g.  
-C:\boost_1_54_0_installed
+Create a folder within C:\cmakerefs to install the built version of the libraries 
+of Boost, e.g. C:\cmakerefs\boost_1_55_0
 From the source Boost folder, execute bootstrap.bat
-	b2 install --prefix=C:\boost_1_54_0_installed address-model=32 
+	b2 install --prefix=C:\cmakerefs\boost_1_55_0 address-model=32 
 --build-type=complete --with-date_time --with-test --with-filesystem 
 --with-system
-Set environment variable BOOST_ROOT to C:\boost_1_54_0_installed\
-Set environment variable BOOST_LIBRARYDIR to C:\boost_1_54_0_installed\lib\
-Download GLM (http://glm.g-truc.net) and unzip it to a folder.
-Set the environment variable GLM_ROOT_DIR to that folder, so that CMake can
-find it.
+Download GLM (http://glm.g-truc.net) and unzip it to a folder within
+C:\cmakerefs.
 CMake will also need the FingGLM module, in order to find GLM. If the module
 is not contained in your CMake distribution, you can copy it from the above 
 mentioned GLM archive, from the folder glm\util, to the modules directory
@@ -95,29 +93,34 @@ of CMake.
 The project is also using the libpng library, which in turn requires the
 zlib library. Normally, a straightforward way to configure them would be the
 following:
-
 Download the libpng binaries and developer files for Windows. Links for the
 packages can be found here:
 http://gnuwin32.sourceforge.net/packages/libpng.htm
-Then decompress the archives.
+Then decompress the archives in a folder in C:\cmakerefs
 Download the zlib binaries and developer files for Windows. Links for the
 packages can be found here:
 http://gnuwin32.sourceforge.net/packages/zlib.htm
-Then decompress the archives.
-Set an environment variable called CMAKE_PREFIX_PATH to point to the
-list of decompressed root directories of the libpng and zlib developer
-files, for example "C:\libraries\zlib-1.2.3-lib;C:\libraries\libpng-1.2.37-lib"
-(The same could have been done for the other libraries mentioned above,
-like boost for example, instead of setting individual environment variables
-for each, but I only found out about it when I got to this point :/ )
+Then decompress the archives in a folder in C:\cmakerefs. In the zlib
+developer files directory, there is a file named zconf.h in the include
+directory. Inside that file, the line including unistd.h needs to be
+commented out, otherwise the project will not compile.
 
-On my system, after performing the above, I kept getting an
-access violation whenever I ran the unit tests since I started using the library.
-The reason was that libpng binary was not compiled in the same way as the rest of
-the project and so I ended up compiling the library from source code myself. 
-More details on this issue and how to resolve it can be found here:
+On my system, after performing the above and building the program as described
+below, I kept getting an access violation whenever I ran the unit tests since I
+started using the library. The reason was that libpng binary was not compiled in
+the same way as the rest of the project and so I ended up compiling the library 
+from source code myself. More details on this issue and how to resolve it can be
+found here:
 
 http://signbit01.wordpress.com/2012/05/27/libpng-1-5-10-access-violation-on-visual-studio-2010/
+
+Set an environment variable called CMAKE_PREFIX_PATH to point to the
+list of decompressed root directories of all libraries mentioned above, 
+for example "C:\libraries\zlib-1.2.3-lib;C:\libraries\libpng-1.2.37-lib ...
+etc" (list the developer file directories, the binaries directories which
+contain the dlls are not needed by cmake.
+
+Download and install Doxygen (http://www.stack.nl/~dimitri/doxygen/)
 
 * Compiling and running (all systems)
 --------------------------------------
