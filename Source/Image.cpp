@@ -61,9 +61,12 @@ Image::~Image() {
 void Image::loadFromFile(string fileLocation) {
 	// function developed based on example at
 	// http://zarb.org/~gc/html/libpng.html
-
+#ifdef _WIN32
+	FILE *fp;
+	fopen_s(&fp, (cfg->getHomeDirectory() + fileLocation).c_str(), "rb");
+#else
 	FILE *fp = fopen((cfg->getHomeDirectory() + fileLocation).c_str(), "rb");
-
+#endif
 	if (!fp) {
 		throw GameException(
 				"Could not open file " + cfg->getHomeDirectory()

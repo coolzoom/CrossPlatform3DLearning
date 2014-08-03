@@ -15,6 +15,11 @@
 #include "GameLog.h"
 #include "Configuration.h"
 #include <png.h>
+#include <pngstruct.h> // needed by pnginfo.h
+#include <pnginfo.h> // Not needed directly but otherwise the error
+					 // "C4150: deletion of pointer to incomplete type"
+					 // will show up.
+
 
 using namespace std;
 
