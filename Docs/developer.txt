@@ -100,10 +100,7 @@ Then decompress the archives in a folder in C:\cmakerefs
 Download the zlib binaries and developer files for Windows. Links for the
 packages can be found here:
 http://gnuwin32.sourceforge.net/packages/zlib.htm
-Then decompress the archives in a folder in C:\cmakerefs. In the zlib
-developer files directory, there is a file named zconf.h in the include
-directory. Inside that file, the line including unistd.h needs to be
-commented out, otherwise the project will not compile.
+Then decompress the archives in a folder in C:\cmakerefs.
 
 On my system, after performing the above and building the program as described
 below, I kept getting an access violation whenever I ran the unit tests since I
