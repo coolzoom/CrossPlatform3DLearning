@@ -39,13 +39,15 @@ void Configuration::findHomeDirectory() {
 	if (boost::algorithm::ends_with(currentLower, "unittesting")) // Linux unit testing
 			{
 		homePath = homePath.branch_path().branch_path();
-	} else if (boost::algorithm::ends_with(currentLower, "temp")) // Linux IDE execution
+	} else if (boost::algorithm::ends_with(currentLower, "temp")) // Linux or Windows
+																  // IDE execution
 			{
 		homePath = homePath.branch_path();
 	} else if (boost::algorithm::ends_with(currentLower, "debug")
-			|| boost::algorithm::ends_with(currentLower, "release")) // Windows
+			|| boost::algorithm::ends_with(currentLower, "release")) // Windows command
+																	 // line execution
 					{
-		if (currentLower.find("unittesting")) // Unit testing
+		if (currentLower.find("unittesting") !=  string::npos) // Unit testing
 				{
 			homePath = homePath.branch_path().branch_path().branch_path();
 		} else // IDE execution
