@@ -130,7 +130,7 @@ void Model::loadFromFile(string fileLocation) {
 					float *vn = new float[3];
 					BOOST_FOREACH (const string& t, tokens) {
 						if (idx > 0) { // The first token is the vertex normal indicator
-							vn[idx - 1] = atof(t.c_str());
+							vn[idx - 1] = (float) atof(t.c_str());
 						}
 						++idx;
 					}
@@ -139,7 +139,7 @@ void Model::loadFromFile(string fileLocation) {
 					float *vt = new float[2];
 					BOOST_FOREACH (const string& t, tokens) {
 						if (idx > 0) { // The first token is the vertex texture coordinate indicator
-							vt[idx - 1] = atof(t.c_str());
+							vt[idx - 1] = (float) atof(t.c_str());
 						}
 						++idx;
 					}
@@ -149,7 +149,7 @@ void Model::loadFromFile(string fileLocation) {
 					float *v = new float[3];
 					BOOST_FOREACH (const string& t, tokens) {
 						if (idx > 0) { // The first token is the vertex indicator
-							v[idx - 1] = atof(t.c_str());
+							v[idx - 1] = (float) atof(t.c_str());
 						}
 						++idx;
 					}

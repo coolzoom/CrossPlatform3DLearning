@@ -134,6 +134,9 @@ project, select Properties, and go to Configuration Properties > Linker > Input
 and edit the Additional Dependencies.
 Locate the library that cannot be found and, if it does not start by "lib", add 
 that prefix to it.
+Also, right click on the unittest project and go to "Properties > Configuration
+Properties > C/C++ > Code Generation". Set "Enable C++ Exceptions" to "Yes with
+SEH Exceptions /EHa".
 In Windows you will probably need to copy the dlls of the libraries we are using 
 (SDL, Boost, GLEW, libpng (from the binaries package), zlib (from the binaries
 package) etc) to the output directory (Release or Debug), unless they 

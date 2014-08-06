@@ -2,11 +2,13 @@
  * gameLogDebugTest.cpp
  *
  *  Created on: Jan 7, 2014
- *      Author: Dimitrios Kourkoulis
+ *      Author: Dimitri Kourkoulis
  */
 #include <boost/test/unit_test.hpp>
-#if not defined(DEBUG) && not defined(_DEBUG)
+#ifndef DEBUG
+#ifndef _DEBUG
 #define DEBUG
+#endif
 #endif
 #include "../GameLog.h"
 #include <sstream>

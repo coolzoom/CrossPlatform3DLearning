@@ -102,11 +102,11 @@ void RendererOpenGL33::DrawScene(
 
 	if (xAngle > 6.28)
 		xAngle = 0.0;
-	xAngle += 0.03;
+	xAngle += 0.03f;
 
 	if (yAngle > 6.28)
 		yAngle = 0.0;
-	yAngle += 0.03;
+	yAngle += 0.03f;
 
 //	if (zAngle > 6.28)
 //			zAngle = 0.0;
@@ -193,29 +193,29 @@ void RendererOpenGL33::DrawScene(
 
 		}
 
-		boost::shared_ptr<Image> textureObj = it->get()->getTexture();
-
-		if (textureObj) {
-			GLuint texture;
-			glGenTextures(1, &texture);
-			glBindTexture(GL_TEXTURE_2D, texture);
-
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureObj->getWidth(),
-					textureObj->getHeight(), 0, GL_RGB, GL_UNSIGNED_SHORT,
-					textureObj->getData());
-//			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-//			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
-
-			GLuint sampler;
-			glGenSamplers(1, &sampler);
-			glBindSampler(texture, sampler);
-
-			GLuint textureUniformLoc = glGetUniformLocation(program, "textureImage");
-			glUniform1i(textureUniformLoc, sampler);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-
-		}
+//		boost::shared_ptr<Image> textureObj = it->get()->getTexture();
+//
+//		if (textureObj) {
+//			GLuint texture;
+//			glGenTextures(1, &texture);
+//			glBindTexture(GL_TEXTURE_2D, texture);
+//
+//			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureObj->getWidth(),
+//					textureObj->getHeight(), 0, GL_RGB, GL_UNSIGNED_SHORT,
+//					textureObj->getData());
+////			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+////			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+//
+//			GLuint sampler;
+//			glGenSamplers(1, &sampler);
+//			glBindSampler(texture, sampler);
+//
+//			GLuint textureUniformLoc = glGetUniformLocation(program, "textureImage");
+//			glUniform1i(textureUniformLoc, sampler);
+//			glBindTexture(GL_TEXTURE_2D, 0);
+//
+//
+//		}
 
 		if (it->get()->getModel()->isIndexedDrawing()) {
 			glDrawElements(GL_TRIANGLES,
