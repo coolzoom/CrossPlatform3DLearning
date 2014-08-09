@@ -2,8 +2,10 @@
 
 layout(location = 0) in vec4 position;
 layout(location = 1) in vec3 normal;
+layout(location = 2) in vec2 uvCoords;
 
 smooth out float cosAngIncidence;
+out vec2 textureCoords;
 
 uniform uint multiColourBool;
 uniform vec3 offset;
@@ -35,5 +37,5 @@ void main()
     vec4 lightDirectionCameraSpace = normalize(perspectiveMatrix * vec4(lightDirection, 1));
 
     cosAngIncidence = clamp(dot(normalCameraSpace, lightDirectionCameraSpace), 0, 1);
-    
+    textureCoords = uvCoords;
 }
