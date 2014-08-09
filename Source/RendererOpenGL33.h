@@ -12,7 +12,7 @@
 #include <string>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <boost/unordered_map.hpp>
+
 
 using namespace std;
 
@@ -33,8 +33,6 @@ private:
 	float xAngle;
 	float yAngle;
 	float zAngle;
-
-	boost::unordered_map<string, GLuint> *textures;
 
 public:
 	RendererOpenGL33(boost::shared_ptr<Configuration> cfg,

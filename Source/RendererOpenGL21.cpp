@@ -11,11 +11,15 @@ namespace AvoidTheBug3D {
 RendererOpenGL21::RendererOpenGL21(boost::shared_ptr<Configuration> cfg,
 		boost::shared_ptr<GameLog> log) :
 		Renderer(cfg, log) {
-	// TODO Auto-generated constructor stub
+
+	vertexShaderPath =
+			"/Game/Shaders/OpenGL21/perspectiveMatrixLightedShader.vert";
+	fragmentShaderPath = "/Game/Shaders/OpenGL21/textureShader.frag";
 
 }
 
 void RendererOpenGL21::Init(int width, int height) {
+	Renderer::Init(width, height);
 }
 
 void RendererOpenGL21::DrawScene(

@@ -7,7 +7,6 @@
 
 #include "RendererOpenGL33.h"
 #include "GameException.h"
-#include <boost/foreach.hpp>
 
 namespace AvoidTheBug3D {
 
@@ -23,80 +22,13 @@ RendererOpenGL33::RendererOpenGL33(boost::shared_ptr<Configuration> cfg,
 	yAngle = 0.0f;
 	zAngle = 0.0f;
 
-	textures = new boost::unordered_map<string, GLuint>();
+	vertexShaderPath = "/Game/Shaders/OpenGL33/perspectiveMatrixLightedShader.vert";
+	fragmentShaderPath = "/Game/Shaders/OpenGL33/textureShader.frag";
 
 }
 
 void RendererOpenGL33::Init(int width, int height) {
 	Renderer::Init(width, height);
-
-	glViewport(0, 0, (GLsizei) width, (GLsizei) height);
-
-	glEnable(GL_DEPTH_TEST);
-	glDepthMask(GL_TRUE);
-	glDepthFunc(GL_LEQUAL);
-	glDepthRange(0.0f, 10.0f);
-
-	GLuint vertexShader = compileShader(
-			"/Game/Shaders/perspectiveMatrixLightedShader.vert",
-			GL_VERTEX_SHADER);
-	GLuint fragmentShader = compileShader("/Game/Shaders/textureShader.frag",
-	GL_FRAGMENT_SHADER);
-
-	program = glCreateProgram();
-	glAttachShader(program, vertexShader);
-	glAttachShader(program, fragmentShader);
-
-	glLinkProgram(program);
-
-	GLint status;
-	glGetProgramiv(program, GL_LINK_STATUS, &status);
-	if (status == GL_FALSE) {
-		GLint infoLogLength;
-		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLogLength);
-
-		GLchar *infoLog = new GLchar[infoLogLength + 1];
-		glGetProgramInfoLog(program, infoLogLength, NULL, infoLog);
-		string infoLogStr = infoLog;
-
-		delete[] infoLog;
-		throw GameException("Failed to link program:\n" + infoLogStr);
-	} else {
-		LOGINFO("Linked program successfully");
-
-		// Perspective and offset
-		glUseProgram(program);
-
-		GLuint offsetUniform = glGetUniformLocation(program, "offset");
-		glUniform3f(offsetUniform, 0.0f, -1.0f, -4.0f);
-
-		GLuint perspectiveMatrixUniform = glGetUniformLocation(program,
-				"perspectiveMatrix");
-
-		float perspectiveMatrix[16];
-		memset(perspectiveMatrix, 0, sizeof(float) * 16);
-		perspectiveMatrix[0] = 1.0f; // frustum scale
-		perspectiveMatrix[5] = 1.0f; // frustum scale
-		perspectiveMatrix[10] = (1.0f + 10.0f) / (1.0f - 10.0f); // (zNear + zFar) / (zNear - zFar)
-		perspectiveMatrix[14] = 2.0f * 1.0f * 10.0f / (1.0f - 10.0f); // 2 * zNear * zFar / (zNear - zFar);
-		perspectiveMatrix[11] = -1.0f; //cameraPos.z? or just the -1 factor...
-
-		glUniformMatrix4fv(perspectiveMatrixUniform, 1, GL_FALSE,
-				perspectiveMatrix);
-
-		glUseProgram(0);
-	}
-	glDetachShader(program, vertexShader);
-	glDetachShader(program, fragmentShader);
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
-
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-	glFrontFace(GL_CCW);
-
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	glClearDepth(10.0f);
 
 }
 
@@ -319,12 +251,6 @@ void RendererOpenGL33::constructZRotationMatrix(float angle) {
 
 RendererOpenGL33::~RendererOpenGL33() {
 	LOGINFO("OpenGL 3.3 renderer getting destroyed");
-	for (boost::unordered_map<string, GLuint>::iterator it = textures->begin(); 
-		it != textures->end(); ++it){
-		LOGINFO("Deleting texture for " + it->first);
-		glDeleteTextures(1, &it->second);
-	}
-	delete textures;
 }
 
 } /* namespace AvoidTheBug3D */

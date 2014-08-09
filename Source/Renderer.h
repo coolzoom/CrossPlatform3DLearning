@@ -27,6 +27,7 @@
 #include "Configuration.h"
 #include "GameLog.h"
 #include <boost/smart_ptr.hpp>
+#include <boost/unordered_map.hpp>
 
 namespace AvoidTheBug3D {
 
@@ -39,6 +40,9 @@ protected:
 	boost::shared_ptr<Configuration> cfg;
 	boost::shared_ptr<GameLog> log;
 	GLuint program;
+
+	string vertexShaderPath;
+	string fragmentShaderPath;
 
 	/**
 	 * Load a shader's source code from a file into a string
@@ -54,6 +58,8 @@ protected:
 	 * @return OpenGL shader reference
 	 */
 	GLuint compileShader(string shaderSource, GLenum shaderType);
+
+	boost::unordered_map<string, GLuint> *textures;
 
 public:
 
