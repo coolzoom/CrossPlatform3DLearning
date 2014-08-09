@@ -22,7 +22,6 @@
 
 #include "GameLog.h"
 #include "Renderer.h"
-#include "RendererOpenGL14.h"
 #include "RendererOpenGL21.h"
 #include "RendererOpenGL33.h"
 #include "GameException.h"
@@ -104,19 +103,9 @@ int main(int argc, char** argv) {
 									"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj",
 									false, false, cfg, log));
 
-		} else if (glewIsSupported("GL_VERSION_1_4")) {
-			LOGINFO("Ready for OpenGL 1.4");
-			renderer = boost::shared_ptr<Renderer>(
-					new RendererOpenGL14(cfg, log));
-			object =
-					boost::shared_ptr<WorldObject>(
-							new WorldObject("animal",
-									"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj",
-									false, false, cfg, log));
-
 		} else {
 			throw GameException(
-					"None of the supported OpenGL versions (3.3, 2.1 or 1.4) are available.");
+					"None of the supported OpenGL versions (3.3 nor 2.1) are available.");
 		}
 
 		renderer->Init(1024, 768);
