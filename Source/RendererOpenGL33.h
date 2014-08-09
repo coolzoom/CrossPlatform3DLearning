@@ -10,11 +10,9 @@
 
 #include "Renderer.h"
 #include <string>
-#include <hash_map>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <boost/unordered_map.hpp>
-#include <functional>
 
 using namespace std;
 
