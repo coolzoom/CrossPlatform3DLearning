@@ -7,6 +7,7 @@
 
 #include "RendererOpenGL33.h"
 #include "GameException.h"
+#include <boost/foreach.hpp>
 
 namespace AvoidTheBug3D {
 
@@ -21,6 +22,8 @@ RendererOpenGL33::RendererOpenGL33(boost::shared_ptr<Configuration> cfg,
 	xAngle = 0.0f;
 	yAngle = 0.0f;
 	zAngle = 0.0f;
+
+	textures = new boost::unordered_map<string, GLuint>();
 
 }
 
@@ -193,29 +196,40 @@ void RendererOpenGL33::DrawScene(
 
 		}
 
-//		boost::shared_ptr<Image> textureObj = it->get()->getTexture();
-//
-//		if (textureObj) {
-//			GLuint texture;
-//			glGenTextures(1, &texture);
-//			glBindTexture(GL_TEXTURE_2D, texture);
-//
-//			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureObj->getWidth(),
-//					textureObj->getHeight(), 0, GL_RGB, GL_UNSIGNED_SHORT,
-//					textureObj->getData());
-////			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-////			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
-//
-//			GLuint sampler;
-//			glGenSamplers(1, &sampler);
-//			glBindSampler(texture, sampler);
-//
-//			GLuint textureUniformLoc = glGetUniformLocation(program, "textureImage");
-//			glUniform1i(textureUniformLoc, sampler);
-//			glBindTexture(GL_TEXTURE_2D, 0);
-//
-//
-//		}
+		boost::shared_ptr<Image> textureObj = it->get()->getTexture();
+
+		if (textureObj) {
+			GLuint texture;
+			if (textures->find(it->get()->getName()) == textures->end())
+			{
+				glGenTextures(1, &texture);
+				glBindTexture(GL_TEXTURE_2D, texture);
+
+				glTexImage2D(GL_TEXTURE_RECTANGLE, 0, GL_RGB, textureObj->getWidth(),
+					textureObj->getHeight(), 0, GL_RGB, GL_UNSIGNED_SHORT,
+					textureObj->getData());
+				//			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+				//			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+				glBindTexture(GL_TEXTURE_2D, 0);
+				textures->insert(boost::unordered_map<string, GLuint>::value_type(it->get()->getName(), texture));
+			}
+			else
+			{
+				texture = textures->find(it->get()->getName())->second;
+			}
+
+			GLuint sampler;
+			glGenSamplers(1, &sampler);
+			glBindSampler(texture, sampler);
+
+			GLuint textureUniformLoc = glGetUniformLocation(program, "textureImage");
+			glUniform1i(textureUniformLoc, sampler);
+			
+		}
 
 		if (it->get()->getModel()->isIndexedDrawing()) {
 			glDrawElements(GL_TRIANGLES,
@@ -305,6 +319,12 @@ void RendererOpenGL33::constructZRotationMatrix(float angle) {
 
 RendererOpenGL33::~RendererOpenGL33() {
 	LOGINFO("OpenGL 3.3 renderer getting destroyed");
+	for (boost::unordered_map<string, GLuint>::iterator it = textures->begin(); 
+		it != textures->end(); ++it){
+		LOGINFO("Deleting texture for " + it->first);
+		glDeleteTextures(1, &it->second);
+	}
+	delete textures;
 }
 
 } /* namespace AvoidTheBug3D */

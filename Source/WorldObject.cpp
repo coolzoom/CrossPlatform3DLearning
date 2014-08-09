@@ -35,6 +35,11 @@ WorldObject::~WorldObject() {
 	// TODO Auto-generated destructor stub
 }
 
+const string WorldObject::getName()
+{
+	return name;
+}
+
 const vector<float>& WorldObject::getLocation() const {
 	return location;
 }

@@ -65,6 +65,12 @@ public:
 	 */
 	virtual ~WorldObject();
 
+	
+	/**
+	/* Get the name of the object
+	*/
+	const string getName();
+
 	/**
 	 * Get the location of the object
 	 * @return The location of the object

@@ -25,7 +25,11 @@ add_definitions(${PNG_DEFINITIONS})
 ADD_EXECUTABLE(unittest mainTest.cpp gameLogTest.cpp gameLogDebugTest.cpp modelTest.cpp 
  imageTest.cpp ../Model.cpp ../GameLogic.cpp ../WorldObject.cpp ../Character.cpp  
  ../PlayerView.cpp ../GameLog.cpp ../Configuration.cpp configurationTest.cpp 
- ../GameException.cpp ../Image.cpp)
+ ../GameException.cpp ../Image.cpp
+ ../Character.h ../GameLog.h ../Model.h ../WorldObject.h
+ ../Configuration.h ../GameLogic.h ../PlayerView.h
+ ../GameException.h ../Image.h 
+ )
 
 # Link to the required libraries
 TARGET_LINK_LIBRARIES(unittest
