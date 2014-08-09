@@ -25,11 +25,11 @@ BOOST_AUTO_TEST_CASE( imageTest ) {
 	BOOST_CHECK_NE(0, image->getWidth());
 	BOOST_CHECK_NE(0, image->getHeight());
 
-	//cout << "Image data:" << endl;
+	cout << "Image width " << image->getWidth() << ", height " << image->getHeight() << endl;
 
 	unsigned short *imageData = image->getData();
 
-	int x = 0, y = 0;
+	int x = 0, y = 1000;
 
 	while (y < image->getHeight()) {
 		x = 0;

@@ -46,7 +46,7 @@ GLuint Renderer::compileShader(string shaderSourceFile, GLenum shaderType) {
 				"Failed to compile shader:\n" + shaderSource + "\nInfo: "
 						+ infoLogStr);
 	} else {
-		LOGINFO("Shader compiled successfully:\n" + shaderSource);
+		LOGINFO("Shader " + shaderSourceFile + " compiled successfully.");
 	}
 
 	return shader;
