@@ -7,12 +7,12 @@
 #include <boost/test/unit_test.hpp>
 #include <iostream>
 
-// using namespace AvoidTheBug3D;
+//using namespace AvoidTheBug3D;
 using namespace std;
 
 BOOST_AUTO_TEST_SUITE(ModelTestSuite)
 	BOOST_AUTO_TEST_CASE( renderer_test ) {
 
-		cout << "Hello" << endl;
+		cout << "Renderer unit testing stub" << endl;
 }
 BOOST_AUTO_TEST_SUITE_END()

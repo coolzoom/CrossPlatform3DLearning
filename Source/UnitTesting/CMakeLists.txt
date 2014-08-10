@@ -53,14 +53,16 @@ INCLUDE_DIRECTORIES(${PNG_INCLUDE_DIRS})
 ADD_DEFINITIONS(${PNG_DEFINITIONS})
 
 # Create the executable
-ADD_EXECUTABLE(unittest mainTest.cpp gameLogTest.cpp gameLogDebugTest.cpp modelTest.cpp
- rendererTest.cpp 
- imageTest.cpp ../Model.cpp ../GameLogic.cpp ../WorldObject.cpp ../Character.cpp  
- ../PlayerView.cpp ../GameLog.cpp ../Configuration.cpp configurationTest.cpp 
+ADD_EXECUTABLE(unittest globalFixture mainTest.cpp gameLogTest.cpp gameLogDebugTest.cpp
+ modelTest.cpp rendererTest.cpp imageTest.cpp configurationTest.cpp 
+  ../Model.cpp ../GameLogic.cpp ../WorldObject.cpp ../Character.cpp  
+ ../PlayerView.cpp ../GameLog.cpp ../Configuration.cpp ../Renderer.cpp ../RendererOpenGL21.cpp
+ ../RendererOpenGL33.cpp 
  ../GameException.cpp ../Image.cpp
  ../Character.h ../GameLog.h ../Model.h ../WorldObject.h
  ../Configuration.h ../GameLogic.h ../PlayerView.h
- ../GameException.h ../Image.h 
+ ../GameException.h ../Image.h ../Renderer.h ../RendererOpenGL21.h
+ ../RendererOpenGL33.h 
  )
 
 # Link to the required libraries
