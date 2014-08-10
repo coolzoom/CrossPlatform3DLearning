@@ -1,5 +1,5 @@
 /*
- * modelTest.cpp
+ * configurationTest.cpp
  *
  *  Created on: Jan 24, 2013
  *      Author: Dimitri Kourkoulis

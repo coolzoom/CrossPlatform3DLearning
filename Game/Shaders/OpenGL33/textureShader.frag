@@ -11,5 +11,5 @@ void main()
 {
 
 //outputColour =  cosAngIncidence * 0.8 * vec4(1.0, 1.0, 1.0, 1.0);
-outputColour = texture(textureImage, textureCoords);
+outputColour = cosAngIncidence * 100 * texture(textureImage, textureCoords);
 }

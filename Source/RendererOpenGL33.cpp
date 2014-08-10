@@ -137,8 +137,10 @@ namespace AvoidTheBug3D {
 							glGenTextures(1, &texture);
 							glBindTexture(GL_TEXTURE_2D, texture);
 
-							glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureObj->getWidth(),
-								textureObj->getHeight(), 0, GL_RGB, GL_UNSIGNED_SHORT,
+							glTexStorage2D(GL_TEXTURE_2D, 0, GL_RED, 3 * textureObj->getWidth(),
+								3 * textureObj->getHeight());
+							glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 3 * textureObj->getWidth(),
+								3 * textureObj->getHeight(), GL_RED, GL_UNSIGNED_SHORT,
 								(GLvoid *)textureObj->getData());
 							/*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
 							glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);*/
