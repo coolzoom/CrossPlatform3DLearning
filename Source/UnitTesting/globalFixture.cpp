@@ -15,16 +15,19 @@
 #include "SDL.h"
 #endif //SDLANDOPENGL
 
-#include "../GameLog.h"
+#include "globals.h"
+
 #include "../Renderer.h"
 #include "../RendererOpenGL21.h"
 #include "../RendererOpenGL33.h"
 #include "../GameException.h"
-#include <boost/smart_ptr.hpp>
+
 #include "../WorldObject.h"
 
 using namespace AvoidTheBug3D;
 using namespace std;
+
+Globals *globals;
 
 // Setup / Teardown
 struct GlobalSetupTeardown
@@ -34,10 +37,13 @@ struct GlobalSetupTeardown
 
 	GlobalSetupTeardown() {
 
-		GameLog *logPtr = new GameLog(cout);
-		boost::shared_ptr<GameLog> log(logPtr);
+		globals = new Globals();
 
-		boost::shared_ptr<Configuration> cfg(new Configuration(log));
+		globals->log = boost::shared_ptr<GameLog>(new GameLog(cout));
+		boost::shared_ptr<GameLog> log = globals->log;
+
+		globals->cfg = boost::shared_ptr<Configuration>(new Configuration(log));
+		boost::shared_ptr<Configuration> cfg = globals->cfg;
 
 		// initialize SDL video
 		if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -101,6 +107,7 @@ struct GlobalSetupTeardown
 	}
 
 	~GlobalSetupTeardown() {
+		delete globals;
 		SDL_FreeSurface(icon);
 		SDL_FreeSurface(screen);
 		SDL_Quit();

@@ -53,7 +53,7 @@ INCLUDE_DIRECTORIES(${PNG_INCLUDE_DIRS})
 ADD_DEFINITIONS(${PNG_DEFINITIONS})
 
 # Create the executable
-ADD_EXECUTABLE(unittest globalFixture mainTest.cpp gameLogTest.cpp gameLogDebugTest.cpp
+ADD_EXECUTABLE(unittest globalFixture globals.h mainTest.cpp gameLogTest.cpp gameLogDebugTest.cpp
  modelTest.cpp rendererTest.cpp imageTest.cpp configurationTest.cpp 
   ../Model.cpp ../GameLogic.cpp ../WorldObject.cpp ../Character.cpp  
  ../PlayerView.cpp ../GameLog.cpp ../Configuration.cpp ../Renderer.cpp ../RendererOpenGL21.cpp

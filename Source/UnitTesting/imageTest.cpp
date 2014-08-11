@@ -1,5 +1,5 @@
 #include <boost/test/unit_test.hpp>
-
+#include "globals.h"
 #include "../Configuration.h"
 #include "../GameLog.h"
 #include "../Image.h"
@@ -11,11 +11,10 @@ using namespace AvoidTheBug3D;
 
 BOOST_AUTO_TEST_SUITE(GameLogTestSuite)
 BOOST_AUTO_TEST_CASE( imageTest ) {
-	GameLog *logPtr = new GameLog(cout);
-	boost::shared_ptr<GameLog> log(logPtr);
 
-	Configuration *cfgPtr = new Configuration(log);
-	boost::shared_ptr<Configuration> cfg(cfgPtr);
+	boost::shared_ptr<GameLog> log = globals->log;
+
+	boost::shared_ptr<Configuration> cfg = globals->cfg;
 
 	boost::scoped_ptr<Image> image(
 			new Image(

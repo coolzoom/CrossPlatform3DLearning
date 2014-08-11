@@ -5,6 +5,7 @@
  *      Author: Dimitrios Kourkoulis
  */
 #include <boost/test/unit_test.hpp>
+#include "globals.h"
 #include "../Model.h"
 #include "../GameLog.h"
 #include "../Configuration.h"
@@ -14,11 +15,9 @@ using namespace AvoidTheBug3D;
 BOOST_AUTO_TEST_SUITE(ModelTestSuite)
 BOOST_AUTO_TEST_CASE( model_test ) {
 
-	GameLog *logPtr = new GameLog(cout);
-	boost::shared_ptr<GameLog> log(logPtr);
+	boost::shared_ptr<GameLog> log = globals->log;
 
-	Configuration *cfgPtr = new Configuration(log);
-	boost::shared_ptr<Configuration> cfg(cfgPtr);
+	boost::shared_ptr<Configuration> cfg = globals->cfg;
 
 	Model *modelPtr = new Model(
 			"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTexture.obj",
