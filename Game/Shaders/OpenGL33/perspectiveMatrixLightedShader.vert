@@ -17,8 +17,6 @@ uniform mat4 zRotationMatrix;
 
 uniform vec3 lightDirection;
 
-
-
 void main()
 {
     vec4 cameraPos = position * xRotationMatrix 

@@ -81,7 +81,7 @@ namespace AvoidTheBug3D {
 					GLuint vao;
 					glGenVertexArrays(1, &vao);
 					glBindVertexArray(vao);
-
+					
 					GLuint positionBufferObject;
 					glGenBuffers(1, &positionBufferObject);
 
@@ -113,9 +113,8 @@ namespace AvoidTheBug3D {
 						glm::vec3 lightDirection(0.6f, -0.5f, -0.2f);
 						GLuint lightDirectionUniform = glGetUniformLocation(program,
 							"lightDirection");
-						glUniformMatrix3fv(lightDirectionUniform, 1, GL_TRUE,
-							glm::value_ptr(lightDirection));
-
+						glUniform3fv(lightDirectionUniform, 1, 
+							glm::value_ptr(lightDirection)); 
 						GLuint normalsBufferObject;
 						glGenBuffers(1, &normalsBufferObject);
 						glBindBuffer(GL_ARRAY_BUFFER, normalsBufferObject);
@@ -123,20 +122,22 @@ namespace AvoidTheBug3D {
 							it->get()->getModel()->getNormalsDataSize(),
 							it->get()->getModel()->getNormalsData(), GL_STATIC_DRAW);
 
-
+						
 						glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
 						glBindBuffer(GL_ARRAY_BUFFER, 0);
 					}
-
+					
 					boost::shared_ptr<Image> textureObj = it->get()->getTexture();
 					GLuint sampler;
+					
 					if (textureObj) {
 						GLuint texture;
 						if (textures->find(it->get()->getName()) == textures->end())
 						{
 							glGenTextures(1, &texture);
 							glBindTexture(GL_TEXTURE_2D, texture);
-
+							
+							
 							/*glTexStorage2D(GL_TEXTURE_2D, 0, GL_RGB, textureObj->getWidth(),
 							textureObj->getHeight());
 							glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, textureObj->getWidth(),
@@ -150,6 +151,7 @@ namespace AvoidTheBug3D {
 							{
 								throw GameException(string((char*)gluErrorString(errorCode)));
 							}
+							
 							/*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
 							glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);*/
 
