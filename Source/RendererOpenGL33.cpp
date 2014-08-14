@@ -35,6 +35,15 @@ namespace AvoidTheBug3D {
 	void RendererOpenGL33::DrawScene(
 		boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene) {
 
+			// Clear the buffers
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+			// Use the shaders prepared at initialisation
+			glUseProgram(program);
+
+			// Rotate everything, just a bit. This will be removed later,
+			// once rendering has been finalised but, for now, it helps
+			// test things.
 			if (xAngle > 6.28)
 				xAngle = 0.0;
 			xAngle += 0.03f;
@@ -47,41 +56,34 @@ namespace AvoidTheBug3D {
 			//			zAngle = 0.0;
 			//		zAngle += 0.03;
 
+			GLuint xRotationMatrixUniform = glGetUniformLocation(program,
+				"xRotationMatrix");
+			GLuint yRotationMatrixUniform = glGetUniformLocation(program,
+				"yRotationMatrix");
+			GLuint zRotationMatrixUniform = glGetUniformLocation(program,
+				"zRotationMatrix");
+
+			constructXRotationMatrix(xAngle);
+			constructYRotationMatrix(yAngle);
+			constructZRotationMatrix(zAngle);
+
+			glUniformMatrix4fv(xRotationMatrixUniform, 1, GL_TRUE,
+				xRotationMatrix.get());
+			glUniformMatrix4fv(yRotationMatrixUniform, 1, GL_TRUE,
+				yRotationMatrix.get());
+			glUniformMatrix4fv(zRotationMatrixUniform, 1, GL_TRUE,
+				zRotationMatrix.get());
+
+			// Pick up each model in the "world" and render it.
 			for (std::vector<boost::shared_ptr<WorldObject> >::iterator it =
 				scene->begin(); it != scene->end(); it++) {
-
-					glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-					glUseProgram(program);
-
-					GLuint multiColourBoolUniform = glGetUniformLocation(program,
-						"multiColourBool");
-					glUniform1ui(multiColourBoolUniform,
-						(it->get()->getModel()->isMultiColour() ? 1 : 0));
-
-					GLuint xRotationMatrixUniform = glGetUniformLocation(program,
-						"xRotationMatrix");
-					GLuint yRotationMatrixUniform = glGetUniformLocation(program,
-						"yRotationMatrix");
-					GLuint zRotationMatrixUniform = glGetUniformLocation(program,
-						"zRotationMatrix");
-
-					constructXRotationMatrix(xAngle);
-					constructYRotationMatrix(yAngle);
-					constructZRotationMatrix(zAngle);
-
-					glUniformMatrix4fv(xRotationMatrixUniform, 1, GL_TRUE,
-						xRotationMatrix.get());
-					glUniformMatrix4fv(yRotationMatrixUniform, 1, GL_TRUE,
-						yRotationMatrix.get());
-					glUniformMatrix4fv(zRotationMatrixUniform, 1, GL_TRUE,
-						zRotationMatrix.get());
 
 					// Generate VAO
 					GLuint vao;
 					glGenVertexArrays(1, &vao);
 					glBindVertexArray(vao);
 					
+					// Pass the vertex positions to the shaders
 					GLuint positionBufferObject;
 					glGenBuffers(1, &positionBufferObject);
 
@@ -93,6 +95,8 @@ namespace AvoidTheBug3D {
 					glEnableVertexAttribArray(0);
 					glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
+					// If the model is created for indexed drawing, pass
+					// the vertex indexes to the shader
 					if (it->get()->getModel()->isIndexedDrawing()) {
 						GLuint indexBufferObject;
 						glGenBuffers(1, &indexBufferObject);
@@ -104,9 +108,21 @@ namespace AvoidTheBug3D {
 						glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
 					}
 
+					// This array will be either used for the random multiple colours
+					// (see below) or for the vertex indexes (see above). Both cannot
+					// be activated at the same time in this program.
 					glEnableVertexAttribArray(1);
 
-					if (it->get()->getModel()->isMultiColour()) {
+					// Is the model supposed to be rendered with random multiple
+					// colours for the faces?
+					bool isMultiColour = it->get()->getModel()->isMultiColour();
+
+					GLuint multiColourBoolUniform = glGetUniformLocation(program,
+						"multiColourBool");
+					glUniform1ui(multiColourBoolUniform, (isMultiColour ? 1 : 0));
+
+					// If not multi-colour, use lighting
+					if (isMultiColour) {
 						glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0,
 							(void*) (it->get()->getModel()->getVertexDataSize() / 2));
 					} else {
@@ -122,16 +138,18 @@ namespace AvoidTheBug3D {
 							it->get()->getModel()->getNormalsDataSize(),
 							it->get()->getModel()->getNormalsData(), GL_STATIC_DRAW);
 
-						
 						glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
 						glBindBuffer(GL_ARRAY_BUFFER, 0);
 					}
-					
+
+					// Add texture if that is contained in the model
 					boost::shared_ptr<Image> textureObj = it->get()->getTexture();
 					GLuint sampler;
 					
 					if (textureObj) {
 						GLuint texture;
+						// If the texture not already been pushed to the shaders, load it.
+						// Otherwise, use the existing one.
 						if (textures->find(it->get()->getName()) == textures->end())
 						{
 							glGenTextures(1, &texture);
@@ -146,11 +164,7 @@ namespace AvoidTheBug3D {
 							//glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 							glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureObj->getWidth(), textureObj->getHeight(), 0, 
 								GL_RGB, GL_UNSIGNED_SHORT, textureObj->getData());
-							GLenum errorCode = glGetError();
-							if (errorCode != GL_NO_ERROR)
-							{
-								throw GameException(string((char*)gluErrorString(errorCode)));
-							}
+							
 							
 							/*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
 							glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);*/
@@ -166,13 +180,13 @@ namespace AvoidTheBug3D {
 							texture = textures->find(it->get()->getName())->second;
 						}
 
-
+						// Sampler for the texture
 						glGenSamplers(1, &sampler);
 						glBindSampler(texture, sampler);
-
 						GLuint textureUniformLoc = glGetUniformLocation(program, "textureImage");
 						glUniform1i(textureUniformLoc, sampler);
-
+						
+						// UV Coordinates
 						GLuint uvBufferObject;
 						glGenBuffers(1, &uvBufferObject);
 						glBindBuffer(GL_ARRAY_BUFFER, uvBufferObject);
@@ -182,8 +196,14 @@ namespace AvoidTheBug3D {
 						glEnableVertexAttribArray(2);
 						glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
 						glBindBuffer(GL_ARRAY_BUFFER, 0);
+						GLenum errorCode = glGetError();
+						if (errorCode != GL_NO_ERROR)
+						{
+							throw GameException(string((char*)gluErrorString(errorCode)));
+						}
 					}
 
+					// Draw
 					if (it->get()->getModel()->isIndexedDrawing()) {
 						glDrawElements(GL_TRIANGLES,
 							it->get()->getModel()->getIndexDataIndexCount(),
@@ -196,12 +216,14 @@ namespace AvoidTheBug3D {
 						glDisableVertexAttribArray(2);
 						glDeleteSamplers(1, &sampler);
 					}
+
+					// Clear stuff
 					glDisableVertexAttribArray(1);
 					glDisableVertexAttribArray(0);
 
 					glUseProgram(0);
 
-					// swap buffers to display, since we're double buffered.
+					// Swap buffers to display, since we're double buffered.
 					SDL_GL_SwapBuffers();
 
 			} // for std::vector<WorldObject>::iterator

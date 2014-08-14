@@ -19,10 +19,9 @@ BOOST_AUTO_TEST_CASE( model_test ) {
 
 	boost::shared_ptr<Configuration> cfg = globals->cfg;
 
-	Model *modelPtr = new Model(
-			"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTexture.obj",
-			false, true, cfg, log);
-	boost::scoped_ptr<Model> model(modelPtr);
+	boost::scoped_ptr<Model> model(new Model(
+		"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTexture.obj",
+		false, true, cfg, log));
 
 	BOOST_CHECK_EQUAL(model->getNumVertices() > 0, true);
 	BOOST_CHECK_EQUAL(model->getNumFaces() > 0, true);

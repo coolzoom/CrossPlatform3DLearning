@@ -25,8 +25,7 @@ BOOST_AUTO_TEST_SUITE(GameLogTestSuite)
 BOOST_AUTO_TEST_CASE( gameLogTest ) {
 	ostringstream oss;
 
-	GameLog *logPtr = new GameLog(oss);
-	boost::scoped_ptr<GameLog> log(logPtr);
+	boost::scoped_ptr<GameLog> log(new GameLog(oss));
 
 	LOGINFO("It works");
 	BOOST_CHECK_EQUAL(oss.str().find("It works") != (string::npos), true);
