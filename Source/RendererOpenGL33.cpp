@@ -158,9 +158,9 @@ namespace AvoidTheBug3D {
 						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
 						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
 						/*glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-						glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+						glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );*/
 						glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-						glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );*/
+						glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
 						/*glActiveTexture(GL_TEXTURE0);*/
 						GLubyte tst[108] = 
 						{0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF,
@@ -174,7 +174,7 @@ namespace AvoidTheBug3D {
 						0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF };
 
 						glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 3, 9, 0, 
-							GL_BGRA, GL_UNSIGNED_BYTE, &tst[0]);
+							GL_RGBA, GL_UNSIGNED_BYTE, &tst[0]);
 						GLenum errorCode = glGetError();
 						if (errorCode != GL_NO_ERROR)
 						{
@@ -191,30 +191,32 @@ namespace AvoidTheBug3D {
 							0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 							0, 0, 0, 0, 0, 0, 0, 0, 0
 						};
-						glGetTexImage(GL_TEXTURE_2D, 0, GL_BGRA, GL_UNSIGNED_BYTE, &tst2[0]);
+						/*glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, &tst2[0]);
 
 						for(int idx = 0; idx < 108; ++idx)
 						{
-							char *cc = new char[10];
-							itoa(tst2[idx], cc, 10);
+						char *cc = new char[10];
+						itoa(tst2[idx], cc, 10);
 
-							cout << "Value: " << cc << endl;
-							delete[] cc;
+						cout << "Value: " << cc << endl;
+						delete[] cc;
 						}
-
+						*/
 						// Sampler for the texture
 						glGenSamplers(1, &sampler);
 						/*glActiveTexture(GL_TEXTURE0);
 						glBindTexture(GL_TEXTURE_2D, texture);*/
+						glBindSampler(texture, sampler);
+						glSamplerParameteri(sampler, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+						glSamplerParameteri(sampler, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+						glSamplerParameteri(sampler, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+						glSamplerParameteri(sampler, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 						GLuint textureUniformLoc = glGetUniformLocation(program, "textureImage");
 						glUniform1i(textureUniformLoc, sampler);
 
-						glBindSampler(texture, sampler);
-						/*glSamplerParameteri(sampler, GL_TEXTURE_WRAP_S, GL_REPEAT);
-						glSamplerParameteri(sampler, GL_TEXTURE_WRAP_T, GL_REPEAT);
-						glSamplerParameteri(sampler, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-						glSamplerParameteri(sampler, GL_TEXTURE_MIN_FILTER, GL_NEAREST);*/
+						
+						
 
 						// UV Coordinates
 
