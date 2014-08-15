@@ -140,7 +140,7 @@ void Image::loadFromFile(string fileLocation) {
 				"For now, only PNG_COLOR_TYPE_RGB is supported for PNG images.");
 	}
 
-	imageData = new unsigned short[width * height * 3];
+	imageData = new unsigned short[width * height];
 
 	for (int y = 0; y < height; y++) {
 
@@ -149,9 +149,12 @@ void Image::loadFromFile(string fileLocation) {
 		for (int x = 0; x < width; x++) {
 
 			png_byte* ptr = &(row[x * 3]);
-			imageData[y * width * 3 + x * 3] = ptr[0];
+
+			imageData[y * width + x] = 1;
+
+			/*imageData[y * width * 3 + x * 3] = ptr[0];
 			imageData[y * width * 3 + x * 3 + 1] = ptr[1];
-			imageData[y * width * 3 + x * 3 + 2] = ptr[2];
+			imageData[y * width * 3 + x * 3 + 2] = ptr[2];*/
 
 		}
 	}

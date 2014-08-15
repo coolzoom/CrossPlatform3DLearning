@@ -29,7 +29,6 @@ namespace AvoidTheBug3D {
 
 	void RendererOpenGL33::Init(int width, int height) {
 		Renderer::Init(width, height);
-
 	}
 
 	void RendererOpenGL33::DrawScene(
@@ -82,9 +81,15 @@ namespace AvoidTheBug3D {
 					GLuint vao;
 					glGenVertexArrays(1, &vao);
 					glBindVertexArray(vao);
-					
+
+					GLuint positionBufferObject = 0;
+					GLuint indexBufferObject = 0;
+					GLuint normalsBufferObject = 0;
+					GLuint sampler = 0;
+					GLuint texture = 0;
+					GLuint uvBufferObject = 0;
+
 					// Pass the vertex positions to the shaders
-					GLuint positionBufferObject;
 					glGenBuffers(1, &positionBufferObject);
 
 					glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject);
@@ -98,7 +103,7 @@ namespace AvoidTheBug3D {
 					// If the model is created for indexed drawing, pass
 					// the vertex indexes to the shader
 					if (it->get()->getModel()->isIndexedDrawing()) {
-						GLuint indexBufferObject;
+
 						glGenBuffers(1, &indexBufferObject);
 						glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
 						glBufferData(GL_ELEMENT_ARRAY_BUFFER,
@@ -131,7 +136,7 @@ namespace AvoidTheBug3D {
 							"lightDirection");
 						glUniform3fv(lightDirectionUniform, 1, 
 							glm::value_ptr(lightDirection)); 
-						GLuint normalsBufferObject;
+
 						glGenBuffers(1, &normalsBufferObject);
 						glBindBuffer(GL_ARRAY_BUFFER, normalsBufferObject);
 						glBufferData(GL_ARRAY_BUFFER,
@@ -144,50 +149,75 @@ namespace AvoidTheBug3D {
 
 					// Add texture if that is contained in the model
 					boost::shared_ptr<Image> textureObj = it->get()->getTexture();
-					GLuint sampler;
-					
-					if (textureObj) {
-						GLuint texture;
-						// If the texture not already been pushed to the shaders, load it.
-						// Otherwise, use the existing one.
-						if (textures->find(it->get()->getName()) == textures->end())
-						{
-							glGenTextures(1, &texture);
-							glBindTexture(GL_TEXTURE_2D, texture);
-							
-							
-							/*glTexStorage2D(GL_TEXTURE_2D, 0, GL_RGB, textureObj->getWidth(),
-							textureObj->getHeight());
-							glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, textureObj->getWidth(),
-							textureObj->getHeight(), GL_RGB, GL_UNSIGNED_SHORT,
-							(GLvoid *)textureObj->getData());*/
-							//glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-							glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureObj->getWidth(), textureObj->getHeight(), 0, 
-								GL_RGB, GL_UNSIGNED_SHORT, textureObj->getData());
-							
-							
-							/*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-							glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);*/
 
-							/*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-							glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-							*/
-							glBindTexture(GL_TEXTURE_2D, 0);
-							textures->insert(boost::unordered_map<string, GLuint>::value_type(it->get()->getName(), texture));
-						}
-						else
+					if (textureObj) {
+						
+						glActiveTexture(GL_TEXTURE0);
+						glGenTextures(1, &texture);
+						glBindTexture(GL_TEXTURE_2D, texture);
+						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+						/*glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+						glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+						glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+						glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );*/
+						/*glActiveTexture(GL_TEXTURE0);*/
+						GLubyte tst[108] = 
+						{0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF,
+						0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF,
+						0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF,
+						0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF,
+						0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF,
+						0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF,
+						0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF,
+						0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF,
+						0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF };
+
+						glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 3, 9, 0, 
+							GL_BGRA, GL_UNSIGNED_BYTE, &tst[0]);
+						GLenum errorCode = glGetError();
+						if (errorCode != GL_NO_ERROR)
 						{
-							texture = textures->find(it->get()->getName())->second;
+							throw GameException(string((char*)gluErrorString(errorCode)));
+						}
+
+						GLubyte tst2[108] = { 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0,
+							0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0,
+							0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+							0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+							0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+							0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+							0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+							0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+							0, 0, 0, 0, 0, 0, 0, 0, 0
+						};
+						glGetTexImage(GL_TEXTURE_2D, 0, GL_BGRA, GL_UNSIGNED_BYTE, &tst2[0]);
+
+						for(int idx = 0; idx < 108; ++idx)
+						{
+							char *cc = new char[10];
+							itoa(tst2[idx], cc, 10);
+
+							cout << "Value: " << cc << endl;
+							delete[] cc;
 						}
 
 						// Sampler for the texture
 						glGenSamplers(1, &sampler);
-						glBindSampler(texture, sampler);
+						/*glActiveTexture(GL_TEXTURE0);
+						glBindTexture(GL_TEXTURE_2D, texture);*/
+
 						GLuint textureUniformLoc = glGetUniformLocation(program, "textureImage");
 						glUniform1i(textureUniformLoc, sampler);
-						
+
+						glBindSampler(texture, sampler);
+						/*glSamplerParameteri(sampler, GL_TEXTURE_WRAP_S, GL_REPEAT);
+						glSamplerParameteri(sampler, GL_TEXTURE_WRAP_T, GL_REPEAT);
+						glSamplerParameteri(sampler, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+						glSamplerParameteri(sampler, GL_TEXTURE_MIN_FILTER, GL_NEAREST);*/
+
 						// UV Coordinates
-						GLuint uvBufferObject;
+
 						glGenBuffers(1, &uvBufferObject);
 						glBindBuffer(GL_ARRAY_BUFFER, uvBufferObject);
 						glBufferData(GL_ARRAY_BUFFER,
@@ -196,11 +226,7 @@ namespace AvoidTheBug3D {
 						glEnableVertexAttribArray(2);
 						glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
 						glBindBuffer(GL_ARRAY_BUFFER, 0);
-						GLenum errorCode = glGetError();
-						if (errorCode != GL_NO_ERROR)
-						{
-							throw GameException(string((char*)gluErrorString(errorCode)));
-						}
+						
 					}
 
 					// Draw
@@ -212,12 +238,32 @@ namespace AvoidTheBug3D {
 						glDrawArrays(GL_TRIANGLES, 0,
 							it->get()->getModel()->getVertexDataComponentCount());
 					}
-					if (textureObj) {
-						glDisableVertexAttribArray(2);
-						glDeleteSamplers(1, &sampler);
-					}
 
 					// Clear stuff
+					if (textureObj) {
+						glDisableVertexAttribArray(2);
+					}
+
+					if (positionBufferObject != 0) {
+						glDeleteBuffers(1, &positionBufferObject);
+					}
+
+					if ( indexBufferObject != 0) {
+						glDeleteBuffers(1, &indexBufferObject);
+					}
+					if ( normalsBufferObject != 0) {
+						glDeleteBuffers(1, &normalsBufferObject);
+					}
+					if ( sampler != 0) {
+						glDeleteSamplers(1, &sampler);
+					}
+					if ( texture != 0) {
+						glDeleteTextures(1, &texture);
+					}
+					if ( uvBufferObject != 0) {
+						glDeleteBuffers(1, &uvBufferObject);
+					}
+
 					glDisableVertexAttribArray(1);
 					glDisableVertexAttribArray(0);
 
