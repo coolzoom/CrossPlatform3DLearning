@@ -151,37 +151,40 @@ namespace AvoidTheBug3D {
 					boost::shared_ptr<Image> textureObj = it->get()->getTexture();
 
 					if (textureObj) {
-						
+
 						glActiveTexture(GL_TEXTURE0);
 						glGenTextures(1, &texture);
+
 						glBindTexture(GL_TEXTURE_2D, texture);
 						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
 						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
-						/*glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-						glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );*/
-						glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-						glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
-						/*glActiveTexture(GL_TEXTURE0);*/
-						GLubyte tst[108] = 
-						{0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF,
-						0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF,
-						0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF,
-						0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF,
-						0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF,
-						0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF,
-						0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF,
-						0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF,
-						0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF, 0xF };
+						/*glPixelStorei(GL_PACK_ROW_LENGTH, 3);
+						glPixelStorei(GL_UNPACK_ROW_LENGTH, 3);*/
+						
+						/*glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+						glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );*/
 
-						glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 3, 9, 0, 
-							GL_RGBA, GL_UNSIGNED_BYTE, &tst[0]);
+						GLfloat tst[108] = 
+						{1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+						1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+						1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+						1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+						1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+						1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+						1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+						1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+						1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f };
+
+						glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, 3, 9, 0, GL_RGBA, 
+							GL_FLOAT, &tst[0]);
+
 						GLenum errorCode = glGetError();
 						if (errorCode != GL_NO_ERROR)
 						{
 							throw GameException(string((char*)gluErrorString(errorCode)));
 						}
 
-						GLubyte tst2[108] = { 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0,
+						GLfloat tst2[108] = { 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0,
 							0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0,
 							0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 							0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -191,32 +194,35 @@ namespace AvoidTheBug3D {
 							0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 							0, 0, 0, 0, 0, 0, 0, 0, 0
 						};
-						/*glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, &tst2[0]);
+
+						/*glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_FLOAT, &tst2[0]);
 
 						for(int idx = 0; idx < 108; ++idx)
 						{
-						char *cc = new char[10];
-						itoa(tst2[idx], cc, 10);
+							char *cc = new char[10];
+							_itoa_s((int)tst2[idx], cc, 10, 10);
 
-						cout << "Value: " << cc << endl;
-						delete[] cc;
-						}
-						*/
+							cout << "Value: " << cc << endl;
+							delete[] cc;
+						}*/
+
+						glBindTexture(GL_TEXTURE_2D, 0);
+
+						glActiveTexture(GL_TEXTURE0);
+						glBindTexture(GL_TEXTURE_2D, texture);
+
 						// Sampler for the texture
-						glGenSamplers(1, &sampler);
-						/*glActiveTexture(GL_TEXTURE0);
-						glBindTexture(GL_TEXTURE_2D, texture);*/
-						glBindSampler(texture, sampler);
+						/*glGenSamplers(1, &sampler);
+
 						glSamplerParameteri(sampler, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 						glSamplerParameteri(sampler, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 						glSamplerParameteri(sampler, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 						glSamplerParameteri(sampler, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-						GLuint textureUniformLoc = glGetUniformLocation(program, "textureImage");
-						glUniform1i(textureUniformLoc, sampler);
+						glBindSampler(texture, sampler);
 
-						
-						
+						GLuint textureUniformLoc = glGetUniformLocation(program, "textureImage");
+						glUniform1i(textureUniformLoc, sampler);*/
 
 						// UV Coordinates
 
@@ -228,7 +234,7 @@ namespace AvoidTheBug3D {
 						glEnableVertexAttribArray(2);
 						glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
 						glBindBuffer(GL_ARRAY_BUFFER, 0);
-						
+
 					}
 
 					// Draw
@@ -269,6 +275,8 @@ namespace AvoidTheBug3D {
 					glDisableVertexAttribArray(1);
 					glDisableVertexAttribArray(0);
 
+					glDeleteVertexArrays(1, &vao);
+					glBindVertexArray(0);
 					glUseProgram(0);
 
 					// Swap buffers to display, since we're double buffered.
