@@ -5,6 +5,7 @@
 #include "../Image.h"
 
 #include <boost/smart_ptr.hpp>
+#include <iomanip>
 
 using namespace std;
 using namespace AvoidTheBug3D;
@@ -18,7 +19,7 @@ BOOST_AUTO_TEST_SUITE(GameLogTestSuite)
 
 		boost::scoped_ptr<Image> image(
 			new Image(
-			"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTexture.png",
+			"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTextureWhite.png",
 			cfg, log));
 
 		BOOST_CHECK_NE(0, image->getWidth());
@@ -26,27 +27,29 @@ BOOST_AUTO_TEST_SUITE(GameLogTestSuite)
 
 		cout << "Image width " << image->getWidth() << ", height " << image->getHeight() << endl;
 
-		unsigned short *imageData = image->getData();
+		float *imageData = image->getData();
 
 		int x = 0, y = 1000;
 
 		while (y < image->getHeight()) {
 			x = 0;
 			while (x < image->getWidth()) {
-				unsigned short colour = imageData[y * image->getWidth() + x];
 
-				//BOOST_CHECK_GE(colour[0], 0);
-				//BOOST_CHECK_LT(colour[0], 256);
-				//BOOST_CHECK_GE(colour[1], 0);
-				//BOOST_CHECK_LT(colour[1], 256);
-				//BOOST_CHECK_GE(colour[2], 0);
-				//BOOST_CHECK_LT(colour[2], 256);
+				float *colour = &imageData[4 * y * image->getWidth() + 4 * x];
 
-
-				cout << "At (" << x << ", " << y << "): " << colour << endl;
+				BOOST_CHECK_GE(colour[0], 0.0f);
+				BOOST_CHECK_LE(colour[0], 1.0f);
+				BOOST_CHECK_GE(colour[1], 0.0f);
+				BOOST_CHECK_LE(colour[1], 1.0f);
+				BOOST_CHECK_GE(colour[2], 0.0f);
+				BOOST_CHECK_LE(colour[2], 1.0f);
+				BOOST_CHECK_EQUAL(colour[3], 1.0f);
+				
+				/*cout << "At (" << x << ", " << y << ") R: " << setprecision( 2 ) << colour[0] << endl;
+				cout << "At (" << x << ", " << y << ") G: " << setprecision( 2 ) << colour[1] << endl;
+				cout << "At (" << x << ", " << y << ") B: " << setprecision( 2 ) << colour[2] << endl;*/
 
 				++x;
-				if (x > 100) break;
 			}
 			++y;
 		}

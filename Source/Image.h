@@ -44,7 +44,7 @@ private:
 
 	png_bytep* rowPointers;
 
-	unsigned short* imageData;
+	float* imageData;
 
 	// Load image from a .png file
 	void loadFromFile(string fileLocation);
@@ -80,7 +80,7 @@ public:
 	 * Get the image data
 	 * @return The image data
 	 */
-	unsigned short* getData() const;
+	float* getData() const;
 
 };
 

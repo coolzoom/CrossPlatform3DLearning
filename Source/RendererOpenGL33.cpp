@@ -164,7 +164,7 @@ namespace AvoidTheBug3D {
 						/*glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
 						glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );*/
 
-						GLfloat tst[108] = 
+						/*GLfloat tst[108] = 
 						{1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
 						1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
 						1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
@@ -173,10 +173,10 @@ namespace AvoidTheBug3D {
 						1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
 						1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
 						1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-						1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f };
-
-						glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, 3, 9, 0, GL_RGBA, 
-							GL_FLOAT, &tst[0]);
+						1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f };*/
+						
+						glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, textureObj->getWidth(), textureObj->getHeight(), 0, GL_RGBA, 
+							GL_FLOAT, textureObj->getData());
 
 						GLenum errorCode = glGetError();
 						if (errorCode != GL_NO_ERROR)
@@ -184,7 +184,7 @@ namespace AvoidTheBug3D {
 							throw GameException(string((char*)gluErrorString(errorCode)));
 						}
 
-						GLfloat tst2[108] = { 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0,
+						/*GLfloat tst2[108] = { 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0,
 							0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0,
 							0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 							0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -195,7 +195,7 @@ namespace AvoidTheBug3D {
 							0, 0, 0, 0, 0, 0, 0, 0, 0
 						};
 
-						/*glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_FLOAT, &tst2[0]);
+						glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_FLOAT, &tst2[0]);
 
 						for(int idx = 0; idx < 108; ++idx)
 						{

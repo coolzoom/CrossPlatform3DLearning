@@ -8,6 +8,7 @@
 #include "Image.h"
 
 #include <stdio.h>
+#include <boost/numeric/conversion/cast.hpp>
 #include "GameException.h"
 
 using namespace std;
@@ -140,7 +141,7 @@ void Image::loadFromFile(string fileLocation) {
 				"For now, only PNG_COLOR_TYPE_RGB is supported for PNG images.");
 	}
 
-	imageData = new unsigned short[width * height];
+	imageData = new float[4 * width * height];
 
 	for (int y = 0; y < height; y++) {
 
@@ -150,12 +151,17 @@ void Image::loadFromFile(string fileLocation) {
 
 			png_byte* ptr = &(row[x * 3]);
 
-			imageData[y * width + x] = 1;
+			float rgb[3];
 
-			/*imageData[y * width * 3 + x * 3] = ptr[0];
-			imageData[y * width * 3 + x * 3 + 1] = ptr[1];
-			imageData[y * width * 3 + x * 3 + 2] = ptr[2];*/
+			rgb[0] = boost::numeric_cast<float, png_byte>(ptr[0]) ;
+			rgb[1] = boost::numeric_cast<float, png_byte>(ptr[1]) ;
+			rgb[2] = boost::numeric_cast<float, png_byte>(ptr[2]) ;
 
+			imageData[y * width * 4 + x * 4] =  floorf(100.0f * (rgb[0] / 255.0f) + 0.5f) / 100.0f;
+			imageData[y * width * 4 + x * 4 + 1] = floorf(100.0f * (rgb[1] / 255.0f) + 0.5f) / 100.0f;
+			imageData[y * width * 4 + x * 4 + 2] = floorf(100.0f * (rgb[2] / 255.0f) + 0.5f) / 100.0f;
+			imageData[y * width * 4 + x * 4 + 3] = 1.0f;
+			
 		}
 	}
 
@@ -170,7 +176,7 @@ int Image::getHeight() const {
 	return height;
 }
 
-unsigned short *Image::getData() const {
+float *Image::getData() const {
 	return imageData;
 }
 
