@@ -51,9 +51,9 @@ namespace AvoidTheBug3D {
 				yAngle = 0.0;
 			yAngle += 0.03f;
 
-			//	if (zAngle > 6.28)
-			//			zAngle = 0.0;
-			//		zAngle += 0.03;
+				/*if (zAngle > 6.28)
+						zAngle = 0.0;
+					zAngle += 0.03;*/
 
 			GLuint xRotationMatrixUniform = glGetUniformLocation(program,
 				"xRotationMatrix");
@@ -131,7 +131,7 @@ namespace AvoidTheBug3D {
 						glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0,
 							(void*) (it->get()->getModel()->getVertexDataSize() / 2));
 					} else {
-						glm::vec3 lightDirection(0.6f, -0.5f, -0.2f);
+						glm::vec3 lightDirection(-0.9f, -0.9f, 0.9f);
 						GLuint lightDirectionUniform = glGetUniformLocation(program,
 							"lightDirection");
 						glUniform3fv(lightDirectionUniform, 1, 
@@ -152,7 +152,7 @@ namespace AvoidTheBug3D {
 
 					if (textureObj) {
 
-						glActiveTexture(GL_TEXTURE0);
+						/*glActiveTexture(GL_TEXTURE0);*/
 						glGenTextures(1, &texture);
 
 						glBindTexture(GL_TEXTURE_2D, texture);
@@ -208,21 +208,21 @@ namespace AvoidTheBug3D {
 
 						glBindTexture(GL_TEXTURE_2D, 0);
 
-						glActiveTexture(GL_TEXTURE0);
+						/*glActiveTexture(GL_TEXTURE0);*/
 						glBindTexture(GL_TEXTURE_2D, texture);
 
-						// Sampler for the texture
-						/*glGenSamplers(1, &sampler);
+						//// Sampler for the texture
+						//glGenSamplers(1, &sampler);
 
-						glSamplerParameteri(sampler, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-						glSamplerParameteri(sampler, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-						glSamplerParameteri(sampler, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-						glSamplerParameteri(sampler, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+						//glSamplerParameteri(sampler, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+						//glSamplerParameteri(sampler, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+						//glSamplerParameteri(sampler, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+						//glSamplerParameteri(sampler, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-						glBindSampler(texture, sampler);
+						//glBindSampler(texture, sampler);
 
-						GLuint textureUniformLoc = glGetUniformLocation(program, "textureImage");
-						glUniform1i(textureUniformLoc, sampler);*/
+						//GLuint textureUniformLoc = glGetUniformLocation(program, "textureImage");
+						//glUniform1i(textureUniformLoc, sampler);
 
 						// UV Coordinates
 
