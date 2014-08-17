@@ -19,7 +19,7 @@ BOOST_AUTO_TEST_SUITE(GameLogTestSuite)
 
 		boost::scoped_ptr<Image> image(
 			new Image(
-			"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTextureWhite.png",
+			"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTextureRed.png",
 			cfg, log));
 
 		BOOST_CHECK_NE(0, image->getWidth());
