@@ -20,7 +20,7 @@ BOOST_AUTO_TEST_CASE( model_test ) {
 	boost::shared_ptr<Configuration> cfg = globals->cfg;
 
 	boost::scoped_ptr<Model> model(new Model(
-		"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTexture.obj",
+		"/Game/Data/Cube/Cube.obj",
 		false, true, cfg, log));
 
 	BOOST_CHECK_EQUAL(model->getNumVertices() > 0, true);

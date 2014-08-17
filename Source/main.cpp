@@ -90,7 +90,7 @@ int main(int argc, char** argv) {
 					boost::shared_ptr<WorldObject>(
 							new WorldObject("animal",
 									"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTexture.obj",
-									"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTextureRed.png",
+									"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTextureRedBlackNumbers.png",
 									false, true, cfg, log));
 
 		} else if (glewIsSupported("GL_VERSION_2_1")) {
