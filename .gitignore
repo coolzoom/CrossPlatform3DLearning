@@ -4,6 +4,7 @@
 #Backup files
 *\~
 *swp
+*blend[0-9]
 
 #Compiled source code documentation
 [Dd]ocs/[Ss]ource[Cc]ode[Dd]oc

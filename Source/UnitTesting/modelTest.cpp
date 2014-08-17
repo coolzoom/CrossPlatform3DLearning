@@ -44,6 +44,7 @@ BOOST_AUTO_TEST_CASE( model_test ) {
 			<< "Texture coordinates count: "
 			<< model->getTextureCoordsDataComponentCount() << endl;
 
+	model->outputVertexData();
 	model->outputTextureCoordsData();
 }
 BOOST_AUTO_TEST_SUITE_END()

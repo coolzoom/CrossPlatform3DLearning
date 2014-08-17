@@ -143,6 +143,9 @@ void Model::loadFromFile(string fileLocation) {
 						}
 						++idx;
 					}
+					
+					vt[1] = 1.0f - vt[1]; // OpenGL's y direction for textures is the opposite of that 
+										  // of Blender's, so an inversion is needed
 					textureCoords->push_back(vt);
 				} else if (line[0] == 'v') {
 					// get vertex
@@ -552,7 +555,8 @@ void Model::outputTextureCoordsData() {
 
 		for (int cnt = 0; cnt != textureCoordsDataComponentCount; ++cnt) {
 			if (cnt % 2 == 0)
-				cout << endl;
+				cout << endl << " for vertex at (" << vertexData[4 * cnt / 2] <<", " 
+				<< vertexData[4 * cnt / 2 + 1] <<", " << vertexData[4 * cnt / 2 + 2] << "): ";
 			cout << textureCoordsData[cnt] << " ";
 		}
 		cout << endl;
