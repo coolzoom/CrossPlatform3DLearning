@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <boost/foreach.hpp>
 #include <boost/tokenizer.hpp>
+#include <boost/unordered_map.hpp>
 #include "GameException.h"
 
 using namespace std;
@@ -218,6 +219,9 @@ void Model::loadFromFile(string fileLocation) {
 			}
 		}
 		file.close();
+
+		//this->correctDataVectors();
+
 	} else
 		throw GameException(
 				"Could not open file " + cfg->getHomeDirectory()
@@ -375,6 +379,7 @@ float* Model::getVertexData() {
 unsigned int * Model::getIndexData() {
 
 	if (indexData == NULL && indexedDrawing) {
+
 		int numIndexes = facesVertexIndexes->size() * 3;
 		indexDataSize = numIndexes * sizeof(int);
 
@@ -382,12 +387,14 @@ unsigned int * Model::getIndexData() {
 
 		indexDataIndexCount = 0;
 
-		BOOST_FOREACH(const int* face, *facesVertexIndexes) {
+		BOOST_FOREACH(const int* face, *facesVertexIndexes) {			
+
 			for (int indexIdx = 0; indexIdx != 3; ++indexIdx) {
 				indexData[indexDataIndexCount] = face[indexIdx] - 1; // -1 because Wavefront indexes
 																	 // are not 0 based
 				++indexDataIndexCount;
 			}
+			
 		}
 	}
 	return indexData;
@@ -444,6 +451,7 @@ float* Model::getNormalsData() {
 
 // Create an array of normal components which corresponds
 // by index to the array of vertex components
+
 	if (normalsData == NULL) {
 
 		if (vertexDataComponentCount == 0) {
@@ -520,10 +528,10 @@ float* Model::getTextureCoordsData() {
 					"There are no vertices or vertex data has not yet been created.");
 		}
 
-		// -2 for each vertex data component, because the texture coorddinates data
+		// -2 for each vertex data component, because the texture coordinates data
 		// has two components per row
-		textureCoordsDataComponentCount = vertexDataComponentCount
-				- 2 * (vertexDataComponentCount / 4);
+		textureCoordsDataComponentCount = vertexDataComponentCount / 2;
+				
 		textureCoordsDataSize = textureCoordsDataComponentCount * sizeof(float);
 
 		textureCoordsData = new float[textureCoordsDataComponentCount];
@@ -538,7 +546,7 @@ float* Model::getTextureCoordsData() {
 					textureCoordsData[2 * (faceVertexIndex[vertexIndex] - 1)
 							+ textureCoordsComponent] =
 							textureCoords->at(
-									facesNormalIndexes->at(faceVertexArrayIndex)[vertexIndex]
+									textureCoordsIndexes->at(faceVertexArrayIndex)[vertexIndex]
 											- 1)[textureCoordsComponent];
 				}
 			}
@@ -571,6 +579,58 @@ int Model::getTextureCoordsDataSize() const {
 
 int Model::getTextureCoordsDataComponentCount() const {
 	return textureCoordsDataComponentCount;
+}
+
+// This was a bad idea. Should be removed soon.
+void Model::correctDataVectors() {
+
+	boost::scoped_ptr<boost::unordered_map<int, int> > vertexUVPairs(new boost::unordered_map<int, int>());
+
+	int numIndexes = facesVertexIndexes->size();
+
+	for (int idx = 0; idx < numIndexes; ++idx) {
+
+		int *faceVertexIndex = facesVertexIndexes->at(idx);
+
+		for (int vertexIndex = 0; vertexIndex != 3; ++vertexIndex) {
+
+			unordered_map<int, int>::iterator vertexUVPair = vertexUVPairs->find(faceVertexIndex[vertexIndex]);
+			if(vertexUVPair != vertexUVPairs->end())
+			{
+				if(vertexUVPair->second != textureCoordsIndexes->at(idx)[vertexIndex])
+				{
+					// duplicate corresponding vertex data entry and point the vertex index to the new tuple
+					float *v = new float[3];
+					memcpy(v, vertices->at(faceVertexIndex[vertexIndex]), 3*sizeof(float));
+					vertices->push_back(v);
+					
+
+					// also duplicate the corresponding normals and texture coords data entries, 
+					// since they are being accessed via the vertex index 
+					/*float *n = new float[3];
+					memcpy(n, normals->at(faceVertexIndex[vertexIndex]), 3*sizeof(float));
+					normals->push_back(n);
+
+					float *t = new float[2];
+					memcpy(t, textureCoords->at(faceVertexIndex[vertexIndex]), 2*sizeof(float));
+					textureCoords->push_back(t);*/
+
+					faceVertexIndex[vertexIndex] = vertices->size() - 1;
+
+					vertexUVPairs->insert(make_pair(faceVertexIndex[vertexIndex], textureCoordsIndexes->at(idx)[vertexIndex]));
+				}
+				// So we don't add a pair if the exact same pair already exists. We do if it does not (see below) or if
+				// the vertex index number exists in a pair with a different texture coordinates index number (see above)
+			}
+			else
+			{
+				vertexUVPairs->insert(make_pair(faceVertexIndex[vertexIndex], textureCoordsIndexes->at(idx)[vertexIndex]));
+			}
+			
+
+		}
+	}
+
 }
 
 }

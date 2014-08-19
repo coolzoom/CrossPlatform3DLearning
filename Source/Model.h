@@ -57,6 +57,11 @@ private:
 	// Load model from a Wavefront .obj file
 	void loadFromFile(string fileLocation);
 
+	// Make sure that no texture coordinate information is lost when the data buffers get created (vertexData, 
+	// indexData, normalsData and textureCoordsData) by realigning the data vectors, in order to ensure unique
+	// vertex - texture coordinates pairs
+	void Model::correctDataVectors();
+
 public:
 	/**
 	 * Initialisation of the model.
