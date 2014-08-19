@@ -220,7 +220,7 @@ void Model::loadFromFile(string fileLocation) {
 		}
 		file.close();
 
-		//this->correctDataVectors();
+		this->correctDataVectors();
 
 	} else
 		throw GameException(
@@ -459,10 +459,9 @@ float* Model::getNormalsData() {
 					"There are no vertices or vertex data has not yet been created.");
 		}
 
-		// -1 for each vertex data component, because the normals data has three components
-		// per row
-		normalsDataComponentCount = vertexDataComponentCount
-				- vertexDataComponentCount / 4;
+		// 3 components per item
+		normalsDataComponentCount = 3 * facesVertexIndexes->size();
+		
 		normalsDataSize = normalsDataComponentCount * sizeof(float);
 
 		normalsData = new float[normalsDataComponentCount];
@@ -528,9 +527,8 @@ float* Model::getTextureCoordsData() {
 					"There are no vertices or vertex data has not yet been created.");
 		}
 
-		// -2 for each vertex data component, because the texture coordinates data
-		// has two components per row
-		textureCoordsDataComponentCount = vertexDataComponentCount / 2;
+		// 2 components per item
+		textureCoordsDataComponentCount =  2 * facesVertexIndexes->size();
 				
 		textureCoordsDataSize = textureCoordsDataComponentCount * sizeof(float);
 
@@ -581,7 +579,7 @@ int Model::getTextureCoordsDataComponentCount() const {
 	return textureCoordsDataComponentCount;
 }
 
-// This was a bad idea. Should be removed soon.
+
 void Model::correctDataVectors() {
 
 	boost::scoped_ptr<boost::unordered_map<int, int> > vertexUVPairs(new boost::unordered_map<int, int>());
@@ -603,19 +601,8 @@ void Model::correctDataVectors() {
 					float *v = new float[3];
 					memcpy(v, vertices->at(faceVertexIndex[vertexIndex]), 3*sizeof(float));
 					vertices->push_back(v);
-					
 
-					// also duplicate the corresponding normals and texture coords data entries, 
-					// since they are being accessed via the vertex index 
-					/*float *n = new float[3];
-					memcpy(n, normals->at(faceVertexIndex[vertexIndex]), 3*sizeof(float));
-					normals->push_back(n);
-
-					float *t = new float[2];
-					memcpy(t, textureCoords->at(faceVertexIndex[vertexIndex]), 2*sizeof(float));
-					textureCoords->push_back(t);*/
-
-					faceVertexIndex[vertexIndex] = vertices->size() - 1;
+					faceVertexIndex[vertexIndex] = vertices->size();
 
 					vertexUVPairs->insert(make_pair(faceVertexIndex[vertexIndex], textureCoordsIndexes->at(idx)[vertexIndex]));
 				}
