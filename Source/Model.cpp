@@ -270,20 +270,21 @@ float* Model::getVertexData() {
 					"Multicolour not supported in combination with indexed drawing");
 		}
 
-		int vertexDataNumElements = vertices->size() * 4;
-		vertexDataSize = vertexDataNumElements * sizeof(float);
+		// 4 components per vertex
+		vertexDataComponentCount = vertices->size() * 4;
+		vertexDataSize = vertexDataComponentCount * sizeof(float);
 
-		vertexData = new float[vertexDataNumElements];
+		vertexData = new float[vertexDataComponentCount];
 
-		vertexDataComponentCount = 0;
+		int idx = 0;
 
 		BOOST_FOREACH(const float* vertex, *vertices) {
 			for (int coordIdx = 0; coordIdx != 3; ++coordIdx) {
-				vertexData[vertexDataComponentCount] = vertex[coordIdx];
-				++vertexDataComponentCount;
+				vertexData[idx] = vertex[coordIdx];
+				++idx;
 			}
-			vertexData[vertexDataComponentCount] = 1.0f;
-			++vertexDataComponentCount;
+			vertexData[idx] = 1.0f;
+			++idx;
 		}
 
 	} else if (vertexData == NULL) {
@@ -380,6 +381,7 @@ unsigned int * Model::getIndexData() {
 
 	if (indexData == NULL && indexedDrawing) {
 
+		// 3 indices per face
 		int numIndexes = facesVertexIndexes->size() * 3;
 		indexDataSize = numIndexes * sizeof(int);
 
@@ -459,9 +461,10 @@ float* Model::getNormalsData() {
 					"There are no vertices or vertex data has not yet been created.");
 		}
 
-		// 3 components per item
-		normalsDataComponentCount = 3 * facesVertexIndexes->size();
-		
+		// 3 components per vertex (a single index for vertices, normals and texture coordinates
+		// is passed to OpenGL, so normals data will be aligned to vertex data according to the
+		// vertex index)
+		normalsDataComponentCount = 3 * vertices->size();
 		normalsDataSize = normalsDataComponentCount * sizeof(float);
 
 		normalsData = new float[normalsDataComponentCount];
@@ -470,10 +473,7 @@ float* Model::getNormalsData() {
 
 		BOOST_FOREACH(const int* faceVertexIndex, *facesVertexIndexes) {
 			for (int vertexIndex = 0; vertexIndex != 3; ++vertexIndex) {
-//				cout << "Setting normal at " << 3 * (faceVertexIndex[vertexIndex] - 1)
-//						<< " to normal index "
-//						<< facesNormalIndexes->at(faceVertexArrayIndex)[vertexIndex]
-//						<< endl;
+
 				for (int normalsDataComponent = 0; normalsDataComponent != 3;
 						++normalsDataComponent) {
 					normalsData[3 * (faceVertexIndex[vertexIndex] - 1)
@@ -481,10 +481,6 @@ float* Model::getNormalsData() {
 							normals->at(
 									facesNormalIndexes->at(faceVertexArrayIndex)[vertexIndex]
 											- 1)[normalsDataComponent];
-
-//					cout << "  * Setting at " << 3 * (faceVertexIndex[vertexIndex] - 1)
-//							+ vertexComponent << " to " << normals->at(facesNormalIndexes->at(faceVertexArrayIndex)[vertexIndex] - 1)[vertexComponent] << endl;
-
 				}
 			}
 			++faceVertexArrayIndex;
@@ -527,9 +523,10 @@ float* Model::getTextureCoordsData() {
 					"There are no vertices or vertex data has not yet been created.");
 		}
 
-		// 2 components per item
-		textureCoordsDataComponentCount =  2 * facesVertexIndexes->size();
-				
+		// 2 components per vertex (a single index for vertices, normals and texture coordinates
+		// is passed to OpenGL, so texture coordinates data will be aligned to vertex data according 
+		// to the vertex index)
+		textureCoordsDataComponentCount =  2 * vertices->size();				
 		textureCoordsDataSize = textureCoordsDataComponentCount * sizeof(float);
 
 		textureCoordsData = new float[textureCoordsDataComponentCount];
