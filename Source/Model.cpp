@@ -596,7 +596,9 @@ void Model::correctDataVectors() {
 				{
 					// duplicate corresponding vertex data entry and point the vertex index to the new tuple
 					float *v = new float[3];
-					memcpy(v, vertices->at(faceVertexIndex[vertexIndex]), 3*sizeof(float));
+					// -1 because at this stage the indexes are still as exported from Blender, meaning 1-based
+					// and not 0-based
+					memcpy(v, vertices->at(faceVertexIndex[vertexIndex] - 1), 3*sizeof(float));
 					vertices->push_back(v);
 
 					faceVertexIndex[vertexIndex] = vertices->size();
