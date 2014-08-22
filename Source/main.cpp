@@ -100,8 +100,9 @@ int main(int argc, char** argv) {
 			object =
 					boost::shared_ptr<WorldObject>(
 							new WorldObject("animal",
-									"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj",
-									false, false, cfg, log));
+									"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTexture.obj",
+									"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTextureRedBlackNumbers.png",
+									false, true, cfg, log));
 
 		} else {
 			throw GameException(

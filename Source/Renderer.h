@@ -28,6 +28,7 @@
 #include "GameLog.h"
 #include <boost/smart_ptr.hpp>
 #include <boost/unordered_map.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace AvoidTheBug3D {
 
@@ -59,7 +60,38 @@ protected:
 	 */
 	GLuint compileShader(string shaderSource, GLenum shaderType);
 
+	/**
+	 * Textures used in the scene, each corresponding to the name of one of
+	 * the rendered models
+	 */
 	boost::unordered_map<string, GLuint> *textures;
+
+	boost::shared_ptr<float> xRotationMatrix;
+	boost::shared_ptr<float> yRotationMatrix;
+	boost::shared_ptr<float> zRotationMatrix;
+
+	/**
+	 * Rotation transformation for rotating around the X axis
+	 * @param angle The angle to rotate by, in radians.
+	 */
+	void constructXRotationMatrix(float angle);
+
+	/**
+	 * Rotation transformation for rotating around the Y axis
+	 * @param angle The angle to rotate by, in radians.
+	 */
+	void constructYRotationMatrix(float angle);
+
+	/**
+	 * Rotation transformation for rotating around the Z axis
+	 * @param angle The angle to rotate by, in radians.
+	 */
+	void constructZRotationMatrix(float angle);
+
+	// Angles on x,y and z by which to rotate
+	float xAngle;
+	float yAngle;
+	float zAngle;
 
 public:
 

@@ -10,8 +10,7 @@
 
 #include "Renderer.h"
 #include <string>
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
+
 
 
 using namespace std;
@@ -20,19 +19,6 @@ namespace AvoidTheBug3D {
 
 /// OpenGL v3.3 rendering class
 class RendererOpenGL33: public Renderer {
-private:
-
-	boost::shared_ptr<float> xRotationMatrix;
-	boost::shared_ptr<float> yRotationMatrix;
-	boost::shared_ptr<float> zRotationMatrix;
-
-	void constructXRotationMatrix(float angle);
-	void constructYRotationMatrix(float angle);
-	void constructZRotationMatrix(float angle);
-
-	float xAngle;
-	float yAngle;
-	float zAngle;
 
 public:
 	RendererOpenGL33(boost::shared_ptr<Configuration> cfg,
