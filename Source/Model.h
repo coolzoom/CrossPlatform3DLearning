@@ -60,7 +60,7 @@ private:
 	// Make sure that no texture coordinate information is lost when the data buffers get created (vertexData, 
 	// indexData, normalsData and textureCoordsData) by realigning the data vectors, in order to ensure unique
 	// vertex - texture coordinates pairs
-	void Model::correctDataVectors();
+	void correctDataVectors();
 
 public:
 	/**
