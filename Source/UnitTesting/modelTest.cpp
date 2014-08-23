@@ -21,7 +21,7 @@ BOOST_AUTO_TEST_CASE( model_test ) {
 
 	boost::scoped_ptr<Model> model(new Model(
 		"/Game/Data/Cube/Cube.obj",
-		false, true, cfg, log));
+		cfg, log));
 
 	BOOST_CHECK_EQUAL(model->getNumVertices() > 0, true);
 	BOOST_CHECK_EQUAL(model->getNumFaces() > 0, true);

@@ -41,8 +41,8 @@ public:
 	 * @param cfg The game configuration file
 	 * @param log The game log
 	 */
-	WorldObject(string name, string modelPath, bool multiColour,
-			bool indexedDrawing, boost::shared_ptr<Configuration> cfg,
+	WorldObject(string name, string modelPath,
+			boost::shared_ptr<Configuration> cfg,
 			boost::shared_ptr<GameLog> log);
 
 	/**
@@ -56,7 +56,6 @@ public:
 	 * @param log The game log
 	 */
 	WorldObject(string name, string modelPath, string texturePath,
-			bool multiColour, bool indexedDrawing,
 			boost::shared_ptr<Configuration> cfg,
 			boost::shared_ptr<GameLog> log);
 
@@ -65,7 +64,7 @@ public:
 	 */
 	virtual ~WorldObject();
 
-	
+
 	/**
 	/* Get the name of the object
 	*/

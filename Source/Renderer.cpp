@@ -327,56 +327,37 @@ void Renderer::drawScene(boost::shared_ptr<vector<boost::shared_ptr<WorldObject>
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
-        // If the model is created for indexed drawing, pass
-        // the vertex indexes to the shader
-        if (it->get()->getModel()->isIndexedDrawing())
-        {
+        // Pass vertex indexes
 
-            glGenBuffers(1, &indexBufferObject);
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-                         it->get()->getModel()->getIndexDataSize(),
-                         it->get()->getModel()->getIndexData(),
-                         GL_STATIC_DRAW);
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
-        }
+        glGenBuffers(1, &indexBufferObject);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+                     it->get()->getModel()->getIndexDataSize(),
+                     it->get()->getModel()->getIndexData(),
+                     GL_STATIC_DRAW);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
 
-        // This array will be either used for the random multiple colours
-        // (see below) or for the vertex indexes (see above). Both cannot
-        // be activated at the same time in this program.
+
+        // Index attribute array
         glEnableVertexAttribArray(1);
 
-        // Is the model supposed to be rendered with random multiple
-        // colours for the faces?
-        bool isMultiColour = it->get()->getModel()->isMultiColour();
 
-        GLuint multiColourBoolUniform = glGetUniformLocation(program,
-                                        "multiColourBool");
-        glUniform1f(multiColourBoolUniform, (isMultiColour ? 1 : 0));
+        // Lighting
 
-        // If not multi-colour, use lighting
-        if (isMultiColour)
-        {
-            glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0,
-                                  (void*) (it->get()->getModel()->getVertexDataSize() / 2));
-        }
-        else
-        {
-            glm::vec3 lightDirection(-0.9f, -0.9f, 0.9f);
-            GLuint lightDirectionUniform = glGetUniformLocation(program,
-                                           "lightDirection");
-            glUniform3fv(lightDirectionUniform, 1,
-                         glm::value_ptr(lightDirection));
+        glm::vec3 lightDirection(-0.9f, -0.9f, 0.9f);
+        GLuint lightDirectionUniform = glGetUniformLocation(program,
+                                       "lightDirection");
+        glUniform3fv(lightDirectionUniform, 1,
+                     glm::value_ptr(lightDirection));
 
-            glGenBuffers(1, &normalsBufferObject);
-            glBindBuffer(GL_ARRAY_BUFFER, normalsBufferObject);
-            glBufferData(GL_ARRAY_BUFFER,
-                         it->get()->getModel()->getNormalsDataSize(),
-                         it->get()->getModel()->getNormalsData(), GL_STATIC_DRAW);
+        glGenBuffers(1, &normalsBufferObject);
+        glBindBuffer(GL_ARRAY_BUFFER, normalsBufferObject);
+        glBufferData(GL_ARRAY_BUFFER,
+                     it->get()->getModel()->getNormalsDataSize(),
+                     it->get()->getModel()->getNormalsData(), GL_STATIC_DRAW);
 
-            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
-        }
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
 
         // Add texture if that is contained in the model
         boost::shared_ptr<Image> textureObj = it->get()->getTexture();
@@ -432,17 +413,9 @@ void Renderer::drawScene(boost::shared_ptr<vector<boost::shared_ptr<WorldObject>
         }
 
         // Draw
-        if (it->get()->getModel()->isIndexedDrawing())
-        {
-            glDrawElements(GL_TRIANGLES,
-                           it->get()->getModel()->getIndexDataIndexCount(),
-                           GL_UNSIGNED_INT, 0);
-        }
-        else
-        {
-            glDrawArrays(GL_TRIANGLES, 0,
-                         it->get()->getModel()->getVertexDataComponentCount());
-        }
+        glDrawElements(GL_TRIANGLES,
+                       it->get()->getModel()->getIndexDataIndexCount(),
+                       GL_UNSIGNED_INT, 0);
 
         // Clear stuff
         if (textureObj)
