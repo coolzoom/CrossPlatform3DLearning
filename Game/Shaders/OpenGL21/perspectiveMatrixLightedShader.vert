@@ -1,6 +1,9 @@
 #version 120
 
-//in vec3 normal;
+attribute vec4 position;
+attribute vec3 normal;
+attribute vec2 uvCoords;
+
 uniform float multiColourBool;
 uniform vec3 offset;
 uniform mat4 perspectiveMatrix;
@@ -14,14 +17,14 @@ varying vec2 textureCoords;
 
 void main()
 {
-    vec4 cameraPos = vec4(gl_Vertex) * xRotationMatrix 
+    vec4 cameraPos = vec4(position) * xRotationMatrix 
 			* yRotationMatrix
 			* zRotationMatrix
 			+ vec4(offset.x, offset.y, offset.z, 0.0);
 
     gl_Position = perspectiveMatrix * cameraPos;
 
-    vec4 normalRotated = vec4(gl_Normal, 1) * xRotationMatrix 
+    vec4 normalRotated = vec4(normal, 1) * xRotationMatrix 
 			* yRotationMatrix
 			* zRotationMatrix;
 
@@ -29,7 +32,7 @@ void main()
     
     vec4 lightDirectionCameraSpace = normalize(perspectiveMatrix * vec4(lightDirection, 1));
 
-cosAngIncidence = clamp(dot(normalCameraSpace, lightDirectionCameraSpace), 0, 1);
-//    textureCoords = uvCoords;
+    cosAngIncidence = clamp(dot(normalCameraSpace, lightDirectionCameraSpace), 0, 1);
+    textureCoords = uvCoords;
     
 }

@@ -75,10 +75,11 @@ void RendererOpenGL21::DrawScene(
 	for (std::vector<boost::shared_ptr<WorldObject> >::iterator it =
 			scene->begin(); it != scene->end(); it++) {
 
+// OpenGL2.1 should not normally support this
 		// Generate VAO
-		GLuint vao;
-		glGenVertexArrays(1, &vao);
-		glBindVertexArray(vao);
+//		GLuint vao;
+//		glGenVertexArrays(1, &vao);
+//		glBindVertexArray(vao);
 
 		GLuint positionBufferObject = 0;
 		GLuint indexBufferObject = 0;
@@ -150,45 +151,46 @@ void RendererOpenGL21::DrawScene(
 		// Add texture if that is contained in the model
 		boost::shared_ptr<Image> textureObj = it->get()->getTexture();
 
-//		if (textureObj) {
+		if (textureObj) {
 //
 //			/*glActiveTexture(GL_TEXTURE0);*/
 //
-//			unordered_map<string, GLuint>::iterator nameTexturePair =
-//					textures->find(it->get()->getName());
-//
-//			// Textures are heavy to be moving back and forth so only create them once per model
-//			if (nameTexturePair != textures->end()) {
-//				texture = nameTexturePair->second;
-//				glBindTexture(GL_TEXTURE_2D, texture);
-//			} else {
-//				glGenTextures(1, &texture);
-//
-//				glBindTexture(GL_TEXTURE_2D, texture);
-//				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-//				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
-//
-//				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F,
-//						textureObj->getWidth(), textureObj->getHeight(), 0,
-//						GL_RGBA,
-//						GL_FLOAT, textureObj->getData());
-//
-//				textures->insert(make_pair(it->get()->getName(), texture));
-//			}
+			unordered_map<string, GLuint>::iterator nameTexturePair =
+					textures->find(it->get()->getName());
+
+			// Textures are heavy to be moving back and forth so only create them once per model
+			if (nameTexturePair != textures->end()) {
+				texture = nameTexturePair->second;
+				glBindTexture(GL_TEXTURE_2D, texture);
+			} else {
+				glGenTextures(1, &texture);
+
+				glBindTexture(GL_TEXTURE_2D, texture);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,  // OpenGL2.1 does not
+                                                         // accept GL_RGBA32F
+						textureObj->getWidth(), textureObj->getHeight(), 0,
+						GL_RGBA,
+						GL_FLOAT, textureObj->getData());
+
+				textures->insert(make_pair(it->get()->getName(), texture));
+			}
 
 			// UV Coordinates
 
-//			glGenBuffers(1, &uvBufferObject);
-//			glBindBuffer(GL_ARRAY_BUFFER, uvBufferObject);
-//			glBufferData(GL_ARRAY_BUFFER,
-//					it->get()->getModel()->getTextureCoordsDataSize(),
-//					it->get()->getModel()->getTextureCoordsData(),
-//					GL_STATIC_DRAW);
-//			glEnableVertexAttribArray(2);
-//			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
-//			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glGenBuffers(1, &uvBufferObject);
+			glBindBuffer(GL_ARRAY_BUFFER, uvBufferObject);
+			glBufferData(GL_ARRAY_BUFFER,
+					it->get()->getModel()->getTextureCoordsDataSize(),
+					it->get()->getModel()->getTextureCoordsData(),
+					GL_STATIC_DRAW);
+			glEnableVertexAttribArray(2);
+			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-//		}
+		}
 
 		// Throw an exception if there was an error in OpenGL, during
 		// any of the above.
@@ -232,8 +234,12 @@ void RendererOpenGL21::DrawScene(
 		glDisableVertexAttribArray(1);
 		glDisableVertexAttribArray(0);
 
-		glDeleteVertexArrays(1, &vao);
-		glBindVertexArray(0);
+// OpenGL2.1 should not normally support this
+//		glDeleteVertexArrays(1, &vao);
+//		glBindVertexArray(0);
+
+
+
 		glUseProgram(0);
 
 		// Swap buffers to display, since we're double buffered.

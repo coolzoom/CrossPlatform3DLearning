@@ -1,12 +1,12 @@
 #version 120
 
+varying float cosAngIncidence;
+varying vec2 textureCoords;
 uniform sampler2D textureImage;
-
-//out vec4 outputColour;
 
 void main()
 {
 
-gl_FragColor =  vec4(1.0, 1.0, 1.0, 1.0);
-//outputColour = texture(textureImage, vec2(0.2, 0.2));
+gl_FragColor = cosAngIncidence * 0.8 * texture2D(textureImage, textureCoords);
+
 }

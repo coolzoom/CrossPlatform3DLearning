@@ -100,8 +100,9 @@ struct GlobalSetupTeardown
 			object =
 				boost::shared_ptr<WorldObject>(
 				new WorldObject("animal",
-				"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimal.obj",
-				false, false, cfg, log));
+				"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTexture.obj",
+				"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTextureRed.png",
+				false, true, cfg, log));
 
 		}
 	}
