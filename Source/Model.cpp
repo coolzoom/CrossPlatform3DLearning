@@ -204,7 +204,10 @@ void Model::loadFromFile(string fileLocation)
         }
         file.close();
 
-        this->correctDataVectors();
+        if (textureCoords->size() > 0)
+        {
+            this->correctDataVectors();
+        }
 
         // Generate the data and delete the initial buffers
         this->getVertexData();
@@ -356,7 +359,7 @@ float* Model::getTextureCoordsData()
 {
 // Create an array of texture coordinates components which corresponds
 // by index to the array of vertex components
-    if (textureCoordsData == NULL)
+    if (textureCoordsData == NULL && textureCoords->size() > 0)
     {
 
         if (vertexDataComponentCount == 0)
