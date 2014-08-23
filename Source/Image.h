@@ -15,12 +15,6 @@
 #include "GameLog.h"
 #include "Configuration.h"
 #include <png.h>
-#ifdef _WIN32
-#include <pngstruct.h> // needed by pnginfo.h
-#include <pnginfo.h> // Not needed directly but otherwise the error
-					 // "C4150: deletion of pointer to incomplete type"
-					 // will show up.
-#endif
 
 using namespace std;
 
@@ -34,16 +28,7 @@ private:
 	boost::shared_ptr<Configuration> cfg;
 	boost::shared_ptr<GameLog> log;
 
-	png_infop pngInformation;
-	png_structp pngStructure;
-
 	int width, height;
-	png_byte colorType;
-	png_byte bitDepth;
-	int numberOfPasses;
-
-	png_bytep* rowPointers;
-
 	float* imageData;
 
 	// Load image from a .png file
