@@ -6,9 +6,14 @@
  */
 
 #include "WorldObject.h"
-#include <boost/assign.hpp>
 
 namespace AvoidTheBug3D {
+
+void WorldObject::initPropVectors() {
+    this->colour = boost::shared_ptr<glm::vec3>(new glm::vec3(0, 0 ,0));
+    this->location = boost::shared_ptr<glm::vec3>(new glm::vec3(0, 0 ,0));
+    this->orientation = boost::shared_ptr<glm::vec3>(new glm::vec3(0, 0 ,0));
+}
 
 WorldObject::WorldObject(string name, string modelPath,
         boost::shared_ptr<Configuration> cfg,
@@ -17,6 +22,7 @@ WorldObject::WorldObject(string name, string modelPath,
 	this->log = log;
 	this->model = boost::shared_ptr<Model>(
 			new Model(modelPath, cfg, log));
+    this->initPropVectors();
 
 }
 
@@ -28,10 +34,19 @@ WorldObject::WorldObject(string name, string modelPath, string texturePath,
 			new Model(modelPath, cfg, log));
 	this->texture = boost::shared_ptr<Image>(
 			new Image(texturePath, cfg, log));
+    this->initPropVectors();
 }
 
 WorldObject::~WorldObject() {
-	// TODO Auto-generated destructor stub
+
+}
+
+const boost::shared_ptr<Model>& WorldObject::getModel() const {
+	return model;
+}
+
+const boost::shared_ptr<Image>& WorldObject::getTexture() const {
+	return texture;
 }
 
 const string WorldObject::getName()
@@ -39,29 +54,29 @@ const string WorldObject::getName()
 	return name;
 }
 
-const vector<float>& WorldObject::getLocation() const {
+const boost::shared_ptr<glm::vec3>& WorldObject::getColour() {
+    return colour;
+}
+
+void WorldObject::setColour(const float &r, const float &g, const float &b) {
+    colour = boost::shared_ptr<glm::vec3>(new glm::vec3(r, g ,b));
+}
+
+const boost::shared_ptr<glm::vec3>& WorldObject::getLocation() const {
 	return location;
 }
 
 void WorldObject::setLocation(const float &x, const float &y, const float &z) {
-	location = boost::assign::list_of(x)(y)(z);
+	location = boost::shared_ptr<glm::vec3>(new glm::vec3(x, y ,z));
 }
 
-const boost::shared_ptr<Model>& WorldObject::getModel() const {
-	return model;
-}
-
-const vector<float>& WorldObject::getOrientation() const {
+const boost::shared_ptr<glm::vec3>& WorldObject::getOrientation() const {
 	return orientation;
 }
 
 void WorldObject::setOrientation(const float &x, const float &y,
 		const float &z) {
-	orientation = boost::assign::list_of(x)(y)(z);
-}
-
-const boost::shared_ptr<Image>& WorldObject::getTexture() const {
-	return texture;
+	orientation = boost::shared_ptr<glm::vec3>(new glm::vec3(x, y ,z));
 }
 
 }

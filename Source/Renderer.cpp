@@ -257,7 +257,7 @@ void Renderer::init(int width, int height)
 void Renderer::drawScene(boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene)
 {
 
-// Clear the buffers
+    // Clear the buffers
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Use the shaders prepared at initialisation
@@ -301,6 +301,7 @@ void Renderer::drawScene(boost::shared_ptr<vector<boost::shared_ptr<WorldObject>
                 scene->begin(); it != scene->end(); it++)
     {
 
+
         GLuint vao = 0;
         if (isOpenGL33Supported)
         {
@@ -341,7 +342,6 @@ void Renderer::drawScene(boost::shared_ptr<vector<boost::shared_ptr<WorldObject>
         // Index attribute array
         glEnableVertexAttribArray(1);
 
-
         // Lighting
 
         glm::vec3 lightDirection(-0.9f, -0.9f, 0.9f);
@@ -350,6 +350,7 @@ void Renderer::drawScene(boost::shared_ptr<vector<boost::shared_ptr<WorldObject>
         glUniform3fv(lightDirectionUniform, 1,
                      glm::value_ptr(lightDirection));
 
+        // Normals
         glGenBuffers(1, &normalsBufferObject);
         glBindBuffer(GL_ARRAY_BUFFER, normalsBufferObject);
         glBufferData(GL_ARRAY_BUFFER,
@@ -359,11 +360,16 @@ void Renderer::drawScene(boost::shared_ptr<vector<boost::shared_ptr<WorldObject>
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+        // Find the colour uniform
+        GLuint colourUniform = glGetUniformLocation(program, "colour");
+
         // Add texture if that is contained in the model
         boost::shared_ptr<Image> textureObj = it->get()->getTexture();
 
         if (textureObj)
         {
+            // "Disable" colour since there is a texture
+            glUniform4fv(colourUniform, 1, glm::value_ptr(glm::vec4(0.0f, 0.0f, 0.0f, 0.0f)));
 
             /*glActiveTexture(GL_TEXTURE0);*/
 
@@ -401,6 +407,13 @@ void Renderer::drawScene(boost::shared_ptr<vector<boost::shared_ptr<WorldObject>
             glEnableVertexAttribArray(2);
             glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
             glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        }
+        else
+        {
+
+            // If there is no texture, use the colour of the object
+            glUniform4fv(colourUniform, 1, glm::value_ptr(*it->get()->getColour()));
 
         }
 
@@ -453,13 +466,13 @@ void Renderer::drawScene(boost::shared_ptr<vector<boost::shared_ptr<WorldObject>
             glDeleteVertexArrays(1, &vao);
             glBindVertexArray(0);
         }
-        glUseProgram(0);
-
-        // Swap buffers to display, since we're double buffered.
-        SDL_GL_SwapBuffers();
 
     } // for std::vector<WorldObject>::iterator
 
+    glUseProgram(0);
+
+    // Swap buffers to display, since we're double buffered.
+    SDL_GL_SwapBuffers();
 }
 
 void Renderer::constructXRotationMatrix(float angle)

@@ -17,8 +17,6 @@ using namespace AvoidTheBug3D;
 
 const GLuint frameRate = 60;
 
-
-
 int main(int argc, char** argv) {
 
 	boost::shared_ptr<GameLog> log(new GameLog(cout));
@@ -27,14 +25,20 @@ int main(int argc, char** argv) {
 
 	try {
 
-		boost::shared_ptr<WorldObject> object(
+		boost::shared_ptr<WorldObject> object1(
 							new WorldObject("animal",
 									"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTexture.obj",
 									"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTextureRedBlackNumbers.png",
 									 cfg, log));
+        boost::shared_ptr<WorldObject> object(
+							new WorldObject("animal",
+									"/Game/Data/Cube/CubeNoTexture.obj",
+									 cfg, log));
+        object->setColour(1.0f, 0.77f, 0.0f);
         boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene(
 				new vector<boost::shared_ptr<WorldObject> >());
 		scene->push_back(object);
+		scene->push_back(object1);
 
         boost::shared_ptr<Renderer> renderer(new Renderer(cfg, log));
 		renderer->init(1024, 768);
