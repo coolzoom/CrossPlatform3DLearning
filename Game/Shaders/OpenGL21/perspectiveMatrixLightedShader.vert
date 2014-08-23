@@ -4,7 +4,6 @@ attribute vec4 position;
 attribute vec3 normal;
 attribute vec2 uvCoords;
 
-uniform float multiColourBool;
 uniform vec3 offset;
 uniform mat4 perspectiveMatrix;
 uniform mat4 xRotationMatrix;

@@ -88,7 +88,7 @@ Renderer::Renderer(boost::shared_ptr<Configuration> cfg,
 Renderer::~Renderer()
 {
 
-    LOGINFO("Renderer superclass destructor running");
+    LOGINFO("Renderer destructor running");
     for (boost::unordered_map<string, GLuint>::iterator it = textures->begin();
             it != textures->end(); ++it)
     {

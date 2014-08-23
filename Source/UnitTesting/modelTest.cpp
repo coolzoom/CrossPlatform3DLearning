@@ -23,14 +23,6 @@ BOOST_AUTO_TEST_CASE( model_test ) {
 		"/Game/Data/Cube/Cube.obj",
 		cfg, log));
 
-	BOOST_CHECK_EQUAL(model->getNumVertices() > 0, true);
-	BOOST_CHECK_EQUAL(model->getNumFaces() > 0, true);
-
-	model->getVertexData();
-	model->getIndexData();
-	model->getNormalsData();
-	model->getTextureCoordsData();
-
 	BOOST_CHECK_NE(0, model->getVertexDataComponentCount());
 	BOOST_CHECK_NE(0, model->getIndexDataIndexCount());
 	BOOST_CHECK_NE(0, model->getNormalsDataComponentCount());
@@ -43,8 +35,5 @@ BOOST_AUTO_TEST_CASE( model_test ) {
 			<< model->getNormalsDataComponentCount() << endl
 			<< "Texture coordinates count: "
 			<< model->getTextureCoordsDataComponentCount() << endl;
-
-	model->outputVertexData();
-	model->outputTextureCoordsData();
 }
 BOOST_AUTO_TEST_SUITE_END()

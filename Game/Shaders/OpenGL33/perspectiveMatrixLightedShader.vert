@@ -7,7 +7,6 @@ layout(location = 2) in vec2 uvCoords;
 smooth out float cosAngIncidence;
 out vec2 textureCoords;
 
-uniform uint multiColourBool;
 uniform vec3 offset;
 uniform mat4 perspectiveMatrix;
 

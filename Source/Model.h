@@ -60,6 +60,11 @@ private:
     // vertex - texture coordinates pairs
     void correctDataVectors();
 
+    // Delete the buffers to which the information read from the file is initially stored. To be used
+    // in order to free those buffers' memory after the data that will be used by the program has been
+    // generated and in the destructor, just in case.
+    void deleteInitialBuffers();
+
 public:
     /**
      * Initialisation of the model.
@@ -74,47 +79,6 @@ public:
     ~Model(void);
 
     /**
-     * Output vertices to stdout
-     */
-    void outputVertices();
-
-    /**
-     * Output faces to stdout
-     */
-    void outputFaces();
-
-    /**
-     * Get the number of vertices in the model
-     * @return The number of vertices
-     */
-    int getNumVertices();
-
-    /**
-     * Get the number of faces in the model
-     * @return The number of faces
-     */
-    int getNumFaces();
-
-    /**
-     * Get the vertices of the model
-     * @return The vertices
-     */
-    vector<float*>* getVertices();
-
-    /**
-     * Get the faces of the model
-     * @return The faces
-     */
-    vector<int*>* getFaces();
-
-    /**
-     * Get the index data, i.e. the indexes of each vertex to be drawn
-     * when the indexed drawing flag has been set.
-     * @return
-     */
-    unsigned int * getIndexData();
-
-    /**
      * Get the vertex data, e.g. to be sent to glBindBuffer.
      * The structure of the data can be defined via the Model's state.
      * @return The vertex data
@@ -122,15 +86,10 @@ public:
     float * getVertexData();
 
     /**
-     * Output the vertex data. The structure of the data can be defined
-     * via the Model's state.
+     * Get the size of the vertex data, in bytes.
+     * @return The size of the vertex data
      */
-    void outputVertexData();
-
-    /**
-     * Output the index data.
-     */
-    void outputIndexData();
+    int getVertexDataSize();
 
     /**
      * Get the number of components in the vertex data array
@@ -138,11 +97,13 @@ public:
      */
     int getVertexDataComponentCount();
 
+
     /**
-     * Get the size of the vertex data, in bytes.
-     * @return The size of the vertex data
+     * Get the index data, i.e. the indexes of each vertex to be drawn
+     * when the indexed drawing flag has been set.
+     * @return
      */
-    int getVertexDataSize();
+    unsigned int * getIndexData();
 
     /**
      * Get the size of the index data
@@ -163,11 +124,6 @@ public:
     float* getNormalsData();
 
     /**
-     * Output the normals data
-     */
-    void outputNormalsData();
-
-    /**
      * Get the size of the normals data, in bytes
      * @return The size of the normals data, in bytes
      */
@@ -184,11 +140,6 @@ public:
      * @return The texture coordinates data
      */
     float* getTextureCoordsData();
-
-    /**
-     * Output the texture coordinates data
-     */
-    void outputTextureCoordsData();
 
     /**
      * Get the size of the texture coordinates data, in bytes

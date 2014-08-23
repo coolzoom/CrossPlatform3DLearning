@@ -1,5 +1,4 @@
 #include "Model.h"
-#include <iostream>
 #include <fstream>
 #include <stdlib.h>
 #include <boost/foreach.hpp>
@@ -48,65 +47,7 @@ Model::Model(string filename,
 
 Model::~Model(void)
 {
-    if (vertices != NULL)
-    {
-        for (int i = 0; i != vertices->size(); ++i)
-        {
-            delete[] vertices->at(i);
-        }
-        vertices->clear();
-        delete vertices;
-    }
-
-    if (facesVertexIndexes != NULL)
-    {
-        for (int i = 0; i != facesVertexIndexes->size(); ++i)
-        {
-            delete[] facesVertexIndexes->at(i);
-        }
-        facesVertexIndexes->clear();
-        delete facesVertexIndexes;
-    }
-
-    if (normals != NULL)
-    {
-        for (int i = 0; i != normals->size(); ++i)
-        {
-            delete[] normals->at(i);
-        }
-        normals->clear();
-        delete normals;
-    }
-
-    if (facesNormalIndexes != NULL)
-    {
-        for (int i = 0; i != facesNormalIndexes->size(); ++i)
-        {
-            delete[] facesNormalIndexes->at(i);
-        }
-        facesNormalIndexes->clear();
-        delete facesNormalIndexes;
-    }
-
-    if (textureCoords != NULL)
-    {
-        for (int i = 0; i != textureCoords->size(); ++i)
-        {
-            delete[] textureCoords->at(i);
-        }
-        textureCoords->clear();
-        delete textureCoords;
-    }
-
-    if (textureCoordsIndexes != NULL)
-    {
-        for (int i = 0; i != textureCoordsIndexes->size(); ++i)
-        {
-            delete[] textureCoordsIndexes->at(i);
-        }
-        textureCoordsIndexes->clear();
-        delete textureCoordsIndexes;
-    }
+    this->deleteInitialBuffers();
 
     if (vertexData != NULL)
     {
@@ -265,54 +206,19 @@ void Model::loadFromFile(string fileLocation)
 
         this->correctDataVectors();
 
+        // Generate the data and delete the initial buffers
+        this->getVertexData();
+        this->getIndexData();
+        this->getNormalsData();
+        this->getTextureCoordsData();
+        this->deleteInitialBuffers();
+
     }
     else
         throw GameException(
             "Could not open file " + cfg->getHomeDirectory()
             + fileLocation);
 
-}
-
-void Model::outputVertices()
-{
-    int vectorCount = vertices->size();
-    for (int idx = 0; idx != vectorCount; ++idx)
-    {
-        cout << "Vertex:" << vertices->at(idx)[0] << " - "
-             << vertices->at(idx)[1] << " - " << vertices->at(idx)[2]
-             << endl;
-    }
-}
-
-int Model::getNumVertices()
-{
-    return (int) this->vertices->size();
-}
-
-int Model::getNumFaces()
-{
-    return (int) this->facesVertexIndexes->size();
-}
-
-vector<float*>* Model::getVertices()
-{
-    return vertices;
-}
-
-void Model::outputFaces()
-{
-    int vectorCount = facesVertexIndexes->size();
-    for (int idx = 0; idx != vectorCount; ++idx)
-    {
-        cout << "Face:" << facesVertexIndexes->at(idx)[0] << " - "
-             << facesVertexIndexes->at(idx)[1] << " - "
-             << facesVertexIndexes->at(idx)[2] << endl;
-    }
-}
-
-vector<int*>* Model::getFaces()
-{
-    return facesVertexIndexes;
 }
 
 float* Model::getVertexData()
@@ -369,30 +275,6 @@ unsigned int * Model::getIndexData()
     return indexData;
 }
 
-void Model::outputVertexData()
-{
-    cout << endl << "Number of faces: " << facesVertexIndexes->size() << endl;
-    cout << "Total number of components: " << vertexDataComponentCount << endl;
-    for (int cnt = 0; cnt != vertexDataComponentCount; ++cnt)
-    {
-        if (cnt % 4 == 0)
-            cout << endl;
-        cout << vertexData[cnt] << " ";
-    }
-    cout << endl;
-}
-
-void Model::outputIndexData()
-{
-    cout << endl << "Index data element count: " << indexDataIndexCount << endl;
-    for (int cnt = 0; cnt != indexDataIndexCount; ++cnt)
-    {
-        if (cnt % 3 == 0)
-            cout << endl;
-        cout << indexData[cnt] << " ";
-    }
-    cout << endl;
-}
 
 int Model::getVertexDataComponentCount()
 {
@@ -460,20 +342,6 @@ float* Model::getNormalsData()
     return normalsData;
 }
 
-void Model::outputNormalsData()
-{
-    cout << "Normals data" << endl;
-    cout << "Component count: " << normalsDataComponentCount;
-
-    for (int cnt = 0; cnt != normalsDataComponentCount; ++cnt)
-    {
-        if (cnt % 3 == 0)
-            cout << endl;
-        cout << normalsData[cnt] << " ";
-    }
-    cout << endl;
-}
-
 int Model::getNormalsDataSize() const
 {
     return normalsDataSize;
@@ -528,21 +396,6 @@ float* Model::getTextureCoordsData()
     return textureCoordsData;
 }
 
-void Model::outputTextureCoordsData()
-{
-    cout << "Texture coordinates data" << endl;
-    cout << "Component count: " << textureCoordsDataComponentCount;
-
-    for (int cnt = 0; cnt != textureCoordsDataComponentCount; ++cnt)
-    {
-        if (cnt % 2 == 0)
-            cout << endl << " for vertex at (" << vertexData[4 * cnt / 2] <<", "
-                 << vertexData[4 * cnt / 2 + 1] <<", " << vertexData[4 * cnt / 2 + 2] << "): ";
-        cout << textureCoordsData[cnt] << " ";
-    }
-    cout << endl;
-}
-
 int Model::getTextureCoordsDataSize() const
 {
     return textureCoordsDataSize;
@@ -595,6 +448,76 @@ void Model::correctDataVectors()
 
 
         }
+    }
+
+}
+
+void Model::deleteInitialBuffers()
+{
+    if (vertices != NULL)
+    {
+        for (int i = 0; i != vertices->size(); ++i)
+        {
+            delete[] vertices->at(i);
+        }
+        vertices->clear();
+        delete vertices;
+        vertices = NULL;
+    }
+
+    if (facesVertexIndexes != NULL)
+    {
+        for (int i = 0; i != facesVertexIndexes->size(); ++i)
+        {
+            delete[] facesVertexIndexes->at(i);
+        }
+        facesVertexIndexes->clear();
+        delete facesVertexIndexes;
+        facesVertexIndexes = NULL;
+    }
+
+    if (normals != NULL)
+    {
+        for (int i = 0; i != normals->size(); ++i)
+        {
+            delete[] normals->at(i);
+        }
+        normals->clear();
+        delete normals;
+        normals = NULL;
+    }
+
+    if (facesNormalIndexes != NULL)
+    {
+        for (int i = 0; i != facesNormalIndexes->size(); ++i)
+        {
+            delete[] facesNormalIndexes->at(i);
+        }
+        facesNormalIndexes->clear();
+        delete facesNormalIndexes;
+        facesNormalIndexes = NULL;
+    }
+
+    if (textureCoords != NULL)
+    {
+        for (int i = 0; i != textureCoords->size(); ++i)
+        {
+            delete[] textureCoords->at(i);
+        }
+        textureCoords->clear();
+        delete textureCoords;
+        textureCoords = NULL;
+    }
+
+    if (textureCoordsIndexes != NULL)
+    {
+        for (int i = 0; i != textureCoordsIndexes->size(); ++i)
+        {
+            delete[] textureCoordsIndexes->at(i);
+        }
+        textureCoordsIndexes->clear();
+        delete textureCoordsIndexes;
+        textureCoordsIndexes = NULL;
     }
 
 }
