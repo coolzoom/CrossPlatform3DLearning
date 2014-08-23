@@ -30,97 +30,113 @@
 #include <boost/unordered_map.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-namespace AvoidTheBug3D {
+namespace AvoidTheBug3D
+{
 
-//typedef unsigned int (*GL_CreateShader_Func)(unsigned int);
+class Renderer
+{
 
-class Renderer {
+private:
 
-protected:
+    boost::shared_ptr<Configuration> cfg;
+    boost::shared_ptr<GameLog> log;
 
-	boost::shared_ptr<Configuration> cfg;
-	boost::shared_ptr<GameLog> log;
-	GLuint program;
+    SDL_Surface *screen;
+    SDL_Surface *icon;
 
-	string vertexShaderPath;
-	string fragmentShaderPath;
+    GLuint program;
 
-	/**
-	 * Load a shader's source code from a file into a string
-	 * @param fileLocation The file's location, relative to the game path
-	 * @return String containing the shader's source code
-	 */
-	string loadShaderFromFile(string fileLocation);
+    bool isOpenGL33Supported;
 
-	/**
-	 * Compile a shader's source code
-	 * @param shaderSource String containing the shader's source code
-	 * @param shaderType Type of shader (GL_VERTEX_SHADER, GL_FRAGMENT_SHADER, GL_GEOMETRY_SHADER - the latter for OpenGL 3.3)
-	 * @return OpenGL shader reference
-	 */
-	GLuint compileShader(string shaderSource, GLenum shaderType);
+    string vertexShaderPath;
+    string fragmentShaderPath;
 
-	/**
-	 * Textures used in the scene, each corresponding to the name of one of
-	 * the rendered models
-	 */
-	boost::unordered_map<string, GLuint> *textures;
+    /**
+     * Load a shader's source code from a file into a string
+     * @param fileLocation The file's location, relative to the game path
+     * @return String containing the shader's source code
+     */
+    string loadShaderFromFile(string fileLocation);
 
-	boost::shared_ptr<float> xRotationMatrix;
-	boost::shared_ptr<float> yRotationMatrix;
-	boost::shared_ptr<float> zRotationMatrix;
+    /**
+     * Compile a shader's source code
+     * @param shaderSource String containing the shader's source code
+     * @param shaderType Type of shader (GL_VERTEX_SHADER, GL_FRAGMENT_SHADER, GL_GEOMETRY_SHADER - the latter for OpenGL 3.3)
+     * @return OpenGL shader reference
+     */
+    GLuint compileShader(string shaderSource, GLenum shaderType);
 
-	/**
-	 * Rotation transformation for rotating around the X axis
-	 * @param angle The angle to rotate by, in radians.
-	 */
-	void constructXRotationMatrix(float angle);
+    /**
+     * Initialise SDL
+     */
+    void initSDL(int width, int height);
 
-	/**
-	 * Rotation transformation for rotating around the Y axis
-	 * @param angle The angle to rotate by, in radians.
-	 */
-	void constructYRotationMatrix(float angle);
+    /**
+     * Detect if OpenGL 3.3 is supported. If not, fall back to OpenGL 2.1.
+     * If neither of the two is supported, an exception is raised.
+     */
+    void detectOpenGLVersion();
 
-	/**
-	 * Rotation transformation for rotating around the Z axis
-	 * @param angle The angle to rotate by, in radians.
-	 */
-	void constructZRotationMatrix(float angle);
+    /**
+     * Textures used in the scene, each corresponding to the name of one of
+     * the rendered models
+     */
+    boost::unordered_map<string, GLuint> *textures;
 
-	// Angles on x,y and z by which to rotate
-	float xAngle;
-	float yAngle;
-	float zAngle;
+    boost::shared_ptr<float> xRotationMatrix;
+    boost::shared_ptr<float> yRotationMatrix;
+    boost::shared_ptr<float> zRotationMatrix;
+
+    /**
+     * Rotation transformation for rotating around the X axis
+     * @param angle The angle to rotate by, in radians.
+     */
+    void constructXRotationMatrix(float angle);
+
+    /**
+     * Rotation transformation for rotating around the Y axis
+     * @param angle The angle to rotate by, in radians.
+     */
+    void constructYRotationMatrix(float angle);
+
+    /**
+     * Rotation transformation for rotating around the Z axis
+     * @param angle The angle to rotate by, in radians.
+     */
+    void constructZRotationMatrix(float angle);
+
+    // Angles on x,y and z by which to rotate
+    float xAngle;
+    float yAngle;
+    float zAngle;
 
 public:
 
-	/**
-	 * Constructor
-	 * @param cfg The game's configuration object
-	 * @param log The game's logging object
-	 */
-	Renderer(boost::shared_ptr<Configuration> cfg,
-			boost::shared_ptr<GameLog> log);
+    /**
+     * Constructor
+     * @param cfg The game's configuration object
+     * @param log The game's logging object
+     */
+    Renderer(boost::shared_ptr<Configuration> cfg,
+             boost::shared_ptr<GameLog> log);
 
-	/**
-	 * Initialise renderer (OpenGL, GLEW, etc)
-	 * @param width The width of the window
-	 * @param height The height of the window
-	 */
-	virtual void Init(int width, int height);
+    /**
+     * Initialise renderer (OpenGL, GLEW, etc)
+     * @param width The width of the window
+     * @param height The height of the window
+     */
+    void init(int width, int height);
 
-	/**
-	 * Draw the scene
-	 */
-	virtual void DrawScene(
-			boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene) = 0;
+    /**
+     * Draw the scene
+     */
+    void drawScene(
+        boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene);
 
-	/**
-	 * Destructor
-	 */
-	virtual ~Renderer();
-
+    /**
+     * Destructor
+     */
+    ~Renderer();
 };
 
 } /* namespace AvoidTheBug3D */

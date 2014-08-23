@@ -7,19 +7,9 @@
 #include <boost/test/unit_test.hpp>
 #include <iostream>
 
-#ifndef SDLANDOPENGL
-#define SDLANDOPENGL
-#define NO_SDL_GLEXT
-#include "GL/glew.h"
-#include "SDL_opengl.h"
-#include "SDL.h"
-#endif //SDLANDOPENGL
-
 #include "globals.h"
 
 #include "../Renderer.h"
-#include "../RendererOpenGL21.h"
-#include "../RendererOpenGL33.h"
 #include "../GameException.h"
 
 #include "../WorldObject.h"
@@ -32,87 +22,38 @@ Globals *globals;
 // Setup / Teardown
 struct GlobalSetupTeardown
 {
-	SDL_Surface *screen;
-	SDL_Surface *icon;
 
-	GlobalSetupTeardown() {
+    GlobalSetupTeardown()
+    {
 
-		globals = new Globals();
+        globals = new Globals();
 
-		globals->log = boost::shared_ptr<GameLog>(new GameLog(cout));
-		boost::shared_ptr<GameLog> log = globals->log;
+        globals->log = boost::shared_ptr<GameLog>(new GameLog(cout));
+        boost::shared_ptr<GameLog> log = globals->log;
 
-		globals->cfg = boost::shared_ptr<Configuration>(new Configuration(log));
-		boost::shared_ptr<Configuration> cfg = globals->cfg;
+        globals->cfg = boost::shared_ptr<Configuration>(new Configuration(log));
+        boost::shared_ptr<Configuration> cfg = globals->cfg;
 
-		// initialize SDL video
-		if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-			LOGERROR(SDL_GetError());
-			throw GameException(string("Unable to initialise SDL"));
-		}
 
-		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
-		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 8);
-		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-		SDL_WM_SetCaption("SDL Application", "SDL Test");
 
-		icon = SDL_LoadBMP("ONLINE32.BMP");
-		SDL_WM_SetIcon(icon, NULL);
-		screen = SDL_SetVideoMode(1024, 768, 32, SDL_OPENGL); // *** SDL_HWSURFACE //DL_OPENGL |SDL_FULLSCREEN SDL_HWSURFACE SDL_DOUBLEBUF | );
+        boost::shared_ptr<WorldObject> object(
+            new WorldObject("animal",
+                            "/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTexture.obj",
+                            "/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTextureRedBlackNumbers.png",
+                            false, true, cfg, log));
+        boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene(
+            new vector<boost::shared_ptr<WorldObject> >());
+        scene->push_back(object);
 
-		if (!screen) {
+        boost::shared_ptr<Renderer> renderer(new Renderer(cfg, log));
+        renderer->init(1024, 768);
 
-			LOGERROR(SDL_GetError());
-			throw GameException("Unable to set video");
-		}
+    }
 
-		if (glewInit() != GLEW_OK) {
-			throw GameException("Error initialising GLEW");
-		} else {
-			string glewVersion = (char*) glewGetString(GLEW_VERSION);
-			LOGINFO("Using GLEW version " + glewVersion);
-		}
-
-		string glVersion = (char*) glGetString(GL_VERSION);
-		glVersion = "OpenGL version supported by machine: " + glVersion;
-		LOGINFO(glVersion);
-
-		boost::shared_ptr<Renderer> renderer;
-		boost::shared_ptr<WorldObject> object;
-		if (glewIsSupported("GL_VERSION_3_3")) {
-			LOGINFO("Ready for OpenGL 3.3");
-			renderer = boost::shared_ptr<Renderer>(
-				new RendererOpenGL33(cfg, log));
-
-			object =
-				boost::shared_ptr<WorldObject>(
-				new WorldObject("animal",
-				"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTexture.obj",
-				"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTextureRed.png",
-				false, true, cfg, log));
-
-		} else if (glewIsSupported("GL_VERSION_2_1")) {
-			LOGINFO("Ready for OpenGL 2.1");
-			renderer = boost::shared_ptr<Renderer>(
-				new RendererOpenGL21(cfg, log));
-			object =
-				boost::shared_ptr<WorldObject>(
-				new WorldObject("animal",
-				"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTexture.obj",
-				"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTextureRed.png",
-				false, true, cfg, log));
-
-		}
-	}
-
-	~GlobalSetupTeardown() {
-		delete globals;
-		SDL_FreeSurface(icon);
-		SDL_FreeSurface(screen);
-		SDL_Quit();
-	}
+    ~GlobalSetupTeardown()
+    {
+        delete globals;
+    }
 };
 
 BOOST_GLOBAL_FIXTURE( GlobalSetupTeardown );

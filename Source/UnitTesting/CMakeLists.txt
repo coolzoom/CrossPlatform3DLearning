@@ -56,13 +56,11 @@ ADD_DEFINITIONS(${PNG_DEFINITIONS})
 ADD_EXECUTABLE(unittest globalFixture globals.h mainTest.cpp gameLogTest.cpp gameLogDebugTest.cpp
  modelTest.cpp rendererTest.cpp imageTest.cpp configurationTest.cpp 
   ../Model.cpp ../GameLogic.cpp ../WorldObject.cpp ../Character.cpp  
- ../PlayerView.cpp ../GameLog.cpp ../Configuration.cpp ../Renderer.cpp ../RendererOpenGL21.cpp
- ../RendererOpenGL33.cpp 
+ ../PlayerView.cpp ../GameLog.cpp ../Configuration.cpp ../Renderer.cpp 
  ../GameException.cpp ../Image.cpp
  ../Character.h ../GameLog.h ../Model.h ../WorldObject.h
  ../Configuration.h ../GameLogic.h ../PlayerView.h
- ../GameException.h ../Image.h ../Renderer.h ../RendererOpenGL21.h
- ../RendererOpenGL33.h 
+ ../GameException.h ../Image.h ../Renderer.h 
  )
 
 # Link to the required libraries
