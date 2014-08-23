@@ -97,12 +97,12 @@ Renderer::~Renderer()
     }
     delete textures;
 
-    SDL_FreeSurface(icon);
+
     SDL_FreeSurface(screen);
     SDL_Quit();
 }
 
-void Renderer::initSDL(int width, int height)
+void Renderer::initSDL(int width, int height, bool fullScreen)
 {
     // initialize SDL video
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -116,11 +116,16 @@ void Renderer::initSDL(int width, int height)
     SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    SDL_WM_SetCaption("SDL Application", "SDL Test");
+    SDL_WM_SetCaption("Avoid the Bug 3D", NULL);
 
-    icon = SDL_LoadBMP("ONLINE32.BMP");
-    SDL_WM_SetIcon(icon, NULL);
-    screen = SDL_SetVideoMode(width, height, 32, SDL_OPENGL); // *** SDL_HWSURFACE //DL_OPENGL |SDL_FULLSCREEN SDL_HWSURFACE SDL_DOUBLEBUF | );
+    Uint32 flags = SDL_OPENGL;
+
+    if (fullScreen) {
+        flags = flags | SDL_FULLSCREEN;
+
+    }
+
+    screen = SDL_SetVideoMode(width, height, 32, flags);
 
     if (!screen)
     {
@@ -163,10 +168,10 @@ void Renderer::detectOpenGLVersion()
 
 }
 
-void Renderer::init(int width, int height)
+void Renderer::init(int width, int height, bool fullScreen)
 {
 
-    this->initSDL(width, height);
+    this->initSDL(width, height, fullScreen);
 
     this->detectOpenGLVersion();
 

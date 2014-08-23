@@ -46,7 +46,7 @@ struct GlobalSetupTeardown
         scene->push_back(object);
 
         boost::shared_ptr<Renderer> renderer(new Renderer(cfg, log));
-        renderer->init(1024, 768);
+        renderer->init(640, 480, false);
 
     }
 

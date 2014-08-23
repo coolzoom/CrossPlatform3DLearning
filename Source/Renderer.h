@@ -42,7 +42,6 @@ private:
     boost::shared_ptr<GameLog> log;
 
     SDL_Surface *screen;
-    SDL_Surface *icon;
 
     GLuint program;
 
@@ -69,7 +68,7 @@ private:
     /**
      * Initialise SDL
      */
-    void initSDL(int width, int height);
+    void initSDL(int width, int height, bool fullScreen);
 
     /**
      * Detect if OpenGL 3.3 is supported. If not, fall back to OpenGL 2.1.
@@ -125,7 +124,7 @@ public:
      * @param width The width of the window
      * @param height The height of the window
      */
-    void init(int width, int height);
+    void init(int width, int height, bool fullScreen);
 
     /**
      * Draw the scene
