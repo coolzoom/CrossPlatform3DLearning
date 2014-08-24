@@ -216,12 +216,10 @@ void Renderer::init(int width, int height, bool fullScreen)
     {
         LOGINFO("Linked program successfully");
 
-        // Perspective and offset
-        glUseProgram(program);
+		glUseProgram(program);
 
-        GLuint offsetUniform = glGetUniformLocation(program, "offset");
-        glUniform3f(offsetUniform, 0.0f, -1.0f, -4.0f);
-
+        // Perspective
+        
         GLuint perspectiveMatrixUniform = glGetUniformLocation(program,
                                           "perspectiveMatrix");
 
@@ -394,6 +392,9 @@ void Renderer::drawScene(boost::shared_ptr<vector<boost::shared_ptr<WorldObject>
 			glm::value_ptr(*boost::scoped_ptr<glm::mat4x4>(rotateY(it->get()->getRotation()->y))));
 		glUniformMatrix4fv(zRotationMatrixUniform, 1, GL_TRUE,
 			glm::value_ptr(*boost::scoped_ptr<glm::mat4x4>(rotateZ(it->get()->getRotation()->z))));
+
+		GLuint offsetUniform = glGetUniformLocation(program, "offset");
+		glUniform3fv(offsetUniform, 1, glm::value_ptr(*it->get()->getOffset()));
 
         // Throw an exception if there was an error in OpenGL, during
         // any of the above.

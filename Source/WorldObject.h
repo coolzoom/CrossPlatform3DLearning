@@ -32,7 +32,7 @@ private:
     boost::shared_ptr<Image> texture;
     string name;
     boost::shared_ptr<glm::vec3> colour;
-    boost::shared_ptr<glm::vec3> location;
+    boost::shared_ptr<glm::vec3> offset;
     boost::shared_ptr<glm::vec3> rotation;
 
     void initPropVectors();
@@ -101,18 +101,18 @@ public:
 
 
     /**
-     * Get the location of the object
-     * @return The location of the object
+     * Get the offset of the object's position
+     * @return The offset
      */
-    const boost::shared_ptr<glm::vec3>& getLocation() const;
+    const boost::shared_ptr<glm::vec3>& getOffset() const;
 
     /**
-     * Set the location of the object
-     * @param x The location's x coordinate
-     * @param y The location's y coordinate
-     * @param z The location's z coordinate
+     * Set the offset of the object's position
+     * @param x The offset's x coordinate
+     * @param y The offset's y coordinate
+     * @param z The offset's z coordinate
      */
-    void setLocation(const float &x, const float &y, const float &z);
+    void setOffset(const float &x, const float &y, const float &z);
 
     /**
      * Get the object's rotation

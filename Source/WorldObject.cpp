@@ -11,7 +11,7 @@ namespace AvoidTheBug3D {
 
 void WorldObject::initPropVectors() {
     this->colour = boost::shared_ptr<glm::vec3>(new glm::vec3(0, 0 ,0));
-    this->location = boost::shared_ptr<glm::vec3>(new glm::vec3(0, 0 ,0));
+    this->offset = boost::shared_ptr<glm::vec3>(new glm::vec3(0, 0 ,0));
     this->rotation = boost::shared_ptr<glm::vec3>(new glm::vec3(0, 0 ,0));
 }
 
@@ -62,12 +62,12 @@ void WorldObject::setColour(const float &r, const float &g, const float &b) {
     colour = boost::shared_ptr<glm::vec3>(new glm::vec3(r, g ,b));
 }
 
-const boost::shared_ptr<glm::vec3>& WorldObject::getLocation() const {
-	return location;
+const boost::shared_ptr<glm::vec3>& WorldObject::getOffset() const {
+	return offset;
 }
 
-void WorldObject::setLocation(const float &x, const float &y, const float &z) {
-	location = boost::shared_ptr<glm::vec3>(new glm::vec3(x, y ,z));
+void WorldObject::setOffset(const float &x, const float &y, const float &z) {
+	offset = boost::shared_ptr<glm::vec3>(new glm::vec3(x, y ,z));
 }
 
 const boost::shared_ptr<glm::vec3>& WorldObject::getRotation() const {

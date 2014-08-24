@@ -8,10 +8,10 @@ uniform vec4 colour;
 void main()
 {
   if (colour != vec4(0, 0, 0, 0)) {
-    gl_FragColor = cosAngIncidence * 0.8 * colour;
+    gl_FragColor = cosAngIncidence * colour;
 }
 else {
-  gl_FragColor = cosAngIncidence * 0.8 * texture2D(textureImage, textureCoords);
+  gl_FragColor = cosAngIncidence * texture2D(textureImage, textureCoords);
 }
 
 }
