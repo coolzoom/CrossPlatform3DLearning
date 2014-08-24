@@ -70,7 +70,7 @@ Renderer::Renderer(boost::shared_ptr<Configuration> cfg,
     this->cfg = cfg;
     this->log = log;
     isOpenGL33Supported = false;
-
+    screen = NULL;
     program = 0;
     textures = new boost::unordered_map<string, GLuint>();
     vertexShaderPath = "";
