@@ -82,32 +82,26 @@ private:
      */
     boost::unordered_map<string, GLuint> *textures;
 
-    boost::shared_ptr<float> xRotationMatrix;
-    boost::shared_ptr<float> yRotationMatrix;
-    boost::shared_ptr<float> zRotationMatrix;
-
     /**
      * Rotation transformation for rotating around the X axis
      * @param angle The angle to rotate by, in radians.
+     * @return The X rotation matrix
      */
-    void constructXRotationMatrix(float angle);
+    glm::mat4x4* rotateX(float angle);
 
     /**
      * Rotation transformation for rotating around the Y axis
      * @param angle The angle to rotate by, in radians.
+	 * @return The Y rotation matrix
      */
-    void constructYRotationMatrix(float angle);
+    glm::mat4x4* rotateY(float angle);
 
     /**
      * Rotation transformation for rotating around the Z axis
      * @param angle The angle to rotate by, in radians.
+	 * @return The Z rotation matrix
      */
-    void constructZRotationMatrix(float angle);
-
-    // Angles on x,y and z by which to rotate
-    float xAngle;
-    float yAngle;
-    float zAngle;
+    glm::mat4x4* rotateZ(float angle);
 
 public:
 

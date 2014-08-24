@@ -75,14 +75,6 @@ Renderer::Renderer(boost::shared_ptr<Configuration> cfg,
     textures = new boost::unordered_map<string, GLuint>();
     vertexShaderPath = "";
     fragmentShaderPath = "";
-
-    xRotationMatrix = boost::shared_ptr<float>(new float[16]);
-    yRotationMatrix = boost::shared_ptr<float>(new float[16]);
-    zRotationMatrix = boost::shared_ptr<float>(new float[16]);
-
-    xAngle = 0.0f;
-    yAngle = 0.0f;
-    zAngle = 0.0f;
 }
 
 Renderer::~Renderer()
@@ -268,45 +260,10 @@ void Renderer::drawScene(boost::shared_ptr<vector<boost::shared_ptr<WorldObject>
     // Use the shaders prepared at initialisation
     glUseProgram(program);
 
-    // Rotate everything, just a bit. This will be removed later,
-    // once rendering has been finalised but, for now, it helps
-    // test things.
-    if (xAngle > 6.28)
-        xAngle = 0.0;
-    xAngle += 0.03f;
-
-    if (yAngle > 6.28)
-        yAngle = 0.0;
-    yAngle += 0.03f;
-
-    /*if (zAngle > 6.28)
-    		zAngle = 0.0;
-    	zAngle += 0.03;*/
-
-    GLuint xRotationMatrixUniform = glGetUniformLocation(program,
-                                    "xRotationMatrix");
-    GLuint yRotationMatrixUniform = glGetUniformLocation(program,
-                                    "yRotationMatrix");
-    GLuint zRotationMatrixUniform = glGetUniformLocation(program,
-                                    "zRotationMatrix");
-
-    constructXRotationMatrix(xAngle);
-    constructYRotationMatrix(yAngle);
-    constructZRotationMatrix(zAngle);
-
-    glUniformMatrix4fv(xRotationMatrixUniform, 1, GL_TRUE,
-                       xRotationMatrix.get());
-    glUniformMatrix4fv(yRotationMatrixUniform, 1, GL_TRUE,
-                       yRotationMatrix.get());
-    glUniformMatrix4fv(zRotationMatrixUniform, 1, GL_TRUE,
-                       zRotationMatrix.get());
-
     // Pick up each model in the "world" and render it.
     for (std::vector<boost::shared_ptr<WorldObject> >::iterator it =
                 scene->begin(); it != scene->end(); it++)
     {
-
-
         GLuint vao = 0;
         if (isOpenGL33Supported)
         {
@@ -422,6 +379,22 @@ void Renderer::drawScene(boost::shared_ptr<vector<boost::shared_ptr<WorldObject>
 
         }
 
+		// Rotation
+		
+		GLuint xRotationMatrixUniform = glGetUniformLocation(program,
+			"xRotationMatrix");
+		GLuint yRotationMatrixUniform = glGetUniformLocation(program,
+			"yRotationMatrix");
+		GLuint zRotationMatrixUniform = glGetUniformLocation(program,
+			"zRotationMatrix");
+
+		glUniformMatrix4fv(xRotationMatrixUniform, 1, GL_TRUE,
+			glm::value_ptr(*boost::scoped_ptr<glm::mat4x4>(rotateX(it->get()->getRotation()->x))));
+		glUniformMatrix4fv(yRotationMatrixUniform, 1, GL_TRUE,
+			glm::value_ptr(*boost::scoped_ptr<glm::mat4x4>(rotateY(it->get()->getRotation()->y))));
+		glUniformMatrix4fv(zRotationMatrixUniform, 1, GL_TRUE,
+			glm::value_ptr(*boost::scoped_ptr<glm::mat4x4>(rotateZ(it->get()->getRotation()->z))));
+
         // Throw an exception if there was an error in OpenGL, during
         // any of the above.
         GLenum errorCode = glGetError();
@@ -480,73 +453,32 @@ void Renderer::drawScene(boost::shared_ptr<vector<boost::shared_ptr<WorldObject>
     SDL_GL_SwapBuffers();
 }
 
-void Renderer::constructXRotationMatrix(float angle)
+glm::mat4x4* Renderer::rotateX(float angle)
 {
-    xRotationMatrix.get()[0] = 1;
-    xRotationMatrix.get()[1] = 0;
-    xRotationMatrix.get()[2] = 0;
-    xRotationMatrix.get()[3] = 0;
-
-    xRotationMatrix.get()[4] = 0;
-    xRotationMatrix.get()[5] = glm::cos(angle);
-    xRotationMatrix.get()[6] = -glm::sin(angle);
-    xRotationMatrix.get()[7] = 0;
-
-    xRotationMatrix.get()[8] = 0;
-    xRotationMatrix.get()[9] = glm::sin(angle);
-    xRotationMatrix.get()[10] = glm::cos(angle);
-    xRotationMatrix.get()[11] = 0;
-
-    xRotationMatrix.get()[12] = 0;
-    xRotationMatrix.get()[13] = 0;
-    xRotationMatrix.get()[14] = 0;
-    xRotationMatrix.get()[15] = 1.0f;
+	return new glm::mat4x4(1.0f, 0.0f, 0.0f, 0.0f,
+							0.0f, glm::cos(angle), -glm::sin(angle), 0.0f,
+							0.0f, glm::sin(angle), glm::cos(angle), 0.0f,
+							0.0f, 0.0f, 0.0f, 1.0f
+							);
 }
 
-void Renderer::constructYRotationMatrix(float angle)
+glm::mat4x4* Renderer::rotateY(float angle)
 {
-    yRotationMatrix.get()[0] = glm::cos(angle);
-    yRotationMatrix.get()[1] = 0;
-    yRotationMatrix.get()[2] = glm::sin(angle);
-    yRotationMatrix.get()[3] = 0;
-
-    yRotationMatrix.get()[4] = 0;
-    yRotationMatrix.get()[5] = 1;
-    yRotationMatrix.get()[6] = 0;
-    yRotationMatrix.get()[7] = 0;
-
-    yRotationMatrix.get()[8] = -glm::sin(angle);
-    yRotationMatrix.get()[9] = 0;
-    yRotationMatrix.get()[10] = glm::cos(angle);
-    yRotationMatrix.get()[11] = 0;
-
-    yRotationMatrix.get()[12] = 0;
-    yRotationMatrix.get()[13] = 0;
-    yRotationMatrix.get()[14] = 0;
-    yRotationMatrix.get()[15] = 1.0f;
+	return new glm::mat4x4(glm::cos(angle), 0.0f, glm::sin(angle), 0.0f,
+							0.0f, 1.0f, 0.0f, 0.0f,
+							-glm::sin(angle), 0.0f, glm::cos(angle), 0.0f,
+							0.0f, 0.0f, 0.0f, 1.0f
+							);
+    
 }
 
-void Renderer::constructZRotationMatrix(float angle)
+glm::mat4x4* Renderer::rotateZ(float angle)
 {
-    zRotationMatrix.get()[0] = glm::cos(angle);
-    zRotationMatrix.get()[1] = -glm::sin(angle);
-    zRotationMatrix.get()[2] = 0;
-    zRotationMatrix.get()[3] = 0;
-
-    zRotationMatrix.get()[4] = glm::sin(angle);
-    zRotationMatrix.get()[5] = glm::cos(angle);
-    zRotationMatrix.get()[6] = 0;
-    zRotationMatrix.get()[7] = 0;
-
-    zRotationMatrix.get()[8] = 0;
-    zRotationMatrix.get()[9] = 0;
-    zRotationMatrix.get()[10] = 1.0f;
-    zRotationMatrix.get()[11] = 0;
-
-    zRotationMatrix.get()[12] = 0;
-    zRotationMatrix.get()[13] = 0;
-    zRotationMatrix.get()[14] = 0;
-    zRotationMatrix.get()[15] = 1.0f;
+	return new glm::mat4x4(glm::cos(angle), -glm::sin(angle), 0.0f,  0.0f,
+							glm::sin(angle), glm::cos(angle), 0.0f, 0.0f,
+							0.0f, 0.0f, 1.0f, 0.0f,
+							0.0f, 0.0f, 0.0f, 1.0f
+							);
 }
 
 } // AvoidTheBug3D

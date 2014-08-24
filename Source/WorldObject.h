@@ -33,7 +33,7 @@ private:
     string name;
     boost::shared_ptr<glm::vec3> colour;
     boost::shared_ptr<glm::vec3> location;
-    boost::shared_ptr<glm::vec3> orientation;
+    boost::shared_ptr<glm::vec3> rotation;
 
     void initPropVectors();
 
@@ -115,18 +115,18 @@ public:
     void setLocation(const float &x, const float &y, const float &z);
 
     /**
-     * Get the object's orientation
+     * Get the object's rotation
      * @return
      */
-     const boost::shared_ptr<glm::vec3>& getOrientation() const;
+     const boost::shared_ptr<glm::vec3>& getRotation() const;
 
     /**
-     * Set the object's orientation
-     * @param x The orientation's x coordinate
-     * @param y The orientation's y coordinate
-     * @param z The orientation's z coordinate
+     * Set the object's rotation
+     * @param x The orientation's x rotation
+     * @param y The orientation's y rotation
+     * @param z The orientation's z rotation
      */
-    void setOrientation(const float &x, const float &y, const float &z);
+    void setRotation(const float &x, const float &y, const float &z);
 
 };
 

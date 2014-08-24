@@ -19,6 +19,8 @@ const GLuint frameRate = 60;
 
 int main(int argc, char** argv) {
 
+	float rotation = 0.0f;
+
 	boost::shared_ptr<GameLog> log(new GameLog(cout));
 
 	boost::shared_ptr<Configuration> cfg(new Configuration(log));
@@ -72,6 +74,14 @@ int main(int argc, char** argv) {
 			ticks = SDL_GetTicks();
 			if (ticks - prevTicks > ticksInterval) {
 				prevTicks = ticks;
+
+				if (rotation > 6.28)
+					rotation = 0.0;
+				rotation += 0.03f;
+
+				object1->setRotation(rotation, rotation, rotation);
+				object->setRotation(-rotation, rotation, rotation);
+
 				renderer->drawScene(scene);
 			}
 		}
