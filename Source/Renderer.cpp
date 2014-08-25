@@ -41,20 +41,10 @@ GLuint Renderer::compileShader(string shaderSourceFile, GLenum shaderType)
     glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
     if (status == GL_FALSE)
     {
-        GLint infoLogLength;
-        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
-
-        GLchar *infoLog = new GLchar[infoLogLength + 1];
-
-        glGetShaderInfoLog(shader, infoLogLength, NULL, infoLog);
-
-        string infoLogStr = infoLog;
-
-        delete[] infoLog;
 
         throw GameException(
             "Failed to compile shader:\n" + shaderSource + "\nInfo: "
-            + infoLogStr);
+            + this->getProgramInfoLog(program));
     }
     else
     {
@@ -72,9 +62,65 @@ Renderer::Renderer(boost::shared_ptr<Configuration> cfg,
     isOpenGL33Supported = false;
     screen = NULL;
     program = 0;
+    textProgram = 0;
     textures = new boost::unordered_map<string, GLuint>();
-    vertexShaderPath = "";
-    fragmentShaderPath = "";
+    font = NULL;
+}
+
+void Renderer::renderText(string text)
+{
+
+    SDL_Color colour = {255, 255, 0};
+
+    SDL_Surface *textSurface = TTF_RenderText_Blended(const_cast<TTF_Font*>(font),
+                               text.c_str(), colour);
+
+    GLuint texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+//    glTexImage2D(texture, 0, isOpenGL33Supported ? GL_RGBA32F : GL_RGBA,
+//                 textSurface->w, textSurface->h, 0, GL_RGBA, GL_FLOAT,
+//                 textSurface->pixels);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    float boxVerts[16] =
+    {
+        -1.0f, 0.0f, 0.0f, 1.0f,
+        1.0f, 0.0f, 0.0f, 1.0f,
+        1.0f, 1.0f, 0.0f, 1.0f,
+        -1.0f, 1.0f, 0.0f, 1.0f
+    };
+
+    glUseProgram(textProgram);
+
+    glEnableVertexAttribArray(0);
+
+    GLuint boxBuffer = 0;
+    glGenBuffers(1, &boxBuffer);
+
+    glBindBuffer(GL_ARRAY_BUFFER, boxBuffer);
+    glBufferData(GL_ARRAY_BUFFER,
+                 sizeof(boxVerts),
+                 &boxVerts,
+                 GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    glDrawArrays(GL_QUADS, 0, 4);
+
+    glDeleteBuffers(1, &boxBuffer);
+
+    glDisableVertexAttribArray(0);
+    glDeleteTextures(1, &texture);
+
+    SDL_FreeSurface(textSurface);
+
+    GLenum errorCode = glGetError();
+    if (errorCode != GL_NO_ERROR)
+    {
+        LOGERROR("OpenGL error while rendering text");
+        throw GameException(string((char*)gluErrorString(errorCode)));
+    }
 }
 
 Renderer::~Renderer()
@@ -89,6 +135,20 @@ Renderer::~Renderer()
     }
     delete textures;
 
+    glUseProgram(0);
+
+    if(textProgram != 0)
+    {
+        glDeleteProgram(textProgram);
+    }
+
+    if(program != 0)
+    {
+        glDeleteProgram(program);
+    }
+
+    TTF_CloseFont(font);
+    TTF_Quit();
 
     SDL_FreeSurface(screen);
     SDL_Quit();
@@ -112,7 +172,8 @@ void Renderer::initSDL(int width, int height, bool fullScreen)
 
     Uint32 flags = SDL_OPENGL;
 
-    if (fullScreen) {
+    if (fullScreen)
+    {
         flags = flags | SDL_FULLSCREEN;
 
     }
@@ -125,6 +186,38 @@ void Renderer::initSDL(int width, int height, bool fullScreen)
         LOGERROR(SDL_GetError());
         throw GameException("Unable to set video");
     }
+
+    if(TTF_Init()==-1)
+    {
+        LOGERROR(TTF_GetError());
+        throw GameException("Unable to initialise font system");
+    }
+
+    font = TTF_OpenFont((cfg->getHomeDirectory() +
+                         "/Game/Data/Fonts/CrusoeText-Regular.ttf").c_str(), 16);
+
+    if (!font)
+    {
+        LOGERROR(TTF_GetError());
+        throw GameException("Failed to load font");
+    }
+
+}
+
+string Renderer::getProgramInfoLog(GLuint linkedProgram)
+{
+
+    GLint infoLogLength;
+    glGetProgramiv(linkedProgram, GL_INFO_LOG_LENGTH, &infoLogLength);
+
+    GLchar *infoLog = new GLchar[infoLogLength + 1];
+    glGetProgramInfoLog(linkedProgram, infoLogLength, NULL, infoLog);
+    string infoLogStr = infoLog;
+
+    delete[] infoLog;
+
+    return infoLogStr;
+
 }
 
 void Renderer::detectOpenGLVersion()
@@ -167,6 +260,11 @@ void Renderer::init(int width, int height, bool fullScreen)
 
     this->detectOpenGLVersion();
 
+    string vertexShaderPath;
+    string fragmentShaderPath;
+    string textVertexShaderPath;
+    string textFragmentShaderPath;
+
     if (isOpenGL33Supported)
     {
         vertexShaderPath = "/Game/Shaders/OpenGL33/perspectiveMatrixLightedShader.vert";
@@ -178,6 +276,9 @@ void Renderer::init(int width, int height, bool fullScreen)
         vertexShaderPath =
             "/Game/Shaders/OpenGL21/perspectiveMatrixLightedShader.vert";
         fragmentShaderPath = "/Game/Shaders/OpenGL21/textureShader.frag";
+        textVertexShaderPath =
+            "/Game/Shaders/OpenGL21/textShader.vert";
+        textFragmentShaderPath = "/Game/Shaders/OpenGL21/textShader.frag";
     }
 
     glViewport(0, 0, (GLsizei) width, (GLsizei) height);
@@ -202,24 +303,16 @@ void Renderer::init(int width, int height, bool fullScreen)
     glGetProgramiv(program, GL_LINK_STATUS, &status);
     if (status == GL_FALSE)
     {
-        GLint infoLogLength;
-        glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLogLength);
-
-        GLchar *infoLog = new GLchar[infoLogLength + 1];
-        glGetProgramInfoLog(program, infoLogLength, NULL, infoLog);
-        string infoLogStr = infoLog;
-
-        delete[] infoLog;
-        throw GameException("Failed to link program:\n" + infoLogStr);
+        throw GameException("Failed to link program:\n" + this->getProgramInfoLog(program));
     }
     else
     {
-        LOGINFO("Linked program successfully");
+        LOGINFO("Linked main rendering program successfully");
 
-		glUseProgram(program);
+        glUseProgram(program);
 
         // Perspective
-        
+
         GLuint perspectiveMatrixUniform = glGetUniformLocation(program,
                                           "perspectiveMatrix");
 
@@ -247,6 +340,30 @@ void Renderer::init(int width, int height, bool fullScreen)
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClearDepth(10.0f);
+
+    // Program (with shaders) for rendering text
+
+    GLuint textVertexShader = compileShader(textVertexShaderPath,
+                                            GL_VERTEX_SHADER);
+    GLuint textFragmentShader = compileShader(textFragmentShaderPath,
+                                GL_FRAGMENT_SHADER);
+
+    textProgram = glCreateProgram();
+    glAttachShader(textProgram, textVertexShader);
+    glAttachShader(textProgram, textFragmentShader);
+
+    glLinkProgram(textProgram);
+
+    glGetProgramiv(textProgram, GL_LINK_STATUS, &status);
+    if (status == GL_FALSE)
+    {
+        throw GameException("Failed to link program:\n" + this->getProgramInfoLog(textProgram));
+    }
+    else
+    {
+        LOGINFO("Linked text rendering program successfully");
+    }
+    glUseProgram(0);
 }
 
 void Renderer::drawScene(boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene)
@@ -377,30 +494,31 @@ void Renderer::drawScene(boost::shared_ptr<vector<boost::shared_ptr<WorldObject>
 
         }
 
-		// Rotation
-		
-		GLuint xRotationMatrixUniform = glGetUniformLocation(program,
-			"xRotationMatrix");
-		GLuint yRotationMatrixUniform = glGetUniformLocation(program,
-			"yRotationMatrix");
-		GLuint zRotationMatrixUniform = glGetUniformLocation(program,
-			"zRotationMatrix");
+        // Rotation
 
-		glUniformMatrix4fv(xRotationMatrixUniform, 1, GL_TRUE,
-			glm::value_ptr(*boost::scoped_ptr<glm::mat4x4>(rotateX(it->get()->getRotation()->x))));
-		glUniformMatrix4fv(yRotationMatrixUniform, 1, GL_TRUE,
-			glm::value_ptr(*boost::scoped_ptr<glm::mat4x4>(rotateY(it->get()->getRotation()->y))));
-		glUniformMatrix4fv(zRotationMatrixUniform, 1, GL_TRUE,
-			glm::value_ptr(*boost::scoped_ptr<glm::mat4x4>(rotateZ(it->get()->getRotation()->z))));
+        GLuint xRotationMatrixUniform = glGetUniformLocation(program,
+                                        "xRotationMatrix");
+        GLuint yRotationMatrixUniform = glGetUniformLocation(program,
+                                        "yRotationMatrix");
+        GLuint zRotationMatrixUniform = glGetUniformLocation(program,
+                                        "zRotationMatrix");
 
-		GLuint offsetUniform = glGetUniformLocation(program, "offset");
-		glUniform3fv(offsetUniform, 1, glm::value_ptr(*it->get()->getOffset()));
+        glUniformMatrix4fv(xRotationMatrixUniform, 1, GL_TRUE,
+                           glm::value_ptr(*boost::scoped_ptr<glm::mat4x4>(rotateX(it->get()->getRotation()->x))));
+        glUniformMatrix4fv(yRotationMatrixUniform, 1, GL_TRUE,
+                           glm::value_ptr(*boost::scoped_ptr<glm::mat4x4>(rotateY(it->get()->getRotation()->y))));
+        glUniformMatrix4fv(zRotationMatrixUniform, 1, GL_TRUE,
+                           glm::value_ptr(*boost::scoped_ptr<glm::mat4x4>(rotateZ(it->get()->getRotation()->z))));
+
+        GLuint offsetUniform = glGetUniformLocation(program, "offset");
+        glUniform3fv(offsetUniform, 1, glm::value_ptr(*it->get()->getOffset()));
 
         // Throw an exception if there was an error in OpenGL, during
         // any of the above.
         GLenum errorCode = glGetError();
         if (errorCode != GL_NO_ERROR)
         {
+            LOGERROR("OpenGL error while rendering scene");
             throw GameException(string((char*)gluErrorString(errorCode)));
         }
 
@@ -456,30 +574,30 @@ void Renderer::drawScene(boost::shared_ptr<vector<boost::shared_ptr<WorldObject>
 
 glm::mat4x4* Renderer::rotateX(float angle)
 {
-	return new glm::mat4x4(1.0f, 0.0f, 0.0f, 0.0f,
-							0.0f, glm::cos(angle), -glm::sin(angle), 0.0f,
-							0.0f, glm::sin(angle), glm::cos(angle), 0.0f,
-							0.0f, 0.0f, 0.0f, 1.0f
-							);
+    return new glm::mat4x4(1.0f, 0.0f, 0.0f, 0.0f,
+                           0.0f, glm::cos(angle), -glm::sin(angle), 0.0f,
+                           0.0f, glm::sin(angle), glm::cos(angle), 0.0f,
+                           0.0f, 0.0f, 0.0f, 1.0f
+                          );
 }
 
 glm::mat4x4* Renderer::rotateY(float angle)
 {
-	return new glm::mat4x4(glm::cos(angle), 0.0f, glm::sin(angle), 0.0f,
-							0.0f, 1.0f, 0.0f, 0.0f,
-							-glm::sin(angle), 0.0f, glm::cos(angle), 0.0f,
-							0.0f, 0.0f, 0.0f, 1.0f
-							);
-    
+    return new glm::mat4x4(glm::cos(angle), 0.0f, glm::sin(angle), 0.0f,
+                           0.0f, 1.0f, 0.0f, 0.0f,
+                           -glm::sin(angle), 0.0f, glm::cos(angle), 0.0f,
+                           0.0f, 0.0f, 0.0f, 1.0f
+                          );
+
 }
 
 glm::mat4x4* Renderer::rotateZ(float angle)
 {
-	return new glm::mat4x4(glm::cos(angle), -glm::sin(angle), 0.0f,  0.0f,
-							glm::sin(angle), glm::cos(angle), 0.0f, 0.0f,
-							0.0f, 0.0f, 1.0f, 0.0f,
-							0.0f, 0.0f, 0.0f, 1.0f
-							);
+    return new glm::mat4x4(glm::cos(angle), -glm::sin(angle), 0.0f,  0.0f,
+                           glm::sin(angle), glm::cos(angle), 0.0f, 0.0f,
+                           0.0f, 0.0f, 1.0f, 0.0f,
+                           0.0f, 0.0f, 0.0f, 1.0f
+                          );
 }
 
 } // AvoidTheBug3D

@@ -85,6 +85,7 @@ int main(int argc, char** argv) {
 				object->setRotation(-rotation, rotation, rotation);
 
 				renderer->drawScene(scene);
+				renderer->renderText("Hello");
 			}
 		}
 

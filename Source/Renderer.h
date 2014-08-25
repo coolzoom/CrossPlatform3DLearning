@@ -19,6 +19,7 @@
 // glew.
 #include "SDL_opengl.h"
 #include "SDL.h"
+#include "SDL_ttf.h"
 #endif //SDLANDOPENGL
 
 #include <boost/smart_ptr.hpp>
@@ -41,14 +42,15 @@ private:
     boost::shared_ptr<Configuration> cfg;
     boost::shared_ptr<GameLog> log;
 
+    TTF_Font *font;
+
     SDL_Surface *screen;
 
     GLuint program;
 
-    bool isOpenGL33Supported;
+    GLuint textProgram;
 
-    string vertexShaderPath;
-    string fragmentShaderPath;
+    bool isOpenGL33Supported;
 
     /**
      * Load a shader's source code from a file into a string
@@ -69,6 +71,11 @@ private:
      * Initialise SDL
      */
     void initSDL(int width, int height, bool fullScreen);
+
+    /**
+     * Retrieve the information of what went wrong when linking a shader program
+     */
+    string getProgramInfoLog(GLuint linkedProgram);
 
     /**
      * Detect if OpenGL 3.3 is supported. If not, fall back to OpenGL 2.1.
@@ -125,6 +132,11 @@ public:
      */
     void drawScene(
         boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene);
+
+    /**
+     * Render some text on the screen
+     */
+    void renderText(string text);
 
     /**
      * Destructor

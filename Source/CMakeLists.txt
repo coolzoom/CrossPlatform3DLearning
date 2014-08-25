@@ -22,6 +22,13 @@ IF(NOT SDL_FOUND)
 ENDIF(NOT SDL_FOUND)
 INCLUDE_DIRECTORIES(${SDL_INCLUDE_DIR})
 
+# SDL ttf
+FIND_PACKAGE(SDL_ttf REQUIRED)
+IF(NOT SDL_TTF_FOUND)
+	MESSAGE(FATAL ERROR "SDL_ttf not found!")
+ENDIF(NOT SDL_TTF_FOUND)
+INCLUDE_DIRECTORIES(${SDL_TTF_INCLUDE_DIRS})
+
 # OpenGL
 FIND_PACKAGE(OpenGL REQUIRED)
 INCLUDE_DIRECTORIES(${OpenGL_INCLUDE_DIRS})
@@ -54,22 +61,23 @@ ADD_DEFINITIONS(${PNG_DEFINITIONS})
 
 # Create the executable
 ADD_EXECUTABLE(game main.cpp GameLog.cpp Model.cpp GameLogic.cpp
- WorldObject.cpp Character.cpp 
- PlayerView.cpp Renderer.cpp 
+ WorldObject.cpp Character.cpp
+ PlayerView.cpp Renderer.cpp
  GameException.cpp Configuration.cpp Image.cpp
  Character.h GameLog.h Model.h WorldObject.h
- Configuration.h GameLogic.h PlayerView.h 
- GameException.h Image.h Renderer.h 
+ Configuration.h GameLogic.h PlayerView.h
+ GameException.h Image.h Renderer.h
  )
 
 # Link to the required libraries
-TARGET_LINK_LIBRARIES(game 
+TARGET_LINK_LIBRARIES(game
 				${OPENGL_LIBRARIES}
 				${GLEW_LIBRARIES}
 				${SDL_LIBRARY}
+				${SDL_TTF_LIBRARIES}
 				${Boost_FILESYSTEM_LIBRARIES}
 				${Boost_SYSTEM_LIBRARIES}
-				${PNG_LIBRARIES}) 
+				${PNG_LIBRARIES})
 
 # Only when building on Windows, also link to the Boost date_time library (see above)
 if (WIN32)
