@@ -86,6 +86,7 @@ int main(int argc, char** argv) {
 
 				renderer->drawScene(scene);
 				renderer->renderText("Hello");
+				renderer->swapBuffers();
 			}
 		}
 

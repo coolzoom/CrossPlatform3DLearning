@@ -70,7 +70,7 @@ Renderer::Renderer(boost::shared_ptr<Configuration> cfg,
 void Renderer::renderText(string text)
 {
 
-    SDL_Color colour = {255, 255, 0};
+    SDL_Color colour = {255, 255, 0, 255};
 
     SDL_Surface *textSurface = TTF_RenderText_Blended(const_cast<TTF_Font*>(font),
                                text.c_str(), colour);
@@ -592,7 +592,9 @@ void Renderer::drawScene(boost::shared_ptr<vector<boost::shared_ptr<WorldObject>
 
     glUseProgram(0);
 
-    // Swap buffers to display, since we're double buffered.
+}
+
+void Renderer::swapBuffers() {
     SDL_GL_SwapBuffers();
 }
 

@@ -139,6 +139,12 @@ public:
     void renderText(string text);
 
     /**
+     * This is a double buffered system and this commands swaps
+     * the buffers
+     */
+    void swapBuffers();
+
+    /**
      * Destructor
      */
     ~Renderer();
