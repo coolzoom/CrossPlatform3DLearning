@@ -79,18 +79,18 @@ void Renderer::renderText(string text)
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
 
-//    glTexImage2D(texture, 0, isOpenGL33Supported ? GL_RGBA32F : GL_RGBA,
-//                 textSurface->w, textSurface->h, 0, GL_RGBA, GL_FLOAT,
-//                 textSurface->pixels);
+    glTexImage2D(GL_TEXTURE_2D, 0,  GL_RGBA,
+                 textSurface->w, textSurface->h, 0, GL_BGRA, GL_UNSIGNED_BYTE,
+                 textSurface->pixels);
 
-    glBindTexture(GL_TEXTURE_2D, 0);
+
 
     float boxVerts[16] =
     {
-        -1.0f, 0.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 0.0f, 1.0f,
-        1.0f, 1.0f, 0.0f, 1.0f,
-        -1.0f, 1.0f, 0.0f, 1.0f
+        0.5f, 0.0f, -0.5f, 1.0f,
+        -0.5f, 0.0f, -0.5f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 1.0f,
+        0.5f, -0.5f, -0.5f, 1.0f
     };
 
     glUseProgram(textProgram);
@@ -106,11 +106,35 @@ void Renderer::renderText(string text)
                  &boxVerts,
                  GL_STATIC_DRAW);
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+    float textureCoords[8] = {
+    0.0f, 0.0f,
+    1.0f, 0.0f,
+    1.0f, 1.0f,
+    0.0f, 1.0f
+    };
+
+    GLuint coordBuffer = 0;
+
+    glGenBuffers(1,&coordBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, coordBuffer);
+    glBufferData(GL_ARRAY_BUFFER,
+        sizeof(textureCoords),
+        &textureCoords,
+        GL_STATIC_DRAW);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+
     glDrawArrays(GL_QUADS, 0, 4);
 
-    glDeleteBuffers(1, &boxBuffer);
 
+    glDeleteBuffers(1, &boxBuffer);
+    glDeleteBuffers(1, &coordBuffer);
+
+    glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(0);
+    glBindTexture(GL_TEXTURE_2D, 0);
     glDeleteTextures(1, &texture);
 
     SDL_FreeSurface(textSurface);

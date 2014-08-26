@@ -45,7 +45,7 @@ int main(int argc, char** argv) {
 		scene->push_back(object1);
 
         boost::shared_ptr<Renderer> renderer(new Renderer(cfg, log));
-		renderer->init(640, 480, true);
+		renderer->init(640, 480, false);
 
 		// program main loop
 		bool done = false;
