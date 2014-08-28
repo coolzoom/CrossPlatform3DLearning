@@ -70,10 +70,28 @@ Renderer::Renderer(boost::shared_ptr<Configuration> cfg,
 void Renderer::renderText(string text)
 {
 
-    SDL_Color colour = {255, 255, 0, 255};
+    SDL_Color colour = {100, 255, 0, 255};
 
     SDL_Surface *textSurface = TTF_RenderText_Blended(const_cast<TTF_Font*>(font),
                                text.c_str(), colour);
+    int numPixels = textSurface->h * textSurface->w;
+
+    Uint32 *pix = static_cast<Uint32*>(textSurface->pixels);
+
+    for (int pidx = 0; pidx < numPixels; ++pidx)
+    {
+
+        Uint32 r = pix[pidx] & textSurface->format->Rmask;
+        Uint32 g = pix[pidx] & textSurface->format->Gmask;
+        Uint32 b = pix[pidx] & textSurface->format->Bmask;
+
+        r = 0xFF * r / textSurface->format->Rmask;
+        g = 0xFF * g / textSurface->format->Gmask;
+        b = 0xFF * b / textSurface->format->Bmask;
+
+        if (r == 0)
+        cout << r << " / " << g << " / " << b << endl;
+    }
 
     GLuint texture;
     glGenTextures(1, &texture);
@@ -107,11 +125,12 @@ void Renderer::renderText(string text)
                  GL_STATIC_DRAW);
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
-    float textureCoords[8] = {
-    0.0f, 0.0f,
-    1.0f, 0.0f,
-    1.0f, 1.0f,
-    0.0f, 1.0f
+    float textureCoords[8] =
+    {
+        0.0f, 0.0f,
+        1.0f, 0.0f,
+        1.0f, 1.0f,
+        0.0f, 1.0f
     };
 
     GLuint coordBuffer = 0;
@@ -119,9 +138,9 @@ void Renderer::renderText(string text)
     glGenBuffers(1,&coordBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, coordBuffer);
     glBufferData(GL_ARRAY_BUFFER,
-        sizeof(textureCoords),
-        &textureCoords,
-        GL_STATIC_DRAW);
+                 sizeof(textureCoords),
+                 &textureCoords,
+                 GL_STATIC_DRAW);
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
@@ -594,7 +613,8 @@ void Renderer::drawScene(boost::shared_ptr<vector<boost::shared_ptr<WorldObject>
 
 }
 
-void Renderer::swapBuffers() {
+void Renderer::swapBuffers()
+{
     SDL_GL_SwapBuffers();
 }
 

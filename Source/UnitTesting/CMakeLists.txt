@@ -2,7 +2,7 @@
 #
 # Created on: Aug 10, 2013
 #     Author: Dimitri Kourkoulis
- 
+
 CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
 PROJECT(unittest)
 
@@ -21,6 +21,13 @@ IF(NOT SDL_FOUND)
 	MESSAGE(FATAL ERROR "SDL not found!")
 ENDIF(NOT SDL_FOUND)
 INCLUDE_DIRECTORIES(${SDL_INCLUDE_DIR})
+
+# SDL ttf
+FIND_PACKAGE(SDL_ttf REQUIRED)
+IF(NOT SDL_TTF_FOUND)
+	MESSAGE(FATAL ERROR "SDL_ttf not found!")
+ENDIF(NOT SDL_TTF_FOUND)
+INCLUDE_DIRECTORIES(${SDL_TTF_INCLUDE_DIRS})
 
 # OpenGL
 FIND_PACKAGE(OpenGL REQUIRED)
@@ -54,13 +61,13 @@ ADD_DEFINITIONS(${PNG_DEFINITIONS})
 
 # Create the executable
 ADD_EXECUTABLE(unittest globalFixture globals.h mainTest.cpp gameLogTest.cpp gameLogDebugTest.cpp
- modelTest.cpp rendererTest.cpp imageTest.cpp configurationTest.cpp 
-  ../Model.cpp ../GameLogic.cpp ../WorldObject.cpp ../Character.cpp  
- ../PlayerView.cpp ../GameLog.cpp ../Configuration.cpp ../Renderer.cpp 
+ modelTest.cpp rendererTest.cpp imageTest.cpp configurationTest.cpp
+  ../Model.cpp ../GameLogic.cpp ../WorldObject.cpp ../Character.cpp
+ ../PlayerView.cpp ../GameLog.cpp ../Configuration.cpp ../Renderer.cpp
  ../GameException.cpp ../Image.cpp
  ../Character.h ../GameLog.h ../Model.h ../WorldObject.h
  ../Configuration.h ../GameLogic.h ../PlayerView.h
- ../GameException.h ../Image.h ../Renderer.h 
+ ../GameException.h ../Image.h ../Renderer.h
  )
 
 # Link to the required libraries
@@ -68,6 +75,7 @@ TARGET_LINK_LIBRARIES(unittest
 				${OPENGL_LIBRARIES}
 				${GLEW_LIBRARIES}
 				${SDL_LIBRARY}
+				${SDL_TTF_LIBRARIES}
 				${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 				${Boost_FILESYSTEM_LIBRARIES}
 				${Boost_SYSTEM_LIBRARIES}
