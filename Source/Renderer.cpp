@@ -72,10 +72,12 @@ void Renderer::renderText(string text)
 {
 
     SDL_Color colour = {100, 255, 0, 255};
-
-    SDL_Surface *textSurface = TTF_RenderText_Blended(const_cast<TTF_Font*>(font),
+    SDL_Surface *textSurface = TTF_RenderText_Blended(font,
                                text.c_str(), colour);
     int numPixels = textSurface->h * textSurface->w;
+
+    //cout << "Font texture height " << textSurface->h << " width " << textSurface->w << endl;
+    //cout << "Bits per pixel " << textSurface->format->BitsPerPixel << endl;
 
     Uint32 *pix = static_cast<Uint32*>(textSurface->pixels);
 
@@ -108,7 +110,7 @@ void Renderer::renderText(string text)
         memcpy(&texturef[pidx * 4], &ttuple, sizeof(ttuple));
 
         //if (a > 0)
-          //cout << ttuple[0] << " / " << ttuple[1] << " / " << ttuple[2] << " / " << ttuple[3] << endl;
+       //   cout << pidx << ": "<< ttuple[0] << " / " << ttuple[1] << " / " << ttuple[2] << " / " << ttuple[3] << endl;
     }
 
     GLuint texture;
