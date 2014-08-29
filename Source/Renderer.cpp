@@ -92,27 +92,31 @@ void Renderer::renderText(string text)
         r = 0xFF * r / textSurface->format->Rmask;
         g = 0xFF * g / textSurface->format->Gmask;
         b = 0xFF * b / textSurface->format->Bmask;
-//        a = 0xFF * a / textSurface->format->Amask;
+        a = 0xFF * a / textSurface->format->Amask;
 
         float ttuple[4] = {boost::numeric_cast<float, Uint32>(r),
                            boost::numeric_cast<float, Uint32>(g),
                            boost::numeric_cast<float, Uint32>(b),
-                           1.0f
+                           boost::numeric_cast<float, Uint32>(a),
                           };
 
         ttuple[0]= floorf(100.0f * (ttuple[0] / 255.0f) + 0.5f) / 100.0f;
         ttuple[1]= floorf(100.0f * (ttuple[1] / 255.0f) + 0.5f) / 100.0f;
         ttuple[2]= floorf(100.0f * (ttuple[2] / 255.0f) + 0.5f) / 100.0f;
+        ttuple[3]= floorf(100.0f * (ttuple[3] / 255.0f) + 0.5f) / 100.0f;
 
         memcpy(&texturef[pidx * 4], &ttuple, sizeof(ttuple));
 
         //if (a > 0)
-          //  cout << ttuple[0] << " / " << ttuple[1] << " / " << ttuple[2] << " / " << ttuple[3] << endl;
+          //cout << ttuple[0] << " / " << ttuple[1] << " / " << ttuple[2] << " / " << ttuple[3] << endl;
     }
 
     GLuint texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
 
     glTexImage2D(GL_TEXTURE_2D, 0,  GL_RGBA,
                  textSurface->w, textSurface->h, 0, GL_RGBA, GL_FLOAT,
@@ -252,13 +256,20 @@ void Renderer::initSDL(int width, int height, bool fullScreen)
         throw GameException("Unable to initialise font system");
     }
 
-    font = TTF_OpenFont((cfg->getHomeDirectory() +
-                         "/Game/Data/Fonts/CrusoeText-Regular.ttf").c_str(), 16);
+    string fontPath = cfg->getHomeDirectory() +
+                         "/Game/Data/Fonts/CrusoeText-Regular.ttf";
+    LOGINFO("Loading font from " + fontPath);
+
+    font = TTF_OpenFont(fontPath.c_str(), 8);
 
     if (!font)
     {
         LOGERROR(TTF_GetError());
         throw GameException("Failed to load font");
+    }
+    else
+    {
+        LOGINFO("TTF font loaded successfully");
     }
 
 }
