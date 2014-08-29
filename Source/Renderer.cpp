@@ -4,6 +4,7 @@
 #include <boost/foreach.hpp>
 #include <glm/glm.hpp>
 #include <boost/unordered_map.hpp>
+#include <boost/numeric/conversion/cast.hpp>
 
 using namespace boost;
 
@@ -78,19 +79,35 @@ void Renderer::renderText(string text)
 
     Uint32 *pix = static_cast<Uint32*>(textSurface->pixels);
 
+    float *texturef = new float[numPixels * 4];
+
     for (int pidx = 0; pidx < numPixels; ++pidx)
     {
 
         Uint32 r = pix[pidx] & textSurface->format->Rmask;
         Uint32 g = pix[pidx] & textSurface->format->Gmask;
         Uint32 b = pix[pidx] & textSurface->format->Bmask;
+        Uint32 a = pix[pidx] & textSurface->format->Amask;
 
         r = 0xFF * r / textSurface->format->Rmask;
         g = 0xFF * g / textSurface->format->Gmask;
         b = 0xFF * b / textSurface->format->Bmask;
+//        a = 0xFF * a / textSurface->format->Amask;
 
-        if (r == 0)
-        cout << r << " / " << g << " / " << b << endl;
+        float ttuple[4] = {boost::numeric_cast<float, Uint32>(r),
+                           boost::numeric_cast<float, Uint32>(g),
+                           boost::numeric_cast<float, Uint32>(b),
+                           1.0f
+                          };
+
+        ttuple[0]= floorf(100.0f * (ttuple[0] / 255.0f) + 0.5f) / 100.0f;
+        ttuple[1]= floorf(100.0f * (ttuple[1] / 255.0f) + 0.5f) / 100.0f;
+        ttuple[2]= floorf(100.0f * (ttuple[2] / 255.0f) + 0.5f) / 100.0f;
+
+        memcpy(&texturef[pidx * 4], &ttuple, sizeof(ttuple));
+
+        //if (a > 0)
+          //  cout << ttuple[0] << " / " << ttuple[1] << " / " << ttuple[2] << " / " << ttuple[3] << endl;
     }
 
     GLuint texture;
@@ -98,10 +115,8 @@ void Renderer::renderText(string text)
     glBindTexture(GL_TEXTURE_2D, texture);
 
     glTexImage2D(GL_TEXTURE_2D, 0,  GL_RGBA,
-                 textSurface->w, textSurface->h, 0, GL_BGRA, GL_UNSIGNED_BYTE,
-                 textSurface->pixels);
-
-
+                 textSurface->w, textSurface->h, 0, GL_RGBA, GL_FLOAT,
+                 &texturef[0]);
 
     float boxVerts[16] =
     {
@@ -155,7 +170,8 @@ void Renderer::renderText(string text)
     glDisableVertexAttribArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
     glDeleteTextures(1, &texture);
-
+    delete[] texturef;
+    texturef = NULL;
     SDL_FreeSurface(textSurface);
 
     GLenum errorCode = glGetError();
