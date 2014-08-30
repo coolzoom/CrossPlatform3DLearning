@@ -341,6 +341,9 @@ void Renderer::init(int width, int height, bool fullScreen)
     {
         vertexShaderPath = "/Game/Shaders/OpenGL33/perspectiveMatrixLightedShader.vert";
         fragmentShaderPath = "/Game/Shaders/OpenGL33/textureShader.frag";
+		textVertexShaderPath =
+			"/Game/Shaders/OpenGL33/textShader.vert";
+		textFragmentShaderPath = "/Game/Shaders/OpenGL33/textShader.frag";
 
     }
     else

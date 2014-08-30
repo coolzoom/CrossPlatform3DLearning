@@ -72,6 +72,12 @@ Download SDL (http://www.libsdl.org - VC development libraries) and unzip it to
 a folder within C:\cmakerefs. I am using version 1.2.
 In the lib subdirectory of SDL, copy the contents of the 32 bit subdirectory one 
 level up.
+Download the SDL_ttf development package for Visual Studio
+(https://www.libsdl.org/projects/SDL_ttf/release-1.2.html). Unfortunately I
+could not get cmake to find this package just by copying it to cmakerefs.
+Maybe there is a way, but what worked for me, was to copy the files from the
+\include directory to the \include directory of the basic SDL package, and the
+files from the \lib\x86 directory to the \lib directory of SDL.
 Download GLEW for windows (http://glew.sourceforge.net/) and unzip it to a 
 folder within C:\cmakerefs. Then copy the library files from the
 lib\Release\Win32 directory of the unzipped archive to the lib
@@ -139,8 +145,8 @@ Also, right click on the unittest project and go to "Properties > Configuration
 Properties > C/C++ > Code Generation". Set "Enable C++ Exceptions" to "Yes with
 SEH Exceptions /EHa".
 In Windows you will probably need to copy the dlls of the libraries we are using 
-(SDL, Boost, GLEW, libpng (from the binaries package), zlib (from the binaries
-package) etc) to the output directory (Release or Debug), unless they 
+(glew32.dll, libfreetype-6.dll, libpng16.dll, SDL.dll, SDL_ttf.dll and
+zib1.dll - all 32-bit versions) to the output directory (Release or Debug), unless they 
 are already accessible in your system (e.g.  if they have been installed to the 
 System directory or if their directories have been included in the PATH 
 environment variable.) You will also need to add /NODEFAULTLIB:MSVCRT to each
