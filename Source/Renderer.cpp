@@ -71,7 +71,7 @@ Renderer::Renderer(boost::shared_ptr<Configuration> cfg,
 void Renderer::renderText(string text)
 {
 
-    SDL_Color colour = {100, 255, 0, 255};
+    SDL_Color colour = {255, 255, 255, 255};
     SDL_Surface *textSurface = TTF_RenderText_Blended(font,
                                text.c_str(), colour);
     int numPixels = textSurface->h * textSurface->w;
@@ -105,12 +105,12 @@ void Renderer::renderText(string text)
         ttuple[0]= floorf(100.0f * (ttuple[0] / 255.0f) + 0.5f) / 100.0f;
         ttuple[1]= floorf(100.0f * (ttuple[1] / 255.0f) + 0.5f) / 100.0f;
         ttuple[2]= floorf(100.0f * (ttuple[2] / 255.0f) + 0.5f) / 100.0f;
-        ttuple[3]= floorf(100.0f * (ttuple[3] / 255.0f) + 0.5f) / 100.0f;
+        // Not normalizing a. It is already 0 or 1.
 
         memcpy(&texturef[pidx * 4], &ttuple, sizeof(ttuple));
 
-        //if (a > 0)
-       //   cout << pidx << ": "<< ttuple[0] << " / " << ttuple[1] << " / " << ttuple[2] << " / " << ttuple[3] << endl;
+      /* if (a > 0)
+          cout << pidx << ": "<< ttuple[0] << " / " << ttuple[1] << " / " << ttuple[2] << " / " << ttuple[3] << endl;*/
     }
 
     GLuint texture;
@@ -262,7 +262,7 @@ void Renderer::initSDL(int width, int height, bool fullScreen)
                          "/Game/Data/Fonts/CrusoeText-Regular.ttf";
     LOGINFO("Loading font from " + fontPath);
 
-    font = TTF_OpenFont(fontPath.c_str(), 8);
+    font = TTF_OpenFont(fontPath.c_str(), 12);
 
     if (!font)
     {
@@ -362,6 +362,9 @@ void Renderer::init(int width, int height, bool fullScreen)
     glDepthMask(GL_TRUE);
     glDepthFunc(GL_LEQUAL);
     glDepthRange(0.0f, 10.0f);
+
+	glEnable (GL_BLEND);
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     GLuint vertexShader = compileShader(vertexShaderPath,
                                         GL_VERTEX_SHADER);

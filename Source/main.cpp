@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
 							new WorldObject("animal",
 									"/Game/Data/Cube/CubeNoTexture.obj",
 									 cfg, log));
-        object->setColour(1.0f, 1.0f, 0.0f);
+        object->setColour(1.0f, 1.0f, 0.0f, 1.0f);
 		object->setOffset(1.5f, -1.0f, -8.0f);
 		object1->setOffset(-1.2f, -1.0f, -4.0f);
         boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene(

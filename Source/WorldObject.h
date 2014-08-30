@@ -31,7 +31,7 @@ private:
     boost::shared_ptr<Model> model;
     boost::shared_ptr<Image> texture;
     string name;
-    boost::shared_ptr<glm::vec3> colour;
+    boost::shared_ptr<glm::vec4> colour;
     boost::shared_ptr<glm::vec3> offset;
     boost::shared_ptr<glm::vec3> rotation;
 
@@ -88,7 +88,7 @@ public:
     * Get the object's colour.
     * @return The object's colour.
     */
-    const boost::shared_ptr<glm::vec3>& getColour();
+    const boost::shared_ptr<glm::vec4>& getColour();
 
     /**
      * Set the object's colour. This will only have an effect if the
@@ -96,8 +96,9 @@ public:
      * @param r The red component
      * @param g The green component
      * @param b The blue component
+     * @param a The alpha component
      */
-    void setColour(const float &r, const float &g, const float &b);
+    void setColour(const float &r, const float &g, const float &b, const float &a);
 
 
     /**
