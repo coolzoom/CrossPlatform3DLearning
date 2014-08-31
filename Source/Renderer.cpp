@@ -71,7 +71,7 @@ Renderer::Renderer(boost::shared_ptr<Configuration> cfg,
 void Renderer::renderText(string text)
 {
 
-    SDL_Color colour = {255, 255, 255, 255};
+    SDL_Color colour = {20, 20, 255, 255};
     SDL_Surface *textSurface = TTF_RenderText_Blended(font,
                                text.c_str(), colour);
     int numPixels = textSurface->h * textSurface->w;
@@ -85,16 +85,15 @@ void Renderer::renderText(string text)
 
     for (int pidx = 0; pidx < numPixels; ++pidx)
     {
-
         Uint32 r = pix[pidx] & textSurface->format->Rmask;
         Uint32 g = pix[pidx] & textSurface->format->Gmask;
         Uint32 b = pix[pidx] & textSurface->format->Bmask;
         Uint32 a = pix[pidx] & textSurface->format->Amask;
 
-        r = 0xFF * r / textSurface->format->Rmask;
-        g = 0xFF * g / textSurface->format->Gmask;
-        b = 0xFF * b / textSurface->format->Bmask;
-        a = 0xFF * a / textSurface->format->Amask;
+        r = r >> textSurface->format->Rshift;
+        g = g >> textSurface->format->Gshift;
+        b = b >> textSurface->format->Bshift;
+        a = a >> textSurface->format->Ashift;
 
         float ttuple[4] = {boost::numeric_cast<float, Uint32>(r),
                            boost::numeric_cast<float, Uint32>(g),
@@ -105,7 +104,7 @@ void Renderer::renderText(string text)
         ttuple[0]= floorf(100.0f * (ttuple[0] / 255.0f) + 0.5f) / 100.0f;
         ttuple[1]= floorf(100.0f * (ttuple[1] / 255.0f) + 0.5f) / 100.0f;
         ttuple[2]= floorf(100.0f * (ttuple[2] / 255.0f) + 0.5f) / 100.0f;
-        // Not normalizing a. It is already 0 or 1.
+		ttuple[3]= floorf(100.0f * (ttuple[3] / 255.0f) + 0.5f) / 100.0f;
 
         memcpy(&texturef[pidx * 4], &ttuple, sizeof(ttuple));
 
@@ -148,10 +147,10 @@ void Renderer::renderText(string text)
 
     float textureCoords[8] =
     {
-        0.0f, 0.0f,
         1.0f, 0.0f,
-        1.0f, 1.0f,
-        0.0f, 1.0f
+        0.0f, 0.0f,
+        0.0f, 1.0f,
+        1.0f, 1.0f
     };
 
     GLuint coordBuffer = 0;
@@ -262,7 +261,7 @@ void Renderer::initSDL(int width, int height, bool fullScreen)
                          "/Game/Data/Fonts/CrusoeText-Regular.ttf";
     LOGINFO("Loading font from " + fontPath);
 
-    font = TTF_OpenFont(fontPath.c_str(), 12);
+    font = TTF_OpenFont(fontPath.c_str(), 48);
 
     if (!font)
     {
