@@ -25,10 +25,6 @@ sudo yum install gdb
 
 * Environment setup (Ubuntu / Debian)
 ----------------------------
-[ *** The program does not currently compile on Debian because the linker
-cannot link against the SDL_ttf library, even though cmake finds it. Hopefully
-this will be corrected soon, after an SDL_ttf or cmake update for Debian has
-been released, or after I find a workaround. *** ]
 sudo apt-get update
 sudo apt-get install build-essential
 sudo apt-get install binutils-gold
@@ -47,6 +43,13 @@ sudo apt-get install libglew-dev
  http://code.google.com/p/nvidia-texture-tools/source/browse/trunk/cmake/FindGLEW.cmake)
 sudo apt-get install libsdl1.2-dev
 sudo apt-get install libsdl1.2-dbg
+sudo apt-get install libsdl-ttf2.0-dev
+  (On Debian 7, the above was not enough because, even though cmake found the SDL_ttf include
+  file, it could not find the library itself and, during linking, I had undefined reference errors
+  related to the SDL_ttf methods. In order to solve the problem, I have replaced the FindSDL_ttf.cmake 
+  file of my cmake distribution, located in /usr/share/cmake-2.8/Modules/ in my case, with
+  this one:
+  https://github.com/Kitware/CMake/blob/master/Modules/FindSDL_ttf.cmake) 
 sudo apt-get install libboost-dev
 sudo apt-get install libboost-test-dev
   (The above works in Debian. In Ubuntu I had to do the following:
