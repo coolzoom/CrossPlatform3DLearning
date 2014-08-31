@@ -108,8 +108,6 @@ void Renderer::renderText(string text)
 
         memcpy(&texturef[pidx * 4], &ttuple, sizeof(ttuple));
 
-      /* if (a > 0)
-          cout << pidx << ": "<< ttuple[0] << " / " << ttuple[1] << " / " << ttuple[2] << " / " << ttuple[3] << endl;*/
     }
 
     GLuint texture;
