@@ -127,6 +127,11 @@ public:
      */
     void init(int width, int height, bool fullScreen);
 
+	/**
+	 * Render a textured quad
+	 */
+	void renderTexturedQuad(float *vetices, float *texture, int width, int height);
+
     /**
      * Draw the scene
      */

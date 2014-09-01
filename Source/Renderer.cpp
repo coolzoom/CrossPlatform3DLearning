@@ -68,123 +68,6 @@ Renderer::Renderer(boost::shared_ptr<Configuration> cfg,
     font = NULL;
 }
 
-void Renderer::renderText(string text)
-{
-
-    SDL_Color colour = {20, 20, 255, 255};
-    SDL_Surface *textSurface = TTF_RenderText_Blended(font,
-                               text.c_str(), colour);
-    int numPixels = textSurface->h * textSurface->w;
-
-    //cout << "Font texture height " << textSurface->h << " width " << textSurface->w << endl;
-    //cout << "Bits per pixel " << textSurface->format->BitsPerPixel << endl;
-
-    Uint32 *pix = static_cast<Uint32*>(textSurface->pixels);
-
-    float *texturef = new float[numPixels * 4];
-
-    for (int pidx = 0; pidx < numPixels; ++pidx)
-    {
-        Uint32 r = pix[pidx] & textSurface->format->Rmask;
-        Uint32 g = pix[pidx] & textSurface->format->Gmask;
-        Uint32 b = pix[pidx] & textSurface->format->Bmask;
-        Uint32 a = pix[pidx] & textSurface->format->Amask;
-
-        r = r >> textSurface->format->Rshift;
-        g = g >> textSurface->format->Gshift;
-        b = b >> textSurface->format->Bshift;
-        a = a >> textSurface->format->Ashift;
-
-        float ttuple[4] = {boost::numeric_cast<float, Uint32>(r),
-                           boost::numeric_cast<float, Uint32>(g),
-                           boost::numeric_cast<float, Uint32>(b),
-                           boost::numeric_cast<float, Uint32>(a),
-                          };
-
-        ttuple[0]= floorf(100.0f * (ttuple[0] / 255.0f) + 0.5f) / 100.0f;
-        ttuple[1]= floorf(100.0f * (ttuple[1] / 255.0f) + 0.5f) / 100.0f;
-        ttuple[2]= floorf(100.0f * (ttuple[2] / 255.0f) + 0.5f) / 100.0f;
-		ttuple[3]= floorf(100.0f * (ttuple[3] / 255.0f) + 0.5f) / 100.0f;
-
-        memcpy(&texturef[pidx * 4], &ttuple, sizeof(ttuple));
-
-    }
-
-    GLuint texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
-
-    glTexImage2D(GL_TEXTURE_2D, 0,  GL_RGBA,
-                 textSurface->w, textSurface->h, 0, GL_RGBA, GL_FLOAT,
-                 &texturef[0]);
-
-    float boxVerts[16] =
-    {
-        0.5f, 0.0f, -0.5f, 1.0f,
-        -0.5f, 0.0f, -0.5f, 1.0f,
-        -0.5f, -0.5f, -0.5f, 1.0f,
-        0.5f, -0.5f, -0.5f, 1.0f
-    };
-
-    glUseProgram(textProgram);
-
-    glEnableVertexAttribArray(0);
-
-    GLuint boxBuffer = 0;
-    glGenBuffers(1, &boxBuffer);
-
-    glBindBuffer(GL_ARRAY_BUFFER, boxBuffer);
-    glBufferData(GL_ARRAY_BUFFER,
-                 sizeof(boxVerts),
-                 &boxVerts,
-                 GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
-
-    float textureCoords[8] =
-    {
-        1.0f, 0.0f,
-        0.0f, 0.0f,
-        0.0f, 1.0f,
-        1.0f, 1.0f
-    };
-
-    GLuint coordBuffer = 0;
-
-    glGenBuffers(1,&coordBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, coordBuffer);
-    glBufferData(GL_ARRAY_BUFFER,
-                 sizeof(textureCoords),
-                 &textureCoords,
-                 GL_STATIC_DRAW);
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
-
-    glDrawArrays(GL_QUADS, 0, 4);
-
-
-    glDeleteBuffers(1, &boxBuffer);
-    glDeleteBuffers(1, &coordBuffer);
-
-    glDisableVertexAttribArray(1);
-    glDisableVertexAttribArray(0);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glDeleteTextures(1, &texture);
-    delete[] texturef;
-    texturef = NULL;
-    SDL_FreeSurface(textSurface);
-
-    GLenum errorCode = glGetError();
-    if (errorCode != GL_NO_ERROR)
-    {
-        LOGERROR("OpenGL error while rendering text");
-        throw GameException(string((char*)gluErrorString(errorCode)));
-    }
-}
-
 Renderer::~Renderer()
 {
 
@@ -441,6 +324,70 @@ void Renderer::init(int width, int height, bool fullScreen)
     glUseProgram(0);
 }
 
+void Renderer::renderTexturedQuad(float *vertices, float *texture, int width, int height)
+{
+	GLuint textureHandle;
+	glGenTextures(1, &textureHandle);
+	glBindTexture(GL_TEXTURE_2D, textureHandle);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+
+	glTexImage2D(GL_TEXTURE_2D, 0,  GL_RGBA,
+		width, height, 0, GL_RGBA, GL_FLOAT,
+		&texture[0]);
+
+	glUseProgram(textProgram);
+
+	glEnableVertexAttribArray(0);
+
+	GLuint boxBuffer = 0;
+	glGenBuffers(1, &boxBuffer);
+
+	glBindBuffer(GL_ARRAY_BUFFER, boxBuffer);
+	glBufferData(GL_ARRAY_BUFFER,
+		sizeof(float) * 16, // 4 times 4 floats
+		vertices,
+		GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+	float textureCoords[8] =
+	{
+		1.0f, 0.0f,
+		0.0f, 0.0f,
+		0.0f, 1.0f,
+		1.0f, 1.0f
+	};
+
+	GLuint coordBuffer = 0;
+
+	glGenBuffers(1,&coordBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, coordBuffer);
+	glBufferData(GL_ARRAY_BUFFER,
+		sizeof(textureCoords),
+		&textureCoords,
+		GL_STATIC_DRAW);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glDrawArrays(GL_QUADS, 0, 4);
+
+	glDeleteBuffers(1, &boxBuffer);
+	glDeleteBuffers(1, &coordBuffer);
+
+	glDisableVertexAttribArray(1);
+	glDisableVertexAttribArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDeleteTextures(1, &textureHandle);
+
+	GLenum errorCode = glGetError();
+	if (errorCode != GL_NO_ERROR)
+	{
+		LOGERROR("OpenGL error while rendering text");
+		throw GameException(string((char*)gluErrorString(errorCode)));
+	}
+}
+
 void Renderer::drawScene(boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene)
 {
 
@@ -645,6 +592,61 @@ void Renderer::drawScene(boost::shared_ptr<vector<boost::shared_ptr<WorldObject>
 
 }
 
+void Renderer::renderText(string text)
+{
+
+	SDL_Color colour = {20, 20, 255, 255};
+	SDL_Surface *textSurface = TTF_RenderText_Blended(font,
+		text.c_str(), colour);
+	int numPixels = textSurface->h * textSurface->w;
+
+	Uint32 *pix = static_cast<Uint32*>(textSurface->pixels);
+
+	float *texturef = new float[numPixels * 4];
+
+	for (int pidx = 0; pidx < numPixels; ++pidx)
+	{
+		Uint32 r = pix[pidx] & textSurface->format->Rmask;
+		Uint32 g = pix[pidx] & textSurface->format->Gmask;
+		Uint32 b = pix[pidx] & textSurface->format->Bmask;
+		Uint32 a = pix[pidx] & textSurface->format->Amask;
+
+		r = r >> textSurface->format->Rshift;
+		g = g >> textSurface->format->Gshift;
+		b = b >> textSurface->format->Bshift;
+		a = a >> textSurface->format->Ashift;
+
+		float ttuple[4] = {boost::numeric_cast<float, Uint32>(r),
+			boost::numeric_cast<float, Uint32>(g),
+			boost::numeric_cast<float, Uint32>(b),
+			boost::numeric_cast<float, Uint32>(a),
+		};
+
+		ttuple[0]= floorf(100.0f * (ttuple[0] / 255.0f) + 0.5f) / 100.0f;
+		ttuple[1]= floorf(100.0f * (ttuple[1] / 255.0f) + 0.5f) / 100.0f;
+		ttuple[2]= floorf(100.0f * (ttuple[2] / 255.0f) + 0.5f) / 100.0f;
+		ttuple[3]= floorf(100.0f * (ttuple[3] / 255.0f) + 0.5f) / 100.0f;
+
+		memcpy(&texturef[pidx * 4], &ttuple, sizeof(ttuple));
+
+	}
+
+	float boxVerts[16] =
+	{
+		0.5f, 0.0f, -0.5f, 1.0f,
+		-0.5f, 0.0f, -0.5f, 1.0f,
+		-0.5f, -0.5f, -0.5f, 1.0f,
+		0.5f, -0.5f, -0.5f, 1.0f
+	};
+
+	this->renderTexturedQuad(boxVerts, texturef, textSurface->w, textSurface->h);
+
+	delete[] texturef;
+	texturef = NULL;
+	SDL_FreeSurface(textSurface);
+
+}
+
 void Renderer::swapBuffers()
 {
     SDL_GL_SwapBuffers();
@@ -677,6 +679,8 @@ glm::mat4x4* Renderer::rotateZ(float angle)
                            0.0f, 0.0f, 0.0f, 1.0f
                           );
 }
+
+
 
 } // AvoidTheBug3D
 
