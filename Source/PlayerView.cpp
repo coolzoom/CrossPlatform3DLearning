@@ -12,8 +12,12 @@ namespace AvoidTheBug3D {
 
 	PlayerView::PlayerView(boost::shared_ptr<Configuration> cfg,
 		boost::shared_ptr<GameLog> log) {
+
 			this->cfg = cfg;
 			this->log = log;
+
+			groundTexture = boost::shared_ptr<Image>(
+				new Image("/Game/Data/OtherTextures/grass.png", cfg, log));
 
 			goat = boost::shared_ptr<WorldObject> (
 				new WorldObject("animal",
@@ -45,6 +49,16 @@ namespace AvoidTheBug3D {
 
 	void PlayerView::render()
 	{
+		float groundVerts[16] =
+		{
+			1.5f, 0.0f, 1.0f, 1.0f,
+			-1.5f, 0.0f, 1.0f, 1.0f,
+			-1.5f, -0.5f, 1.0f, 1.0f,
+			1.5f, -0.5f, 1.0f, 1.0f
+		};
+
+		
+
 		if (rotation > 6.28)
 			rotation = 0.0;
 		rotation += 0.03f;
@@ -54,6 +68,7 @@ namespace AvoidTheBug3D {
 
 		renderer->drawScene(scene);
 		renderer->renderText("Hello");
+		renderer->renderTexturedQuad(&groundVerts[0], groundTexture->getData(), groundTexture->getWidth(), groundTexture->getHeight());
 		renderer->swapBuffers();
 
 	}
