@@ -296,7 +296,7 @@ void Renderer::init(int width, int height, bool fullScreen)
     glCullFace(GL_BACK);
     glFrontFace(GL_CCW);
 
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
     glClearDepth(10.0f);
 
     // Program (with shaders) for rendering text

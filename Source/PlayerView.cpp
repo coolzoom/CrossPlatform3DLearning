@@ -51,10 +51,10 @@ namespace AvoidTheBug3D {
 	{
 		float groundVerts[16] =
 		{
-			1.5f, 0.0f, 1.0f, 1.0f,
-			-1.5f, 0.0f, 1.0f, 1.0f,
-			-1.5f, -0.5f, 1.0f, 1.0f,
-			1.5f, -0.5f, 1.0f, 1.0f
+			1.0f, 0.0f, 1.0f, 1.0f,
+			-1.0f, 0.0f, 1.0f, 1.0f,
+			-1.0f, -1.0f, 1.0f, 1.0f,
+			1.0f, -1.0f, 1.0f, 1.0f
 		};
 
 		
@@ -67,7 +67,7 @@ namespace AvoidTheBug3D {
 		box->setRotation(-rotation, rotation, rotation);
 
 		renderer->drawScene(scene);
-		renderer->renderText("Hello");
+		//renderer->renderText("Hello");
 		renderer->renderTexturedQuad(&groundVerts[0], groundTexture->getData(), groundTexture->getWidth(), groundTexture->getHeight());
 		renderer->swapBuffers();
 
