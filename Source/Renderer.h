@@ -128,6 +128,23 @@ public:
     void init(int width, int height, bool fullScreen);
 
 	/**
+	 * Generate a texture in OpenGL, using the given data
+	 * @param name The name by which the texture will be known
+	 * @param texture The texture data
+	 * @param width The width of the texture, in pixels
+	 * @param height The height of the texture, in pixels
+	 * @return The texture handle
+	 */
+	GLuint generateTexture(string name, float *texture, int width, int height);
+	
+	/**
+	 * Get the handle of a texture which has already been generated (see generateTexture)
+	 * @param name The name of the texture
+	 * @return The texture handle (0 if not found)
+	 */
+	GLuint getTextureHandle(string name);
+
+	/**
 	 * Render a textured quad
 	 */
 	void renderTexturedQuad(float *vetices, float *texture, int width, int height);
