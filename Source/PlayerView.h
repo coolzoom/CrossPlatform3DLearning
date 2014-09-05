@@ -28,6 +28,7 @@ namespace AvoidTheBug3D {
 		boost::shared_ptr<Renderer> renderer;
 
 		boost::shared_ptr<Image> groundTexture;
+		boost::shared_ptr<Image> skyTexture;
 
 		float rotation;
 

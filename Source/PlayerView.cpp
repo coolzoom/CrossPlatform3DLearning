@@ -19,6 +19,9 @@ namespace AvoidTheBug3D {
 			groundTexture = boost::shared_ptr<Image>(
 				new Image("/Game/Data/OtherTextures/grass.png", cfg, log));
 
+			skyTexture = boost::shared_ptr<Image>(
+				new Image("/Game/Data/OtherTextures/sky.png", cfg, log));
+
 			goat = boost::shared_ptr<WorldObject> (
 				new WorldObject("animal",
 				"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTexture.obj",
@@ -57,6 +60,13 @@ namespace AvoidTheBug3D {
 			1.0f, -1.0f, 1.0f, 1.0f
 		};
 
+		float skyVerts[16] =
+		{
+			1.0f, 1.0f, 1.0f, 1.0f,
+			-1.0f, 1.0f, 1.0f, 1.0f,
+			-1.0f, 0.0f, 1.0f, 1.0f,
+			1.0f, 0.0f, 1.0f, 1.0f
+		};
 		
 
 		if (rotation > 6.28)
@@ -67,8 +77,10 @@ namespace AvoidTheBug3D {
 		box->setRotation(-rotation, rotation, rotation);
 
 		renderer->drawScene(scene);
-		//renderer->renderText("Hello");
+		
 		renderer->renderTexturedQuad(&groundVerts[0], groundTexture->getData(), groundTexture->getWidth(), groundTexture->getHeight());
+		renderer->renderTexturedQuad(&skyVerts[0], skyTexture->getData(), skyTexture->getWidth(), skyTexture->getHeight());
+		renderer->renderText("Hello");
 		renderer->swapBuffers();
 
 	}
