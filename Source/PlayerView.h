@@ -27,12 +27,7 @@ namespace AvoidTheBug3D {
 		boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene;
 		boost::shared_ptr<Renderer> renderer;
 
-		boost::shared_ptr<Image> groundTexture;
-		boost::shared_ptr<Image> skyTexture;
-
 		float rotation;
-
-		
 
 	public:
 

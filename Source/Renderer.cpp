@@ -359,18 +359,14 @@ namespace AvoidTheBug3D
 	}
 
 
-	void Renderer::renderTexturedQuad(float *vertices, float *texture, int width, int height)
+	void Renderer::renderTexturedQuad(float *vertices, string textureName)
 	{
-		GLuint textureHandle;
-		glGenTextures(1, &textureHandle);
+		GLuint textureHandle = getTextureHandle(textureName);
+
+		if (textureHandle == 0) {
+			throw GameException("Texture " + textureName + "has not been generated");
+		}
 		glBindTexture(GL_TEXTURE_2D, textureHandle);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
-
-		glTexImage2D(GL_TEXTURE_2D, 0,  GL_RGBA,
-			width, height, 0, GL_RGBA, GL_FLOAT,
-			&texture[0]);
 
 		glUseProgram(textProgram);
 
@@ -413,7 +409,6 @@ namespace AvoidTheBug3D
 		glDisableVertexAttribArray(1);
 		glDisableVertexAttribArray(0);
 		glBindTexture(GL_TEXTURE_2D, 0);
-		glDeleteTextures(1, &textureHandle);
 
 		GLenum errorCode = glGetError();
 		if (errorCode != GL_NO_ERROR)
@@ -612,39 +607,51 @@ namespace AvoidTheBug3D
 	void Renderer::renderText(string text)
 	{
 
-		SDL_Color colour = {20, 20, 255, 255};
-		SDL_Surface *textSurface = TTF_RenderText_Blended(font,
-			text.c_str(), colour);
-		int numPixels = textSurface->h * textSurface->w;
+		GLuint textHandle = getTextureHandle("text_" + text);
 
-		Uint32 *pix = static_cast<Uint32*>(textSurface->pixels);
+		if (textHandle == 0) {
 
-		float *texturef = new float[numPixels * 4];
+			SDL_Color colour = {20, 20, 255, 255};
+			SDL_Surface *textSurface = TTF_RenderText_Blended(font,
+				text.c_str(), colour);
+			int numPixels = textSurface->h * textSurface->w;
 
-		for (int pidx = 0; pidx < numPixels; ++pidx)
-		{
-			Uint32 r = pix[pidx] & textSurface->format->Rmask;
-			Uint32 g = pix[pidx] & textSurface->format->Gmask;
-			Uint32 b = pix[pidx] & textSurface->format->Bmask;
-			Uint32 a = pix[pidx] & textSurface->format->Amask;
+			Uint32 *pix = static_cast<Uint32*>(textSurface->pixels);
 
-			r = r >> textSurface->format->Rshift;
-			g = g >> textSurface->format->Gshift;
-			b = b >> textSurface->format->Bshift;
-			a = a >> textSurface->format->Ashift;
+			float *texturef = new float[numPixels * 4];
 
-			float ttuple[4] = {boost::numeric_cast<float, Uint32>(r),
-				boost::numeric_cast<float, Uint32>(g),
-				boost::numeric_cast<float, Uint32>(b),
-				boost::numeric_cast<float, Uint32>(a),
-			};
+			for (int pidx = 0; pidx < numPixels; ++pidx)
+			{
+				Uint32 r = pix[pidx] & textSurface->format->Rmask;
+				Uint32 g = pix[pidx] & textSurface->format->Gmask;
+				Uint32 b = pix[pidx] & textSurface->format->Bmask;
+				Uint32 a = pix[pidx] & textSurface->format->Amask;
 
-			ttuple[0]= floorf(100.0f * (ttuple[0] / 255.0f) + 0.5f) / 100.0f;
-			ttuple[1]= floorf(100.0f * (ttuple[1] / 255.0f) + 0.5f) / 100.0f;
-			ttuple[2]= floorf(100.0f * (ttuple[2] / 255.0f) + 0.5f) / 100.0f;
-			ttuple[3]= floorf(100.0f * (ttuple[3] / 255.0f) + 0.5f) / 100.0f;
+				r = r >> textSurface->format->Rshift;
+				g = g >> textSurface->format->Gshift;
+				b = b >> textSurface->format->Bshift;
+				a = a >> textSurface->format->Ashift;
 
-			memcpy(&texturef[pidx * 4], &ttuple, sizeof(ttuple));
+				float ttuple[4] = {boost::numeric_cast<float, Uint32>(r),
+					boost::numeric_cast<float, Uint32>(g),
+					boost::numeric_cast<float, Uint32>(b),
+					boost::numeric_cast<float, Uint32>(a),
+				};
+
+				ttuple[0]= floorf(100.0f * (ttuple[0] / 255.0f) + 0.5f) / 100.0f;
+				ttuple[1]= floorf(100.0f * (ttuple[1] / 255.0f) + 0.5f) / 100.0f;
+				ttuple[2]= floorf(100.0f * (ttuple[2] / 255.0f) + 0.5f) / 100.0f;
+				ttuple[3]= floorf(100.0f * (ttuple[3] / 255.0f) + 0.5f) / 100.0f;
+
+				memcpy(&texturef[pidx * 4], &ttuple, sizeof(ttuple));
+
+			}
+
+			textHandle = generateTexture("text_" + text, texturef, textSurface->w, textSurface->h);
+
+			delete[] texturef;
+			texturef = NULL;
+			SDL_FreeSurface(textSurface);
 
 		}
 
@@ -656,12 +663,7 @@ namespace AvoidTheBug3D
 			0.5f, -0.5f, -0.5f, 1.0f
 		};
 
-		this->renderTexturedQuad(boxVerts, texturef, textSurface->w, textSurface->h);
-
-		delete[] texturef;
-		texturef = NULL;
-		SDL_FreeSurface(textSurface);
-
+		this->renderTexturedQuad(boxVerts, "text_" + text);
 	}
 
 	void Renderer::swapBuffers()

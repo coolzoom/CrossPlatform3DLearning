@@ -147,7 +147,7 @@ public:
 	/**
 	 * Render a textured quad
 	 */
-	void renderTexturedQuad(float *vetices, float *texture, int width, int height);
+	void renderTexturedQuad(float *vertices, string textureName);
 
     /**
      * Draw the scene
