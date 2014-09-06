@@ -15,9 +15,9 @@ void WorldObject::initPropVectors() {
     this->rotation = boost::shared_ptr<glm::vec3>(new glm::vec3(0, 0 ,0));
 }
 
-WorldObject::WorldObject(string name, string modelPath,
-        boost::shared_ptr<Configuration> cfg,
-		boost::shared_ptr<GameLog> log) {
+WorldObject::WorldObject(const string &name, const string &modelPath,
+        const boost::shared_ptr<Configuration> cfg,
+		const boost::shared_ptr<GameLog> log) {
 	this->name = name;
 	this->log = log;
 	this->model = boost::shared_ptr<Model>(
@@ -26,8 +26,8 @@ WorldObject::WorldObject(string name, string modelPath,
 
 }
 
-WorldObject::WorldObject(string name, string modelPath, string texturePath,
-		boost::shared_ptr<Configuration> cfg, boost::shared_ptr<GameLog> log) {
+WorldObject::WorldObject(const string &name, const string &modelPath, const string &texturePath,
+		const boost::shared_ptr<Configuration> cfg, const boost::shared_ptr<GameLog> log) {
 	this->name = name;
 	this->log = log;
 	this->model = boost::shared_ptr<Model>(

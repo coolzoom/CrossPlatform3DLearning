@@ -57,7 +57,7 @@ private:
      * @param fileLocation The file's location, relative to the game path
      * @return String containing the shader's source code
      */
-    string loadShaderFromFile(string fileLocation);
+    string loadShaderFromFile(const string &fileLocation);
 
     /**
      * Compile a shader's source code
@@ -65,7 +65,7 @@ private:
      * @param shaderType Type of shader (GL_VERTEX_SHADER, GL_FRAGMENT_SHADER, GL_GEOMETRY_SHADER - the latter for OpenGL 3.3)
      * @return OpenGL shader reference
      */
-    GLuint compileShader(string shaderSource, GLenum shaderType);
+    GLuint compileShader(const string &shaderSource, const GLenum shaderType);
 
     /**
      * Initialise SDL
@@ -75,7 +75,7 @@ private:
     /**
      * Retrieve the information of what went wrong when linking a shader program
      */
-    string getProgramInfoLog(GLuint linkedProgram);
+    string getProgramInfoLog(const GLuint linkedProgram) const;
 
     /**
      * Detect if OpenGL 3.3 is supported. If not, fall back to OpenGL 2.1.
@@ -94,21 +94,21 @@ private:
      * @param angle The angle to rotate by, in radians.
      * @return The X rotation matrix
      */
-    glm::mat4x4* rotateX(float angle);
+    glm::mat4x4* rotateX(const float angle) const;
 
     /**
      * Rotation transformation for rotating around the Y axis
      * @param angle The angle to rotate by, in radians.
 	 * @return The Y rotation matrix
      */
-    glm::mat4x4* rotateY(float angle);
+    glm::mat4x4* rotateY(const float angle) const;
 
     /**
      * Rotation transformation for rotating around the Z axis
      * @param angle The angle to rotate by, in radians.
 	 * @return The Z rotation matrix
      */
-    glm::mat4x4* rotateZ(float angle);
+    glm::mat4x4* rotateZ(const float angle) const;
 
 public:
 
@@ -117,15 +117,15 @@ public:
      * @param cfg The game's configuration object
      * @param log The game's logging object
      */
-    Renderer(boost::shared_ptr<Configuration> cfg,
-             boost::shared_ptr<GameLog> log);
+    Renderer(const boost::shared_ptr<Configuration> cfg,
+             const boost::shared_ptr<GameLog> log);
 
     /**
      * Initialise renderer (OpenGL, GLEW, etc)
      * @param width The width of the window
      * @param height The height of the window
      */
-    void init(int width, int height, bool fullScreen);
+    void init(const int width, const int height, const bool fullScreen);
 
 	/**
 	 * Generate a texture in OpenGL, using the given data
@@ -135,30 +135,30 @@ public:
 	 * @param height The height of the texture, in pixels
 	 * @return The texture handle
 	 */
-	GLuint generateTexture(string name, float *texture, int width, int height);
+	GLuint generateTexture(const string &name, const float *texture, const int width, const int height);
 	
 	/**
 	 * Get the handle of a texture which has already been generated (see generateTexture)
 	 * @param name The name of the texture
 	 * @return The texture handle (0 if not found)
 	 */
-	GLuint getTextureHandle(string name);
+	GLuint getTextureHandle(const string &name);
 
 	/**
 	 * Render a textured quad
 	 */
-	void renderTexturedQuad(float *vertices, string textureName);
+	void renderTexturedQuad(const float *vertices, const string &textureName);
 
     /**
      * Draw the scene
      */
     void drawScene(
-        boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene);
+        const boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene);
 
     /**
      * Render some text on the screen
      */
-    void renderText(string text);
+    void renderText(const string &text);
 
     /**
      * This is a double buffered system and this commands swaps

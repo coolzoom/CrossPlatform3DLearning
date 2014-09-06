@@ -36,13 +36,13 @@ namespace AvoidTheBug3D {
 		* @param cfg The game's configuration object
 		* @param log The game's logging object
 		*/
-		PlayerView(boost::shared_ptr<Configuration> cfg,
-			boost::shared_ptr<GameLog> log);
+		PlayerView(const boost::shared_ptr<Configuration> cfg,
+			const boost::shared_ptr<GameLog> log);
 
 		/**
 		* Destructor
 		*/
-		virtual ~PlayerView();
+		~PlayerView();
 
 		/**
 		* Render the view

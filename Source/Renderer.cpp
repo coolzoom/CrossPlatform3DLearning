@@ -11,7 +11,7 @@ using namespace boost;
 namespace AvoidTheBug3D
 {
 
-	string Renderer::loadShaderFromFile(string fileLocation)
+	string Renderer::loadShaderFromFile(const string &fileLocation)
 	{
 		string shaderSource = "";
 		ifstream file((cfg->getHomeDirectory() + fileLocation).c_str());
@@ -26,7 +26,7 @@ namespace AvoidTheBug3D
 		return shaderSource;
 	}
 
-	GLuint Renderer::compileShader(string shaderSourceFile, GLenum shaderType)
+	GLuint Renderer::compileShader(const string &shaderSourceFile, const GLenum shaderType)
 	{
 
 		GLuint shader = glCreateShader(shaderType);
@@ -55,8 +55,8 @@ namespace AvoidTheBug3D
 		return shader;
 	}
 
-	Renderer::Renderer(boost::shared_ptr<Configuration> cfg,
-		boost::shared_ptr<GameLog> log)
+	Renderer::Renderer(const boost::shared_ptr<Configuration> cfg,
+		const boost::shared_ptr<GameLog> log)
 	{
 		this->cfg = cfg;
 		this->log = log;
@@ -156,7 +156,7 @@ namespace AvoidTheBug3D
 
 	}
 
-	string Renderer::getProgramInfoLog(GLuint linkedProgram)
+	string Renderer::getProgramInfoLog(const GLuint linkedProgram) const
 	{
 
 		GLint infoLogLength;
@@ -205,7 +205,7 @@ namespace AvoidTheBug3D
 
 	}
 
-	void Renderer::init(int width, int height, bool fullScreen)
+	void Renderer::init(const int width, const int height, const bool fullScreen)
 	{
 
 		this->initSDL(width, height, fullScreen);
@@ -324,7 +324,7 @@ namespace AvoidTheBug3D
 		glUseProgram(0);
 	}
 
-	GLuint Renderer::generateTexture( string name, float *texture, int width, int height )
+	GLuint Renderer::generateTexture(const string &name, const float *texture, const int width, const int height )
 	{
 		GLuint textureHandle;
 
@@ -345,7 +345,7 @@ namespace AvoidTheBug3D
 	}
 
 
-	GLuint Renderer::getTextureHandle( string name )
+	GLuint Renderer::getTextureHandle(const string &name)
 	{
 		GLuint handle = 0;
 
@@ -359,7 +359,7 @@ namespace AvoidTheBug3D
 	}
 
 
-	void Renderer::renderTexturedQuad(float *vertices, string textureName)
+	void Renderer::renderTexturedQuad(const float *vertices, const string &textureName)
 	{
 		GLuint textureHandle = getTextureHandle(textureName);
 
@@ -418,7 +418,7 @@ namespace AvoidTheBug3D
 		}
 	}
 
-	void Renderer::drawScene(boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene)
+	void Renderer::drawScene(const boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene)
 	{
 
 		// Clear the buffers
@@ -604,7 +604,7 @@ namespace AvoidTheBug3D
 
 	}
 
-	void Renderer::renderText(string text)
+	void Renderer::renderText(const string &text)
 	{
 
 		GLuint textHandle = getTextureHandle("text_" + text);
@@ -671,7 +671,7 @@ namespace AvoidTheBug3D
 		SDL_GL_SwapBuffers();
 	}
 
-	glm::mat4x4* Renderer::rotateX(float angle)
+	glm::mat4x4* Renderer::rotateX(const float angle) const
 	{
 		return new glm::mat4x4(1.0f, 0.0f, 0.0f, 0.0f,
 			0.0f, glm::cos(angle), -glm::sin(angle), 0.0f,
@@ -680,7 +680,7 @@ namespace AvoidTheBug3D
 			);
 	}
 
-	glm::mat4x4* Renderer::rotateY(float angle)
+	glm::mat4x4* Renderer::rotateY(const float angle) const
 	{
 		return new glm::mat4x4(glm::cos(angle), 0.0f, glm::sin(angle), 0.0f,
 			0.0f, 1.0f, 0.0f, 0.0f,
@@ -690,7 +690,7 @@ namespace AvoidTheBug3D
 
 	}
 
-	glm::mat4x4* Renderer::rotateZ(float angle)
+	glm::mat4x4* Renderer::rotateZ(const float angle) const
 	{
 		return new glm::mat4x4(glm::cos(angle), -glm::sin(angle), 0.0f,  0.0f,
 			glm::sin(angle), glm::cos(angle), 0.0f, 0.0f,

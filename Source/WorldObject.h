@@ -46,9 +46,9 @@ public:
      * @param cfg The game configuration file
      * @param log The game log
      */
-    WorldObject(string name, string modelPath,
-                boost::shared_ptr<Configuration> cfg,
-                boost::shared_ptr<GameLog> log);
+    WorldObject(const string &name, const string &modelPath,
+                const boost::shared_ptr<Configuration> cfg,
+                const boost::shared_ptr<GameLog> log);
 
     /**
      * Constructor for object with texture
@@ -58,9 +58,9 @@ public:
      * @param cfg The game configuration file
      * @param log The game log
      */
-    WorldObject(string name, string modelPath, string texturePath,
-                boost::shared_ptr<Configuration> cfg,
-                boost::shared_ptr<GameLog> log);
+    WorldObject(const string &name, const string &modelPath, const string &texturePath,
+                const boost::shared_ptr<Configuration> cfg,
+                const boost::shared_ptr<GameLog> log);
 
     /**
      * Destructor

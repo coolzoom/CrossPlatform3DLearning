@@ -30,7 +30,7 @@ public:
 	/**
 	 * Destructor
 	 */
-	virtual ~Configuration();
+	~Configuration();
 
 	/**
 	 * Get the home directory of the application

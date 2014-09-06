@@ -52,7 +52,7 @@ public:
 	/**
 	 * Destructor
 	 */
-	virtual ~GameLog();
+	~GameLog();
 
 	/**
 	 * Append a message to the log

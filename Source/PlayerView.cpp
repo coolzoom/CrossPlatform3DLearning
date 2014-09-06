@@ -11,8 +11,8 @@
 
 namespace AvoidTheBug3D {
 
-	PlayerView::PlayerView(boost::shared_ptr<Configuration> cfg,
-		boost::shared_ptr<GameLog> log) {
+	PlayerView::PlayerView(const boost::shared_ptr<Configuration> cfg,
+		const boost::shared_ptr<GameLog> log) {
 
 			this->cfg = cfg;
 			this->log = log;

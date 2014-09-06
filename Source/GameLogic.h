@@ -11,7 +11,7 @@
 class GameLogic {
 public:
 	GameLogic();
-	virtual ~GameLogic();
+	~GameLogic();
 };
 
 #endif /* GAMELOGIC_H_ */

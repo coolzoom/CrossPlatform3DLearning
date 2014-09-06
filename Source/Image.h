@@ -47,7 +47,7 @@ public:
 	/**
 	 * Destructor
 	 */
-	virtual ~Image();
+	~Image();
 
 	/**
 	 * Get the image width
