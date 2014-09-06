@@ -16,8 +16,8 @@ using namespace std;
 namespace AvoidTheBug3D
 {
 
-Image::Image(string fileLocation, const boost::shared_ptr<Configuration>& cfg,
-             const boost::shared_ptr<GameLog>& log)
+	Image::Image(const string &fileLocation, const boost::shared_ptr<Configuration> cfg,
+		const boost::shared_ptr<GameLog> log)
 {
     this->cfg = cfg;
     this->log = log;
@@ -40,7 +40,7 @@ Image::~Image()
     }
 }
 
-void Image::loadFromFile(string fileLocation)
+void Image::loadFromFile(const string &fileLocation)
 {
     // function developed based on example at
     // http://zarb.org/~gc/html/libpng.html

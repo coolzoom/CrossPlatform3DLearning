@@ -32,7 +32,7 @@ private:
 	float* imageData;
 
 	// Load image from a .png file
-	void loadFromFile(string fileLocation);
+	void loadFromFile(const string &fileLocation);
 
 public:
 	/**
@@ -41,8 +41,8 @@ public:
 	 * @param cfg Game configuration object
 	 * @param log Game log
 	 */
-	Image(string fileLocation, const boost::shared_ptr<Configuration> &cfg,
-			const boost::shared_ptr<GameLog> &log);
+	Image(const string &fileLocation, const boost::shared_ptr<Configuration> cfg,
+			const boost::shared_ptr<GameLog> log);
 
 	/**
 	 * Destructor

@@ -11,9 +11,9 @@ using namespace boost;
 namespace AvoidTheBug3D
 {
 
-Model::Model(string filename,
-             const boost::shared_ptr<Configuration> &cfg,
-             const boost::shared_ptr<GameLog> &log)
+Model::Model(const string &filename,
+             const boost::shared_ptr<Configuration> cfg,
+             const boost::shared_ptr<GameLog> log)
 {
     this->cfg = cfg;
     this->log = log;
@@ -279,12 +279,12 @@ unsigned int * Model::getIndexData()
 }
 
 
-int Model::getVertexDataComponentCount()
+int Model::getVertexDataComponentCount() const
 {
     return vertexDataComponentCount;
 }
 
-int Model::getVertexDataSize()
+int Model::getVertexDataSize() const
 {
     return vertexDataSize;
 }

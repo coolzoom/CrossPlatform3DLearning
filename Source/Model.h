@@ -73,9 +73,9 @@ public:
      * @param cfg The game configuration
      * @param log The log
      */
-    Model(string fileLocation,
-          const boost::shared_ptr<Configuration> &cfg,
-          const boost::shared_ptr<GameLog> &log);
+    Model(const string &filename,
+          const boost::shared_ptr<Configuration> cfg,
+          const boost::shared_ptr<GameLog> log);
     ~Model(void);
 
     /**
@@ -89,13 +89,13 @@ public:
      * Get the size of the vertex data, in bytes.
      * @return The size of the vertex data
      */
-    int getVertexDataSize();
+    int getVertexDataSize() const;
 
     /**
      * Get the number of components in the vertex data array
      * @return The number of vertex data components
      */
-    int getVertexDataComponentCount();
+    int getVertexDataComponentCount() const;
 
 
     /**
