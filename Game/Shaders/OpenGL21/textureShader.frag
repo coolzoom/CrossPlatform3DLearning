@@ -11,7 +11,9 @@ void main()
     gl_FragColor = cosAngIncidence * colour;
 }
 else {
-  gl_FragColor = cosAngIncidence * texture2D(textureImage, textureCoords);
+
+  vec4 textureWtLight = cosAngIncidence * texture2D(textureImage, textureCoords);
+  gl_FragColor = vec4(textureWtLight.rgb, 1.0);
 }
 
 }

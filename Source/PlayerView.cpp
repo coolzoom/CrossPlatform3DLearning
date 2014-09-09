@@ -19,19 +19,12 @@ namespace AvoidTheBug3D {
 
 			goat = boost::shared_ptr<WorldObject> (
 				new WorldObject("animal",
-				"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTexture.obj",
-				"/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTextureRedBlackNumbers.png",
+				"/Game/Data/Goat/Goat.obj",
+				"/Game/Data/Goat/Goat.png",
 				cfg, log));
-			box = boost::shared_ptr<WorldObject> (
-				new WorldObject("animal",
-				"/Game/Data/Cube/CubeNoTexture.obj",
-				cfg, log));
-			box->setColour(1.0f, 1.0f, 0.0f, 1.0f);
-			box->setOffset(1.5f, -1.0f, -8.0f);
 			goat->setOffset(-1.2f, -1.0f, -4.0f);
 			scene = boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > >(
 				new vector<boost::shared_ptr<WorldObject> >());
-			scene->push_back(box);
 			scene->push_back(goat);
 
 			rotation = 0.0f;
@@ -77,13 +70,12 @@ namespace AvoidTheBug3D {
 		rotation += 0.03f;
 
 		goat->setRotation(rotation, rotation, rotation);
-		box->setRotation(-rotation, rotation, rotation);
 
 		renderer->drawScene(scene);
 
 		renderer->renderTexturedQuad(&groundVerts[0], "ground");
 		renderer->renderTexturedQuad(&skyVerts[0], "sky");
-		renderer->renderText("Hello");
+		//renderer->renderText("Hello");
 		renderer->swapBuffers();
 
 	}

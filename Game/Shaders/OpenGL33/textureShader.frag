@@ -13,7 +13,8 @@ if (colour != vec4(0, 0, 0, 0)) {
     outputColour = cosAngIncidence * colour;
 }
 else {
-  outputColour =  cosAngIncidence * texture(textureImage, textureCoords);
+  vec4 textureWtLight = cosAngIncidence * texture(textureImage, textureCoords);
+  outputColour = vec4(textureWtLight.rgb, 1.0);
 }
 
 }
