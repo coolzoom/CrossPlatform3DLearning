@@ -19,7 +19,7 @@ namespace AvoidTheBug3D {
 
 			goat = boost::shared_ptr<WorldObject> (
 				new WorldObject("animal",
-				"/Game/Data/Goat/Goat.obj",
+				"/Game/Data/Goat/goatAnim_000006.obj",
 				"/Game/Data/Goat/Goat.png",
 				cfg, log));
 			goat->setOffset(-1.2f, -1.0f, -4.0f);
