@@ -62,10 +62,10 @@ ADD_DEFINITIONS(${PNG_DEFINITIONS})
 # Create the executable
 ADD_EXECUTABLE(unittest globalFixture globals.h mainTest.cpp gameLogTest.cpp gameLogDebugTest.cpp
  modelTest.cpp rendererTest.cpp imageTest.cpp configurationTest.cpp
-  ../Model.cpp ../GameLogic.cpp ../WorldObject.cpp ../Character.cpp
+  ../Model.cpp ../GameLogic.cpp ../WorldObject.cpp
  ../PlayerView.cpp ../GameLog.cpp ../Configuration.cpp ../Renderer.cpp
  ../GameException.cpp ../Image.cpp
- ../Character.h ../GameLog.h ../Model.h ../WorldObject.h
+ ../GameLog.h ../Model.h ../WorldObject.h
  ../Configuration.h ../GameLogic.h ../PlayerView.h
  ../GameException.h ../Image.h ../Renderer.h
  )

@@ -61,10 +61,10 @@ ADD_DEFINITIONS(${PNG_DEFINITIONS})
 
 # Create the executable
 ADD_EXECUTABLE(game main.cpp GameLog.cpp Model.cpp GameLogic.cpp
- WorldObject.cpp Character.cpp
+ WorldObject.cpp
  PlayerView.cpp Renderer.cpp
  GameException.cpp Configuration.cpp Image.cpp
- Character.h GameLog.h Model.h WorldObject.h
+ GameLog.h Model.h WorldObject.h
  Configuration.h GameLogic.h PlayerView.h
  GameException.h Image.h Renderer.h
  )
