@@ -28,7 +28,7 @@ class WorldObject
 private:
     boost::shared_ptr<GameLog> log;
     boost::shared_ptr<Configuration> cfg;
-    boost::shared_ptr<Model[]> model;
+    Model* model;
 	bool animating;
 	int frameDelay;
 	int currentFrame;

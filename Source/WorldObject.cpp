@@ -11,14 +11,6 @@
 
 namespace AvoidTheBug3D {
 
-	struct model_deleter
-	{
-		void operator ()( Model const * p)
-		{ 
-			delete[] p; 
-		}
-	};
-
 	void WorldObject::initPropVectors() {
 		this->colour = boost::shared_ptr<glm::vec4>(new glm::vec4(0, 0 ,0, 0));
 		this->offset = boost::shared_ptr<glm::vec3>(new glm::vec3(0, 0 ,0));
@@ -36,8 +28,7 @@ namespace AvoidTheBug3D {
 			currentFrame = 0;
 			this->numFrames = numFrames;
 
-			model = boost::shared_ptr<Model[]>(
-				new Model[numFrames], model_deleter());
+			model = new Model[numFrames];
 
 			if (numFrames > 1) {
 				LOGINFO("Loading animated model (this may take a while):");
@@ -64,6 +55,7 @@ namespace AvoidTheBug3D {
 	}
 
 	WorldObject::~WorldObject() {
+		delete[] model;
 
 	}
 
