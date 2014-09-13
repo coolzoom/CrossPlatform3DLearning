@@ -33,7 +33,6 @@ int getTokens(string input, char sep, string* tokens){
 		curPos = foundPos + 1;
 		}
 	}
-
 	return count;
 }
 
