@@ -2,7 +2,6 @@
 #include <fstream>
 #include <stdlib.h>
 #include <boost/foreach.hpp>
-#include <boost/tokenizer.hpp>
 #include <boost/unordered_map.hpp>
 #include "GameException.h"
 
@@ -10,6 +9,34 @@ using namespace std;
 using namespace boost;
 namespace AvoidTheBug3D
 {
+int getTokens(string input, char sep, string* tokens){
+	int curPos = 0;
+	int count = 0;
+
+	int length = input.length();
+
+	for (int idx = 0; idx < length; ++idx) {
+		if (input[idx] == sep) {
+			++count;
+		}
+	}
+	++count;
+
+	for (int idx = 0; idx < count; ++idx) {
+		if (idx == count - 1) {
+			tokens[idx] = input.substr(curPos);
+		}
+		else {
+
+		size_t foundPos = input.find(sep, curPos);
+		tokens[idx] = input.substr(curPos, foundPos - curPos);
+		curPos = foundPos + 1;
+		}
+	}
+
+	return count;
+}
+
 
 Model::Model() {
 
@@ -89,16 +116,20 @@ void Model::loadFromFile(string fileLocation)
         {
             if (line[0] == 'v' || line[0] == 'f')
             {
-                char_separator<char> sep(" ");
-                tokenizer<char_separator<char> > tokens(line, sep);
-                int idx = 0;
+                string *tokens = new string[4]; // Max 4 such tokens in Wavefront files
+				
+				int numTokens = getTokens(line, ' ', tokens);
+				
+				int idx = 0;
 
                 if (line[0] == 'v' && line[1] == 'n')
                 {
                     // get vertex normal
                     float *vn = new float[3];
-                    BOOST_FOREACH (const string& t, tokens)
+                    //BOOST_FOREACH (const string& t, tokens)
+                    for (int tokenIdx = 0; tokenIdx < numTokens; ++tokenIdx)
                     {
+						string t = tokens[tokenIdx];
                         if (idx > 0)   // The first token is the vertex normal indicator
                         {
                             vn[idx - 1] = (float) atof(t.c_str());
@@ -110,8 +141,10 @@ void Model::loadFromFile(string fileLocation)
                 else if (line[0] == 'v' && line[1] == 't')
                 {
                     float *vt = new float[2];
-                    BOOST_FOREACH (const string& t, tokens)
-                    {
+                    //BOOST_FOREACH (const string& t, tokens)
+					for (int tokenIdx = 0; tokenIdx < numTokens; ++tokenIdx)
+					{
+						string t = tokens[tokenIdx];
                         if (idx > 0)   // The first token is the vertex texture coordinate indicator
                         {
                             vt[idx - 1] = (float) atof(t.c_str());
@@ -127,8 +160,10 @@ void Model::loadFromFile(string fileLocation)
                 {
                     // get vertex
                     float *v = new float[3];
-                    BOOST_FOREACH (const string& t, tokens)
-                    {
+                    //BOOST_FOREACH (const string& t, tokens)
+					for (int tokenIdx = 0; tokenIdx < numTokens; ++tokenIdx)
+					{
+						string t = tokens[tokenIdx];
                         if (idx > 0)   // The first token is the vertex indicator
                         {
                             v[idx - 1] = (float) atof(t.c_str());
@@ -143,8 +178,10 @@ void Model::loadFromFile(string fileLocation)
                     int *v = new int[3];
                     int *n = NULL;
                     int *textC = NULL;
-                    BOOST_FOREACH (const string& t, tokens)
-                    {
+                    //BOOST_FOREACH (const string& t, tokens)
+					for (int tokenIdx = 0; tokenIdx < numTokens; ++tokenIdx)
+					{
+						string t = tokens[tokenIdx];
 
                         if (idx > 0)   // The first token is face indicator
                         {
@@ -167,13 +204,16 @@ void Model::loadFromFile(string fileLocation)
                                     n = new int[3];
                                 if (textC == NULL)
                                     textC = new int[3];
-                                char_separator<char> compsep("/");
-                                tokenizer<char_separator<char> > components(t,
-                                        compsep);
+								
+								string *components = new string[3]; // Max 3 such components in Wavefront files
+								int numComponents = getTokens(t, '/', components);
+
                                 int componentIdx = 0;
 
-                                BOOST_FOREACH(const string &component, components)
-                                {
+                                //BOOST_FOREACH(const string &component, components)
+								for (int compIdx = 0; compIdx < numComponents; ++compIdx)
+								{
+									string component = components[compIdx];
                                     switch (componentIdx)
                                     {
                                     case 0:
@@ -189,6 +229,11 @@ void Model::loadFromFile(string fileLocation)
                                     }
                                     ++componentIdx;
                                 }
+
+								if (components != NULL)
+								{
+									delete[] components;
+								}
                             }
 
                             else   // just the vertex index is contained in the string
@@ -204,6 +249,11 @@ void Model::loadFromFile(string fileLocation)
                     if (textC != NULL)
                         textureCoordsIndexes->push_back(textC);
                 }
+
+				if (tokens != NULL)
+				{
+					delete[] tokens;
+				}
             }
         }
         file.close();
