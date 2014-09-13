@@ -19,10 +19,10 @@ namespace AvoidTheBug3D {
 
 			goat = boost::shared_ptr<WorldObject> (
 				new WorldObject("animal",
-				"/Game/Data/Goat/goatAnim_000006.obj",
-				"/Game/Data/Goat/Goat.png",
-				cfg, log));
+				"/Game/Data/Goat/goatAnim",
+				cfg, log, "/Game/Data/Goat/Goat.png", 19));
 			goat->setOffset(-1.2f, -1.0f, -4.0f);
+			goat->startAnimating();
 			scene = boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > >(
 				new vector<boost::shared_ptr<WorldObject> >());
 			scene->push_back(goat);
@@ -68,7 +68,7 @@ namespace AvoidTheBug3D {
 		if (rotation > 6.28)
 			rotation = 0.0;
 		rotation += 0.03f;
-
+		goat->animate();
 		goat->setRotation(rotation, rotation, rotation);
 
 		renderer->drawScene(scene);

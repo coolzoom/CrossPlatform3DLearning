@@ -28,7 +28,12 @@ class WorldObject
 private:
     boost::shared_ptr<GameLog> log;
     boost::shared_ptr<Configuration> cfg;
-    boost::shared_ptr<Model> model;
+    boost::shared_ptr<Model[]> model;
+	bool animating;
+	int frameDelay;
+	int currentFrame;
+	int framesWaited;
+	int numFrames;
     boost::shared_ptr<Image> texture;
     string name;
     boost::shared_ptr<glm::vec4> colour;
@@ -40,27 +45,23 @@ private:
 public:
 
     /**
-     * Constructor for object without texture
-     * @param name The name of the object
-     * @param modelPath The path to the file containing the object's model
-     * @param cfg The game configuration file
-     * @param log The game log
-     */
-    WorldObject(const string &name, const string &modelPath,
-                const boost::shared_ptr<Configuration> cfg,
-                const boost::shared_ptr<GameLog> log);
-
-    /**
      * Constructor for object with texture
      * @param name The name of the object
      * @param modelPath The path to the file containing the object's model
-     * @param texturePath The path to the file containing the object's texture
      * @param cfg The game configuration file
      * @param log The game log
+	 * @param texturePath The path to the file containing the object's texture. If the object
+	 * 					  is animated, it has to be the path up to the name part of the model.
+	 * 					  The program will append an underscore, a 6-digit index number and the
+	 * 					  .obj suffix for each frame. (e.g. goatAnim will become goatAnim_000001.obj,
+	 * 					  goatAnim_000002.obj, etc.)
+	 * @param numFrames The number of frames, if the object is animated. A single animation
+	 * 					sequence is supported per object and the first frame is considered to
+	 * 					be the non-moving state.
      */
-    WorldObject(const string &name, const string &modelPath, const string &texturePath,
+    WorldObject(const string &name, const string &modelPath,
                 const boost::shared_ptr<Configuration> cfg,
-                const boost::shared_ptr<GameLog> log);
+                const boost::shared_ptr<GameLog> log, const string &texturePath = "", const int &numFrames = 1);
 
     /**
      * Destructor
@@ -71,7 +72,7 @@ public:
      * Get the object's model
      * @return The object's model
      */
-    const boost::shared_ptr<Model>& getModel() const;
+    Model& getModel() const;
 
     /**
      * Get the object's texture
@@ -128,6 +129,32 @@ public:
      * @param z The orientation's z rotation
      */
     void setRotation(const float &x, const float &y, const float &z);
+
+	/**
+	 * Start animating the object
+	 */
+	void startAnimating();
+
+	/**
+	 * Stop animating the object
+	 */
+	void stopAnimating();
+
+	/**
+	 * Reset the animation sequence (go to first frame)
+	 */
+	void resetAnimation();
+
+	/**
+	 * Set the animation speed
+	 * @param delay The delay between each animation frame, expressed in number of game frames
+	 */
+	void setFrameDelay(const int &delay);
+
+	/**
+	 * Process animation (progress current frame if necessary)
+	 */
+	void animate();
 
 };
 

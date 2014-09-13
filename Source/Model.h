@@ -66,6 +66,12 @@ private:
     void deleteInitialBuffers();
 
 public:
+
+	/**
+	 * Default constructor
+	 */
+	Model();
+
     /**
      * Initialisation of the model.
      * @param fileLocation The model file location. This must be a Wavefront .obj file and it must have been
@@ -73,7 +79,7 @@ public:
      * @param cfg The game configuration
      * @param log The log
      */
-    Model(const string &filename,
+    void init(const string &filename,
           const boost::shared_ptr<Configuration> cfg,
           const boost::shared_ptr<GameLog> log);
     ~Model(void);

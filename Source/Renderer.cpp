@@ -451,8 +451,8 @@ namespace AvoidTheBug3D
 
 			glBindBuffer(GL_ARRAY_BUFFER, positionBufferObject);
 			glBufferData(GL_ARRAY_BUFFER,
-				it->get()->getModel()->getVertexDataSize(),
-				it->get()->getModel()->getVertexData(),
+				it->get()->getModel().getVertexDataSize(),
+				it->get()->getModel().getVertexData(),
 				GL_STATIC_DRAW);
 			glEnableVertexAttribArray(0);
 			glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
@@ -462,8 +462,8 @@ namespace AvoidTheBug3D
 			glGenBuffers(1, &indexBufferObject);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-				it->get()->getModel()->getIndexDataSize(),
-				it->get()->getModel()->getIndexData(),
+				it->get()->getModel().getIndexDataSize(),
+				it->get()->getModel().getIndexData(),
 				GL_STATIC_DRAW);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObject);
 
@@ -483,8 +483,8 @@ namespace AvoidTheBug3D
 			glGenBuffers(1, &normalsBufferObject);
 			glBindBuffer(GL_ARRAY_BUFFER, normalsBufferObject);
 			glBufferData(GL_ARRAY_BUFFER,
-				it->get()->getModel()->getNormalsDataSize(),
-				it->get()->getModel()->getNormalsData(), GL_STATIC_DRAW);
+				it->get()->getModel().getNormalsDataSize(),
+				it->get()->getModel().getNormalsData(), GL_STATIC_DRAW);
 
 			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -513,8 +513,8 @@ namespace AvoidTheBug3D
 				glGenBuffers(1, &uvBufferObject);
 				glBindBuffer(GL_ARRAY_BUFFER, uvBufferObject);
 				glBufferData(GL_ARRAY_BUFFER,
-					it->get()->getModel()->getTextureCoordsDataSize(),
-					it->get()->getModel()->getTextureCoordsData(), GL_STATIC_DRAW);
+					it->get()->getModel().getTextureCoordsDataSize(),
+					it->get()->getModel().getTextureCoordsData(), GL_STATIC_DRAW);
 				glEnableVertexAttribArray(2);
 				glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -558,7 +558,7 @@ namespace AvoidTheBug3D
 
 			// Draw
 			glDrawElements(GL_TRIANGLES,
-				it->get()->getModel()->getIndexDataIndexCount(),
+				it->get()->getModel().getIndexDataIndexCount(),
 				GL_UNSIGNED_INT, 0);
 
 			// Clear stuff

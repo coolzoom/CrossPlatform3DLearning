@@ -11,7 +11,11 @@ using namespace boost;
 namespace AvoidTheBug3D
 {
 
-Model::Model(const string &filename,
+Model::Model() {
+
+}
+
+void Model::init(const string &filename,
              const boost::shared_ptr<Configuration> cfg,
              const boost::shared_ptr<GameLog> log)
 {
