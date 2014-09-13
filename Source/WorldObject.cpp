@@ -32,7 +32,11 @@ WorldObject::WorldObject(const string &name, const string &modelPath,
 		new Model[numFrames], []( Model *p ) { delete[] p; });
 
 	if (numFrames > 1) {
+		LOGINFO("Loading animated model (this may take a while):");
 		for (int idx = 0; idx < numFrames; ++idx) {
+			stringstream lss;
+			lss << "Frame " << idx + 1 << " of " << numFrames << "...";
+			LOGINFO(lss.str());
 			stringstream ss;
 			ss << setfill('0') << setw(6) << idx + 1;
 			string frameNum = ss.str();
