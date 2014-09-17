@@ -21,8 +21,8 @@ namespace AvoidTheBug3D {
 	private:
 		boost::shared_ptr<Configuration> cfg;
 		boost::shared_ptr<GameLog> log;
-		boost::shared_ptr<WorldObject> goat;
 
+		boost::shared_ptr<WorldObject> goat;
 		boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene;
 		boost::shared_ptr<Renderer> renderer;
 

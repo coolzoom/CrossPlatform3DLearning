@@ -8,6 +8,7 @@
 #include "GameLog.h"
 #include "GameException.h"
 #include <boost/smart_ptr.hpp>
+#include "GameLogic.h"
 #include "PlayerView.h"
 
 using namespace std;
@@ -22,6 +23,9 @@ int main(int argc, char** argv) {
 	boost::shared_ptr<Configuration> cfg(new Configuration(log));
 
 	try {
+
+		boost::shared_ptr<GameLogic> gameLogic(new GameLogic(cfg, log));
+
 		boost::shared_ptr<PlayerView> pv(new PlayerView(cfg, log));
 
 		// program main loop

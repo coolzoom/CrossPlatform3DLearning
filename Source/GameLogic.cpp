@@ -1,18 +1,23 @@
 /*
- * GameLogic.cpp
- *
- *  Created on: Dec 26, 2013
- *      Author: Dimitri Kourkoulis
- */
+* GameLogic.cpp
+*
+*  Created on: Dec 26, 2013
+*      Author: Dimitri Kourkoulis
+*/
 
 #include "GameLogic.h"
 
-GameLogic::GameLogic() {
-	// TODO Auto-generated constructor stub
+namespace AvoidTheBug3D {
 
-}
+	GameLogic::GameLogic(const boost::shared_ptr<Configuration> cfg,
+		const boost::shared_ptr<GameLog> log) {
 
-GameLogic::~GameLogic() {
-	// TODO Auto-generated destructor stub
-}
+			this->cfg = cfg;
+			this->log = log;
+	}
 
+	GameLogic::~GameLogic() {
+		// TODO Auto-generated destructor stub
+	}
+
+} /* namespace AvoidTheBug3D */
