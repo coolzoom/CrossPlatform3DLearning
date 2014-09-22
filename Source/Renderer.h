@@ -52,6 +52,8 @@ private:
 
     bool isOpenGL33Supported;
 
+    bool noShaders;
+
     /**
      * Load a shader's source code from a file into a string
      * @param fileLocation The file's location, relative to the game path
@@ -136,7 +138,7 @@ public:
 	 * @return The texture handle
 	 */
 	GLuint generateTexture(const string &name, const float *texture, const int width, const int height);
-	
+
 	/**
 	 * Get the handle of a texture which has already been generated (see generateTexture)
 	 * @param name The name of the texture
