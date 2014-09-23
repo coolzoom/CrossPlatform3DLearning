@@ -66,7 +66,7 @@ ADD_EXECUTABLE(game main.cpp GameLog.cpp Model.cpp GameLogic.cpp
  GameException.cpp Configuration.cpp Image.cpp
  GameLog.h Model.h WorldObject.h
  Configuration.h GameLogic.h PlayerView.h
- GameException.h Image.h Renderer.h
+ GameException.h Image.h Renderer.h KeyInput.h
  )
 
 # Link to the required libraries
