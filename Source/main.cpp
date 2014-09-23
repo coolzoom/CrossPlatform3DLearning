@@ -74,8 +74,9 @@ int main(int argc, char** argv)
             ticks = SDL_GetTicks();
             if (ticks - prevTicks > ticksInterval)
             {
+				gameLogic->process(input);
                 prevTicks = ticks;
-                pv->render();
+                pv->render(gameLogic->scene);
             }
         }
 

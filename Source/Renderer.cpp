@@ -425,11 +425,14 @@ void Renderer::renderTexturedQuad(const float *vertices, const string &textureNa
     }
 }
 
+void Renderer::clearScreen()
+{
+	// Clear the buffers
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
 void Renderer::drawScene(const boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene)
 {
-
-    // Clear the buffers
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Use the shaders prepared at initialisation
     glUseProgram(program);
@@ -707,6 +710,8 @@ glm::mat4x4* Renderer::rotateZ(const float angle) const
                            0.0f, 0.0f, 0.0f, 1.0f
                           );
 }
+
+
 
 } // AvoidTheBug3D
 

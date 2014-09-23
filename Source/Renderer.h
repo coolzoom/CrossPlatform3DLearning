@@ -1,10 +1,3 @@
-/*
- * Renderer.h
- *
- *  Created on: Jan 15, 2014
- *      Author: Dimitri Kourkoulis
- */
-
 #ifndef RENDERER_H_
 #define RENDERER_H_
 
@@ -33,6 +26,16 @@
 
 namespace AvoidTheBug3D
 {
+
+/**
+ * @class	Renderer
+ *
+ * @brief	Renderer class, which can render using OpenGL v3.3 or v2.1 if the
+ * 			former is not available
+ *
+ * @author	Dimitri Kourkoulis
+ * @date	Jan 15, 2014
+ */
 
 class Renderer
 {
@@ -148,17 +151,32 @@ public:
 
 	/**
 	 * Render a textured quad
+	 * @param vertices The vertices
+	 * @param textureName The name of the texture (must have been loaded with generateTexture())
 	 */
 	void renderTexturedQuad(const float *vertices, const string &textureName);
 
+	/**
+	 * Clears the screen.
+	 */
+	void clearScreen();
+
     /**
      * Draw the scene
+     * @param scene The scene
      */
     void drawScene(
         const boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene);
 
     /**
-     * Render some text on the screen
+     * Render some text on the screen. The text will be rendered at a depth z of 0.5
+     * in an orthographic coordinate space
+     * @param text The text to be rendered
+     * @param colour The colour in which the text will be rendered
+     * @param topX The top x coordinate of the text rectangle
+     * @param topY The top y coordinate of the text rectangle
+	 * @param bottomX The bottom x coordinate of the text rectangle
+	 * @param bottomY The bottom y coordinate of the text rectangle
      */
 	void renderText(const string &text, const SDL_Color &colour, 
 		const float &topX, const float &topY, const float &bottomX, const float &bottomY);
