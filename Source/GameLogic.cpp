@@ -25,8 +25,6 @@ namespace AvoidTheBug3D {
 			scene = boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > >(
 				new vector<boost::shared_ptr<WorldObject> >());
 			scene->push_back(goat);
-
-			rotation = 0.0f;
 	}
 
 	GameLogic::~GameLogic() {
@@ -57,7 +55,7 @@ namespace AvoidTheBug3D {
 		}
 		
 		goat->animate();
-		goat->setRotation(rotation, goatRotation->y, rotation);
+		goat->setRotation(0.0f, goatRotation->y, 0.0f);
 	}
 
 } /* namespace AvoidTheBug3D */

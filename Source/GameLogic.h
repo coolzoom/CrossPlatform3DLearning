@@ -26,9 +26,6 @@ namespace AvoidTheBug3D {
 		boost::shared_ptr<GameLog> log;
 
 		boost::shared_ptr<WorldObject> goat;
-		
-
-		float rotation;
 
 	public:
 
