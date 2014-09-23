@@ -160,7 +160,8 @@ public:
     /**
      * Render some text on the screen
      */
-    void renderText(const string &text);
+	void renderText(const string &text, const SDL_Color &colour, 
+		const float &topX, const float &topY, const float &bottomX, const float &bottomY);
 
     /**
      * This is a double buffered system and this commands swaps

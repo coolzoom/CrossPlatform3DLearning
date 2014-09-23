@@ -75,7 +75,9 @@ namespace AvoidTheBug3D {
 
 		renderer->renderTexturedQuad(&groundVerts[0], "ground");
 		renderer->renderTexturedQuad(&skyVerts[0], "sky");
-		//renderer->renderText("Hello");
+		SDL_Color textColour = {50, 50, 50, 255};
+
+		renderer->renderText("Hello", textColour, -1.0f, 0.8f, 0.0f, -0.1f);
 		renderer->swapBuffers();
 
 	}

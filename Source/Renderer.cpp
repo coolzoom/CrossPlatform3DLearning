@@ -612,7 +612,8 @@ void Renderer::drawScene(const boost::shared_ptr<vector<boost::shared_ptr<WorldO
 
 }
 
-void Renderer::renderText(const string &text)
+void Renderer::renderText(const string &text, const SDL_Color &colour, 
+	const float &topX, const float &topY, const float &bottomX, const float &bottomY)
 {
 
     GLuint textHandle = getTextureHandle("text_" + text);
@@ -620,7 +621,6 @@ void Renderer::renderText(const string &text)
     if (textHandle == 0)
     {
 
-        SDL_Color colour = {20, 20, 255, 255};
         SDL_Surface *textSurface = TTF_RenderText_Blended(font,
                                    text.c_str(), colour);
         int numPixels = textSurface->h * textSurface->w;
@@ -666,10 +666,10 @@ void Renderer::renderText(const string &text)
 
     float boxVerts[16] =
     {
-        0.5f, 0.0f, -0.5f, 1.0f,
-        -0.5f, 0.0f, -0.5f, 1.0f,
-        -0.5f, -0.5f, -0.5f, 1.0f,
-        0.5f, -0.5f, -0.5f, 1.0f
+        bottomX, topY, -0.5f, 1.0f,
+        topX, topY, -0.5f, 1.0f,
+        topX, bottomY, -0.5f, 1.0f,
+        bottomX, bottomY, -0.5f, 1.0f
     };
 
     this->renderTexturedQuad(boxVerts, "text_" + text);
