@@ -62,8 +62,8 @@ namespace AvoidTheBug3D {
 
 		renderer->drawScene(scene);
 
-		SDL_Color textColour = {50, 50, 50, 255};
-		renderer->renderText("Hello", textColour, -1.0f, 0.8f, 0.0f, -0.1f);
+		SDL_Color textColour = {220, 220, 220, 255};
+		renderer->renderText("I can walk!", textColour, -1.0f, 0.8f, 1.0f, -0.1f);
 		
 		renderer->swapBuffers();
 	}

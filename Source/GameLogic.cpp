@@ -34,24 +34,41 @@ namespace AvoidTheBug3D {
 	void GameLogic::process( const KeyInput &keyInput )
 	{
 		const boost::shared_ptr<glm::vec3> goatRotation = goat->getRotation();
+		const boost::shared_ptr<glm::vec3> goatOffset = goat->getOffset();
+		float goatSpeed = 0.05f;
 
-		goat->startAnimating();
+		goat->stopAnimating();
+
 		if(keyInput.left) {
-			goatRotation->y += 0.03f;
+			goatRotation->y -= 0.03f;
 
 			if (goatRotation->y > 6.28f)
 				goatRotation->y = 0.0f;
+			goat->startAnimating();
 			
 		}
 		else if (keyInput.right) {
-			goatRotation->y -= 0.03f;
-
+			goatRotation->y += 0.03f;
+			
 			if (goatRotation->y < -6.28f)
 				goatRotation->y = 0.0f;
+			goat->startAnimating();
 		}
-		else
-		{
-			goat->stopAnimating();
+		
+		if(keyInput.up) {
+			float a = 
+
+			goatOffset->x -= glm::cos(goatRotation->y) * goatSpeed;
+			goatOffset->z -= glm::sin(goatRotation->y) * goatSpeed;
+
+			goat->startAnimating();
+
+		}
+		else if (keyInput.down) {
+			goatOffset->x += glm::cos(goatRotation->y) * goatSpeed;
+			goatOffset->z += glm::sin(goatRotation->y) * goatSpeed;
+
+			goat->startAnimating();
 		}
 		
 		goat->animate();
