@@ -282,7 +282,7 @@ void Renderer::init(const int width, const int height, const bool fullScreen)
         float perspectiveMatrix[16];
         memset(perspectiveMatrix, 0, sizeof(float) * 16);
         perspectiveMatrix[0] = 1.0f; // frustum scale
-        perspectiveMatrix[5] = 1.0f; // frustum scale
+        perspectiveMatrix[5] = 1.8f; // frustum scale
         perspectiveMatrix[10] = (1.0f + 10.0f) / (1.0f - 10.0f); // (zNear + zFar) / (zNear - zFar)
         perspectiveMatrix[14] = 2.0f * 1.0f * 10.0f / (1.0f - 10.0f); // 2 * zNear * zFar / (zNear - zFar);
         perspectiveMatrix[11] = -1.0f; //cameraPos.z? or just the -1 factor...
@@ -483,7 +483,7 @@ void Renderer::drawScene(const boost::shared_ptr<vector<boost::shared_ptr<WorldO
 
         // Lighting
 
-        glm::vec3 lightDirection(-0.9f, -0.9f, 0.9f);
+        glm::vec3 lightDirection(0.0f, 0.9f, 0.2f);
         GLuint lightDirectionUniform = glGetUniformLocation(program,
                                        "lightDirection");
         glUniform3fv(lightDirectionUniform, 1,

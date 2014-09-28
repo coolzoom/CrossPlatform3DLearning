@@ -18,7 +18,7 @@ namespace AvoidTheBug3D {
 			this->log = log;
 
 			renderer = boost::shared_ptr<Renderer>(new Renderer(cfg, log));
-			renderer->init(640, 480, false);
+			renderer->init(854, 480, false);
 
 			boost::scoped_ptr<Image> groundTexture (
 				new Image("/Game/Data/OtherTextures/grass.png", cfg, log));
