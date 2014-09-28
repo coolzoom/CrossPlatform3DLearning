@@ -39,7 +39,7 @@ struct GlobalSetupTeardown
         boost::shared_ptr<WorldObject> object(
             new WorldObject("animal",
                             "/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTexture.obj",
-                            cfg, log, "/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTextureRedBlackNumbers.png"));
+                            cfg, log, 1, "/Game/Data/UnspecifiedAnimal/UnspecifiedAnimalWithTextureRedBlackNumbers.png"));
         boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene(
             new vector<boost::shared_ptr<WorldObject> >());
         scene->push_back(object);

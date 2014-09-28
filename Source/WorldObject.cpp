@@ -18,8 +18,8 @@ namespace AvoidTheBug3D {
 	}
 
 	WorldObject::WorldObject(const string &name, const string &modelPath,
-		const boost::shared_ptr<Configuration> cfg, const boost::shared_ptr<GameLog> log, const string &texturePath,
-		const int &numFrames) {
+		const boost::shared_ptr<Configuration> cfg, const boost::shared_ptr<GameLog> log, const int &numFrames, 
+		const string &texturePath) {
 			this->name = name;
 			this->log = log;
 			animating = false;
@@ -31,7 +31,7 @@ namespace AvoidTheBug3D {
 			model = new Model[numFrames];
 
 			if (numFrames > 1) {
-				LOGINFO("Loading animated model (this may take a while):");
+				LOGINFO("Loading " + name + " animated model (this may take a while):");
 				for (int idx = 0; idx < numFrames; ++idx) {
 					stringstream lss;
 					lss << "Frame " << idx + 1 << " of " << numFrames << "...";

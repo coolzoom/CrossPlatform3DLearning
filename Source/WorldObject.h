@@ -61,7 +61,7 @@ public:
      */
     WorldObject(const string &name, const string &modelPath,
                 const boost::shared_ptr<Configuration> cfg,
-                const boost::shared_ptr<GameLog> log, const string &texturePath = "", const int &numFrames = 1);
+                const boost::shared_ptr<GameLog> log, const int &numFrames = 1, const string &texturePath = "");
 
     /**
      * Destructor

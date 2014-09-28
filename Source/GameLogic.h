@@ -26,6 +26,7 @@ namespace AvoidTheBug3D {
 		boost::shared_ptr<GameLog> log;
 
 		boost::shared_ptr<WorldObject> goat;
+		boost::shared_ptr<WorldObject> bug;
 
 	public:
 
