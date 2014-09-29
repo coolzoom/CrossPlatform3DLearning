@@ -37,7 +37,7 @@ namespace AvoidTheBug3D {
 			scene->push_back(goat);
 			scene->push_back(bug);
 
-			
+			bugState = FLYING_STRAIGHT;	
 	}
 
 	GameLogic::~GameLogic() {

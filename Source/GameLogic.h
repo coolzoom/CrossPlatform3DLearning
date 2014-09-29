@@ -28,6 +28,10 @@ namespace AvoidTheBug3D {
 		boost::shared_ptr<WorldObject> goat;
 		boost::shared_ptr<WorldObject> bug;
 
+		enum BugState {FLYING_STRAIGHT, TURNING_RIGHT, TURNING_LEFT};
+		BugState bugState;
+		int bugFramesInCurrentState;
+
 	public:
 
 		/**
