@@ -7,10 +7,12 @@
 
 #define BUG_ROTATION_SPEED 0.09f
 #define BUG_TURNING_ANGLE 0.08f
-#define BUG_SPEED 0.06f
+#define BUG_SPEED 0.000f
 
 #define GOAT_ROTATION_SPEED 0.03f
 #define GOAT_SPEED 0.05f
+
+#define ROUND_2_DECIMAL(x) (floorf(100 * x + 0.5) / 100)
 
 #define FULL_ROTATION 6.28f // More or less 360 degrees in radians
 
@@ -103,9 +105,34 @@ namespace AvoidTheBug3D {
 		const boost::shared_ptr<glm::vec3> bugRotation = bug->getRotation();
 		const boost::shared_ptr<glm::vec3> bugOffset = bug->getOffset();
 
-		bugRotation->x = -BUG_TURNING_ANGLE;
+		glm::vec2 goatRelPos( goat->getOffset()->x - bug->getOffset()->x, goat->getOffset()->y - bug->getOffset()->y);
 
-		bugRotation->y -= BUG_ROTATION_SPEED;
+		glm::vec2 bugDirection(glm::cos(bug->getRotation()->y), glm::sin(bug->getRotation()->y));
+
+		float dotPosDir = glm::dot<float>(goatRelPos, bugDirection);
+
+		if (dotPosDir > 0) {
+			bugState = FLYING_STRAIGHT;
+		}
+		else
+		{
+			bugState = TURNING_LEFT;
+		}
+
+
+		if (bugState == TURNING_LEFT)
+		{
+
+			bugRotation->x = -BUG_TURNING_ANGLE;
+
+			bugRotation->y -= BUG_ROTATION_SPEED;
+
+		}
+		else 
+		{
+			bugRotation->x = 0;
+		}
+		
 
 		if (bugRotation->y < -FULL_ROTATION)
 			bugRotation->y = 0.0f;
