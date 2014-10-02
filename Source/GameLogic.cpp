@@ -5,6 +5,15 @@
 *      Author: Dimitri Kourkoulis
 */
 
+#define BUG_ROTATION_SPEED 0.09f
+#define BUG_TURNING_ANGLE 0.08f
+#define BUG_SPEED 0.06f
+
+#define GOAT_ROTATION_SPEED 0.03f
+#define GOAT_SPEED 0.05f
+
+#define FULL_ROTATION 6.28f // More or less 360 degrees in radians
+
 #include "GameLogic.h"
 #include <glm/glm.hpp>
 
@@ -44,63 +53,73 @@ namespace AvoidTheBug3D {
 		// TODO Auto-generated destructor stub
 	}
 
-	void GameLogic::process( const KeyInput &keyInput )
+	void GameLogic::moveGoat( const KeyInput &keyInput )
 	{
 		const boost::shared_ptr<glm::vec3> goatRotation = goat->getRotation();
 		const boost::shared_ptr<glm::vec3> goatOffset = goat->getOffset();
-		float goatSpeed = 0.05f;
-		
-		const boost::shared_ptr<glm::vec3> bugRotation = bug->getRotation();
-		const boost::shared_ptr<glm::vec3> bugOffset = bug->getOffset();
-		float bugSpeed = 0.06f;
-		bugRotation->x = -0.8f;
-
-
-		bugRotation->y -= 0.09f;
-
-		if (bugRotation->y < -6.28f)
-			bugRotation->y = 0.0f;
-
-		bugOffset->x -= glm::cos(bugRotation->y) * bugSpeed;
-		bugOffset->z -= glm::sin(bugRotation->y) * bugSpeed;
 
 		goat->stopAnimating();
 
 		if(keyInput.left) {
-			goatRotation->y -= 0.03f;
+			goatRotation->y -= GOAT_ROTATION_SPEED;
 
-			if (goatRotation->y < - 6.28f)
+			if (goatRotation->y < - FULL_ROTATION)
 				goatRotation->y = 0.0f;
 			goat->startAnimating();
-			
+
 		}
 		else if (keyInput.right) {
-			goatRotation->y += 0.03f;
-			
-			if (goatRotation->y > 6.28f)
+			goatRotation->y += GOAT_ROTATION_SPEED;
+
+			if (goatRotation->y > FULL_ROTATION)
 				goatRotation->y = 0.0f;
 			goat->startAnimating();
 		}
-		
+
 		if(keyInput.up) {
 			float a = 
 
-			goatOffset->x -= glm::cos(goatRotation->y) * goatSpeed;
-			goatOffset->z -= glm::sin(goatRotation->y) * goatSpeed;
+				goatOffset->x -= glm::cos(goatRotation->y) * GOAT_SPEED;
+			goatOffset->z -= glm::sin(goatRotation->y) * GOAT_SPEED;
 
 			goat->startAnimating();
 
 		}
 		else if (keyInput.down) {
-			goatOffset->x += glm::cos(goatRotation->y) * goatSpeed;
-			goatOffset->z += glm::sin(goatRotation->y) * goatSpeed;
+			goatOffset->x += glm::cos(goatRotation->y) * GOAT_SPEED;
+			goatOffset->z += glm::sin(goatRotation->y) * GOAT_SPEED;
 
 			goat->startAnimating();
 		}
-		
+
 		goat->animate();
-		bug->animate();
+		
 		goat->setRotation(0.0f, goatRotation->y, 0.0f);
+
+	}
+
+	void GameLogic::moveBug()
+	{
+		const boost::shared_ptr<glm::vec3> bugRotation = bug->getRotation();
+		const boost::shared_ptr<glm::vec3> bugOffset = bug->getOffset();
+
+		bugRotation->x = -BUG_TURNING_ANGLE;
+
+		bugRotation->y -= BUG_ROTATION_SPEED;
+
+		if (bugRotation->y < -FULL_ROTATION)
+			bugRotation->y = 0.0f;
+
+		bugOffset->x -= glm::cos(bugRotation->y) * BUG_SPEED;
+		bugOffset->z -= glm::sin(bugRotation->y) * BUG_SPEED;
+
+		bug->animate();
+	}
+
+	void GameLogic::process( const KeyInput &keyInput )
+	{
+		moveBug();
+		moveGoat(keyInput);
 	}
 
 } /* namespace AvoidTheBug3D */

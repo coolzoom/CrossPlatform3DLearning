@@ -32,6 +32,10 @@ namespace AvoidTheBug3D {
 		BugState bugState;
 		int bugFramesInCurrentState;
 
+		void moveGoat(const KeyInput &keyInput);
+
+		void moveBug();
+
 	public:
 
 		/**
@@ -60,7 +64,6 @@ namespace AvoidTheBug3D {
 		 * 
 		 * @param	keyInput	The keyboard input
 		 */
-
 		void process(const KeyInput &keyInput);
 	};
 
