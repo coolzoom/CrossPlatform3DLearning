@@ -18,16 +18,14 @@ uniform vec3 lightDirection;
 
 void main()
 {
-    vec4 cameraPos = position * xRotationMatrix 
+    vec4 cameraPos = position * zRotationMatrix * xRotationMatrix 
 			* yRotationMatrix
-			* zRotationMatrix
 			+ vec4(offset.x, offset.y, offset.z, 0.0);
 
     gl_Position = perspectiveMatrix * cameraPos;
 
-    vec4 normalRotated = vec4(normal, 1) * xRotationMatrix 
-			* yRotationMatrix
-			* zRotationMatrix;
+    vec4 normalRotated = vec4(normal, 1) * zRotationMatrix * xRotationMatrix 
+			* yRotationMatrix;
 
     vec4 normalCameraSpace = normalize(perspectiveMatrix * normalRotated);    
     

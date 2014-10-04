@@ -28,10 +28,11 @@ namespace AvoidTheBug3D {
 		boost::shared_ptr<WorldObject> goat;
 		boost::shared_ptr<WorldObject> bug;
 
-		enum BugState {FLYING_STRAIGHT, TURNING_RIGHT, TURNING_LEFT};
-		BugState bugState;
+		enum BugState {FLYING_STRAIGHT, TURNING, DIVING_DOWN, DIVING_UP};
+		BugState bugState, bugPreviousState;
 		int bugFramesInCurrentState;
-
+		float bugVerticalSpeed;
+		
 		void moveGoat(const KeyInput &keyInput);
 
 		void moveBug();

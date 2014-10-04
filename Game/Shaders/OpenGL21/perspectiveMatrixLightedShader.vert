@@ -16,16 +16,14 @@ varying vec2 textureCoords;
 
 void main()
 {
-    vec4 cameraPos = vec4(position) * xRotationMatrix 
+    vec4 cameraPos = vec4(position) * zRotationMatrix * xRotationMatrix 
 			* yRotationMatrix
-			* zRotationMatrix
 			+ vec4(offset.x, offset.y, offset.z, 0.0);
 
     gl_Position = perspectiveMatrix * cameraPos;
 
-    vec4 normalRotated = vec4(normal, 1) * xRotationMatrix 
-			* yRotationMatrix
-			* zRotationMatrix;
+    vec4 normalRotated = vec4(normal, 1) * zRotationMatrix * xRotationMatrix 
+			* yRotationMatrix;
 
     vec4 normalCameraSpace = normalize(perspectiveMatrix * normalRotated);    
     
