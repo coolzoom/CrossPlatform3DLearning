@@ -45,7 +45,7 @@ namespace AvoidTheBug3D {
 				new WorldObject("bug",
 				"/Game/Data/Bug/bugAnim",
 				cfg, log, 9));
-			bug->setOffset(0.5f, GROUND_Y + BUG_FLIGHT_HEIGHT, -4.0f);
+			bug->setOffset(0.5f, GROUND_Y + BUG_FLIGHT_HEIGHT, -18.0f);
 			bug->setColour(0.2f, 0.2f, 0.2f, 1.0f);
 			// The bug will always be flapping its wings, so we might as well set
 			// it to do so here
