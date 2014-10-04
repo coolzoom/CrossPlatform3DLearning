@@ -29,6 +29,7 @@ namespace AvoidTheBug3D {
 		boost::shared_ptr<WorldObject> bug;
 
 		enum BugState {FLYING_STRAIGHT, TURNING, DIVING_DOWN, DIVING_UP};
+		enum GameState {START_SCREEN, PLAYING};
 		BugState bugState, bugPreviousState;
 		int bugFramesInCurrentState;
 		float bugVerticalSpeed;
@@ -36,6 +37,9 @@ namespace AvoidTheBug3D {
 		void moveGoat(const KeyInput &keyInput);
 
 		void moveBug();
+		void initGame();
+		void processGame(const KeyInput &keyInput);
+		void processStartScreen(const KeyInput &keyInput);
 
 	public:
 

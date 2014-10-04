@@ -39,18 +39,12 @@ namespace AvoidTheBug3D {
 				new WorldObject("goat",
 				"/Game/Data/Goat/goatAnim",
 				cfg, log, 19, "/Game/Data/Goat/Goat.png"));
-			goat->setOffset(-1.2f, GROUND_Y, -4.0f);
+			
 
 			bug = boost::shared_ptr<WorldObject> (
 				new WorldObject("bug",
 				"/Game/Data/Bug/bugAnim",
 				cfg, log, 9));
-			bug->setOffset(0.5f, GROUND_Y + BUG_FLIGHT_HEIGHT, -18.0f);
-			bug->setColour(0.2f, 0.2f, 0.2f, 1.0f);
-			// The bug will always be flapping its wings, so we might as well set
-			// it to do so here
-			bug->setFrameDelay(2);
-			bug->startAnimating();
 
 			bugVerticalSpeed = ROUND_2_DECIMAL(BUG_FLIGHT_HEIGHT / BUG_DIVE_DURATION);
 
@@ -59,13 +53,28 @@ namespace AvoidTheBug3D {
 			scene->push_back(goat);
 			scene->push_back(bug);
 
-			bugState = FLYING_STRAIGHT;
-			bugPreviousState = FLYING_STRAIGHT;
-			bugFramesInCurrentState = 1;
+			initGame();
+
 	}
 
 	GameLogic::~GameLogic() {
 		// TODO Auto-generated destructor stub
+	}
+
+	void GameLogic::initGame()
+	{
+		goat->setOffset(-1.2f, GROUND_Y, -4.0f);
+		bug->setOffset(0.5f, GROUND_Y + BUG_FLIGHT_HEIGHT, -18.0f);
+		bug->setColour(0.2f, 0.2f, 0.2f, 1.0f);
+
+		// The bug will always be flapping its wings, so we might as well set
+		// it to do so here
+		bug->setFrameDelay(2);
+		bug->startAnimating();
+
+		bugState = FLYING_STRAIGHT;
+		bugPreviousState = FLYING_STRAIGHT;
+		bugFramesInCurrentState = 1;
 	}
 
 	void GameLogic::moveGoat( const KeyInput &keyInput )
@@ -224,15 +233,25 @@ namespace AvoidTheBug3D {
 		if (bugOffset->x > -(bugOffset->z)) 
 			bugOffset->x = -(bugOffset->z);
 
-
-
 		bug->animate();
 	}
 
-	void GameLogic::process( const KeyInput &keyInput )
+	void GameLogic::processGame( const KeyInput &keyInput )
 	{
 		moveBug();
 		moveGoat(keyInput);
 	}
+
+	void GameLogic::processStartScreen( const KeyInput &keyInput )
+	{
+
+	}
+
+	void GameLogic::process( const KeyInput &keyInput )
+	{
+		processGame(keyInput);
+	}
+
+	
 
 } /* namespace AvoidTheBug3D */
