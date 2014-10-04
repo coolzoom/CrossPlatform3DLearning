@@ -5,18 +5,15 @@
 *      Author: Dimitri Kourkoulis
 */
 
-#define MAX_X 2.0f
-#define MIN_X -2.0f
-
 #define MAX_Z -2.0f
-#define MIN_Z -9.0f
+#define MIN_Z -24.0f
 
 #define GROUND_Y -1.0f
 
 #define BUG_ROTATION_SPEED 0.12f
 #define BUG_DIVE_TILT 0.8f
-#define BUG_SPEED 0.05f
-#define BUG_DIVE_DURATION 40
+#define BUG_SPEED 0.08f
+#define BUG_DIVE_DURATION 30
 #define BUG_START_DIVE_DISTANCE 0.1f
 #define BUG_FLIGHT_HEIGHT 1.4f
 

@@ -283,8 +283,8 @@ void Renderer::init(const int width, const int height, const bool fullScreen)
         memset(perspectiveMatrix, 0, sizeof(float) * 16);
         perspectiveMatrix[0] = 1.0f; // frustum scale
         perspectiveMatrix[5] = 1.8f; // frustum scale
-        perspectiveMatrix[10] = (1.0f + 10.0f) / (1.0f - 10.0f); // (zNear + zFar) / (zNear - zFar)
-        perspectiveMatrix[14] = 2.0f * 1.0f * 10.0f / (1.0f - 10.0f); // 2 * zNear * zFar / (zNear - zFar);
+        perspectiveMatrix[10] = (1.0f + 25.0f) / (1.0f - 25.0f); // (zNear + zFar) / (zNear - zFar)
+        perspectiveMatrix[14] = 2.0f * 1.0f * 25.0f / (1.0f - 25.0f); // 2 * zNear * zFar / (zNear - zFar);
         perspectiveMatrix[11] = -1.0f; //cameraPos.z? or just the -1 factor...
 
         glUniformMatrix4fv(perspectiveMatrixUniform, 1, GL_FALSE,
