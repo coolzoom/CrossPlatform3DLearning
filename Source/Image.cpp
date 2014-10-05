@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <boost/numeric/conversion/cast.hpp>
 #include "GameException.h"
+#include "MathMacros.h"
 
 using namespace std;
 
@@ -158,9 +159,9 @@ void Image::loadFromFile(const string &fileLocation)
             rgb[1] = boost::numeric_cast<float, png_byte>(ptr[1]) ;
             rgb[2] = boost::numeric_cast<float, png_byte>(ptr[2]) ;
 
-            imageData[y * width * 4 + x * 4] =  floorf(100.0f * (rgb[0] / 255.0f) + 0.5f) / 100.0f;
-            imageData[y * width * 4 + x * 4 + 1] = floorf(100.0f * (rgb[1] / 255.0f) + 0.5f) / 100.0f;
-            imageData[y * width * 4 + x * 4 + 2] = floorf(100.0f * (rgb[2] / 255.0f) + 0.5f) / 100.0f;
+            imageData[y * width * 4 + x * 4] =  ROUND_2_DECIMAL(rgb[0] / 255.0f);
+            imageData[y * width * 4 + x * 4 + 1] = ROUND_2_DECIMAL(rgb[1] / 255.0f);
+            imageData[y * width * 4 + x * 4 + 2] = ROUND_2_DECIMAL(rgb[2] / 255.0f);
             imageData[y * width * 4 + x * 4 + 3] = 1.0f;
 
         }

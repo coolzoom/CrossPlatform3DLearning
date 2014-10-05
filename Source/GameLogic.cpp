@@ -9,6 +9,7 @@
 #define MIN_Z -24.0f
 
 #define GROUND_Y -1.0f
+#define FULL_ROTATION 6.28f // More or less 360 degrees in radians
 
 #define BUG_ROTATION_SPEED 0.12f
 #define BUG_DIVE_TILT 0.8f
@@ -20,12 +21,9 @@
 #define GOAT_ROTATION_SPEED 0.1f
 #define GOAT_SPEED 0.05f
 
-#define ROUND_2_DECIMAL(x) (floorf(100 * x + 0.5) / 100)
-
-#define FULL_ROTATION 6.28f // More or less 360 degrees in radians
-
 #include "GameLogic.h"
 #include <glm/glm.hpp>
+#include "MathMacros.h"
 
 namespace AvoidTheBug3D {
 
