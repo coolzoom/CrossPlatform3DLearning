@@ -76,7 +76,7 @@ int main(int argc, char** argv)
             {
 				gameLogic->process(input);
                 prevTicks = ticks;
-                pv->render(gameLogic->scene);
+                pv->render(gameLogic->gameScene);
             }
         }
 

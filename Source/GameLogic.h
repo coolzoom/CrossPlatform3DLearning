@@ -6,6 +6,7 @@
 #include "GameLog.h"
 #include "WorldObject.h"
 #include "KeyInput.h"
+#include "GameScene.h"
 
 namespace AvoidTheBug3D {
 
@@ -44,11 +45,9 @@ namespace AvoidTheBug3D {
 	public:
 
 		/**
-		 * The scene, in its current state.
-		 *
-		 * @return	The scene.
+		 * @brief	The game scene.
 		 */
-		boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene;
+		boost::shared_ptr<GameScene> gameScene;
 
 		/**
 		 * Constructor

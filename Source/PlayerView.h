@@ -13,6 +13,7 @@
 #include "GameLog.h"
 #include "WorldObject.h"
 #include "Renderer.h"
+#include "GameScene.h"
 
 namespace AvoidTheBug3D {
 
@@ -44,7 +45,7 @@ namespace AvoidTheBug3D {
 		 *
 		 * @param	scene	The scene
 		 */
-		void render(boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene);
+		void render(boost::shared_ptr<GameScene> gameScene);
 	};
 
 } /* namespace AvoidTheBug3D */

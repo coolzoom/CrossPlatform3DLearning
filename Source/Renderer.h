@@ -162,11 +162,11 @@ public:
 	void clearScreen();
 
     /**
-     * Draw the scene
-     * @param scene The scene
+     * Render the world objects
+     * @param scene The world objects
      */
-    void drawScene(
-        const boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene);
+    void renderWorldObjects(
+        const boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > worldObjects);
 
     /**
      * Render some text on the screen. The text will be rendered at a depth z of 0.5

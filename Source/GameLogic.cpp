@@ -33,6 +33,8 @@ namespace AvoidTheBug3D {
 			this->cfg = cfg;
 			this->log = log;
 
+			gameScene = boost::shared_ptr<GameScene>(new GameScene(cfg, log));
+
 			goat = boost::shared_ptr<WorldObject> (
 				new WorldObject("goat",
 				"/Game/Data/Goat/goatAnim",
@@ -45,11 +47,9 @@ namespace AvoidTheBug3D {
 				cfg, log, 9));
 
 			bugVerticalSpeed = ROUND_2_DECIMAL(BUG_FLIGHT_HEIGHT / BUG_DIVE_DURATION);
-
-			scene = boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > >(
-				new vector<boost::shared_ptr<WorldObject> >());
-			scene->push_back(goat);
-			scene->push_back(bug);
+			
+			gameScene->worldObjects->push_back(goat);
+			gameScene->worldObjects->push_back(bug);
 
 			initGame();
 

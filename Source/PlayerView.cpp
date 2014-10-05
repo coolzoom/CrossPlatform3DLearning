@@ -34,7 +34,7 @@ namespace AvoidTheBug3D {
 		// TODO Auto-generated destructor stub
 	}
 
-	void PlayerView::render(boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene)
+	void PlayerView::render(boost::shared_ptr<GameScene> gameScene)
 	{
 
 		renderer->clearScreen();
@@ -60,7 +60,7 @@ namespace AvoidTheBug3D {
 		renderer->renderTexturedQuad(&groundVerts[0], "ground");
 		renderer->renderTexturedQuad(&skyVerts[0], "sky");
 
-		renderer->drawScene(scene);
+		renderer->renderWorldObjects(gameScene->worldObjects);
 
 		SDL_Color textColour = {255, 255, 0, 255};
 		renderer->renderText("Now it's chasing me! HELP!", textColour, -1.0f, 1.0f, 1.0f, 0.5f);

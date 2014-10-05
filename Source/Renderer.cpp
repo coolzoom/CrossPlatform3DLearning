@@ -431,7 +431,7 @@ void Renderer::clearScreen()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Renderer::drawScene(const boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > scene)
+void Renderer::renderWorldObjects(const boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > > worldObjects)
 {
 
     // Use the shaders prepared at initialisation
@@ -439,7 +439,7 @@ void Renderer::drawScene(const boost::shared_ptr<vector<boost::shared_ptr<WorldO
 
     // Pick up each model in the "world" and render it.
     for (std::vector<boost::shared_ptr<WorldObject> >::iterator it =
-                scene->begin(); it != scene->end(); it++)
+                worldObjects->begin(); it != worldObjects->end(); it++)
     {
         GLuint vao = 0;
         if (isOpenGL33Supported)
