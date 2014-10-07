@@ -14,6 +14,8 @@ namespace AvoidTheBug3D {
 			this->cfg = cfg;
 			this->log = log;
 
+			showingStartScreen = true;
+
 			worldObjects = boost::shared_ptr<vector<boost::shared_ptr<WorldObject> > >(
 				new vector<boost::shared_ptr<WorldObject> >());
 	}

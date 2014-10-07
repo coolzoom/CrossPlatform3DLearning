@@ -15,7 +15,7 @@ namespace AvoidTheBug3D
 
 	typedef struct KeyInput  
 	{
-		bool up, down, left, right;
+		bool up, down, left, right, enter;
 
 		KeyInput()
 		{
@@ -23,6 +23,7 @@ namespace AvoidTheBug3D
 			down = false;
 			left = false;
 			right = false;
+			enter = false;
 		}
 
 	} KeyInput;

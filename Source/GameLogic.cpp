@@ -24,6 +24,7 @@
 #include "GameLogic.h"
 #include <glm/glm.hpp>
 #include "MathMacros.h"
+#include "GameException.h"
 
 namespace AvoidTheBug3D {
 
@@ -39,19 +40,20 @@ namespace AvoidTheBug3D {
 				new WorldObject("goat",
 				"/Game/Data/Goat/goatAnim",
 				cfg, log, 19, "/Game/Data/Goat/Goat.png"));
-			
 
 			bug = boost::shared_ptr<WorldObject> (
 				new WorldObject("bug",
 				"/Game/Data/Bug/bugAnim",
 				cfg, log, 9));
+			bug->setColour(0.2f, 0.2f, 0.2f, 1.0f);
+			bug->setFrameDelay(2);
 
 			bugVerticalSpeed = ROUND_2_DECIMAL(BUG_FLIGHT_HEIGHT / BUG_DIVE_DURATION);
 			
 			gameScene->worldObjects->push_back(goat);
 			gameScene->worldObjects->push_back(bug);
 
-			initGame();
+			gameState = START_SCREEN;
 
 	}
 
@@ -63,11 +65,7 @@ namespace AvoidTheBug3D {
 	{
 		goat->setOffset(-1.2f, GROUND_Y, -4.0f);
 		bug->setOffset(0.5f, GROUND_Y + BUG_FLIGHT_HEIGHT, -18.0f);
-		bug->setColour(0.2f, 0.2f, 0.2f, 1.0f);
-
-		// The bug will always be flapping its wings, so we might as well set
-		// it to do so here
-		bug->setFrameDelay(2);
+		
 		bug->startAnimating();
 
 		bugState = FLYING_STRAIGHT;
@@ -242,14 +240,27 @@ namespace AvoidTheBug3D {
 
 	void GameLogic::processStartScreen( const KeyInput &keyInput )
 	{
-
+		gameScene->showingStartScreen = true;
+		if (keyInput.enter) {
+			initGame();
+			gameScene->showingStartScreen = false;
+			gameState = PLAYING;
+		}
 	}
 
 	void GameLogic::process( const KeyInput &keyInput )
 	{
-		processGame(keyInput);
+		switch(gameState) {
+		case START_SCREEN:
+			processStartScreen(keyInput);
+			break;
+		case PLAYING:
+			processGame(keyInput);
+			break;
+		default:
+			throw GameException("Urecognised game state");
+			break;
+		}
 	}
-
-	
 
 } /* namespace AvoidTheBug3D */

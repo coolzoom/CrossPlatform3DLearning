@@ -54,6 +54,7 @@ int main(int argc, char** argv)
 				input.down = keyState[SDLK_DOWN] == 1;
 				input.left = keyState[SDLK_LEFT] == 1;
 				input.right = keyState[SDLK_RIGHT] == 1;
+				input.enter = keyState[SDLK_RETURN] == 1;
 
                 switch (event.type)
                 {

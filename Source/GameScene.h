@@ -25,6 +25,11 @@ namespace AvoidTheBug3D {
 	public:
 
 		/**
+		 * @brief	Showing start screen.
+		 */
+		bool showingStartScreen;
+
+		/**
 		 * The set of world objects, in their current state.
 		 *
 		 * @return	The world objects.

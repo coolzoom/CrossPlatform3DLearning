@@ -20,6 +20,10 @@ namespace AvoidTheBug3D {
 			renderer = boost::shared_ptr<Renderer>(new Renderer(cfg, log));
 			renderer->init(854, 480, false);
 
+			boost::scoped_ptr<Image> startScreenTexture (
+				new Image("/Game/Data/OtherTextures/startScreen.png", cfg, log));
+			renderer->generateTexture("startScreen", startScreenTexture->getData(), startScreenTexture->getWidth(), startScreenTexture->getHeight());
+
 			boost::scoped_ptr<Image> groundTexture (
 				new Image("/Game/Data/OtherTextures/grass.png", cfg, log));
 			renderer->generateTexture("ground", groundTexture->getData(), groundTexture->getWidth(), groundTexture->getHeight());
@@ -39,31 +43,47 @@ namespace AvoidTheBug3D {
 
 		renderer->clearScreen();
 
-		// Draw the background
+		if(gameScene->showingStartScreen) {
+			float startScreenVerts[16] =
+			{
+				1.0f, 1.0f, 1.0f, 1.0f,
+				-1.0f, 1.0f, 1.0f, 1.0f,
+				-1.0f, -1.0f, 1.0f, 1.0f,
+				1.0f, -1.0f, 1.0f, 1.0f
+			};
+
+			renderer->renderTexturedQuad(&startScreenVerts[0], "startScreen");
+
+			/*SDL_Color textColour = {255, 255, 0, 255};
+			renderer->renderText("Now it's chasing me! HELP!", textColour, -1.0f, 1.0f, 1.0f, 0.5f);*/
+		}
+		else
+		{
+			// Draw the background
+
+			float groundVerts[16] =
+			{
+				1.0f, 0.0f, 1.0f, 1.0f,
+				-1.0f, 0.0f, 1.0f, 1.0f,
+				-1.0f, -1.0f, 1.0f, 1.0f,
+				1.0f, -1.0f, 1.0f, 1.0f
+			};
+
+			float skyVerts[16] =
+			{
+				1.0f, 1.0f, 1.0f, 1.0f,
+				-1.0f, 1.0f, 1.0f, 1.0f,
+				-1.0f, 0.0f, 1.0f, 1.0f,
+				1.0f, 0.0f, 1.0f, 1.0f
+			};
+
+			renderer->renderTexturedQuad(&groundVerts[0], "ground");
+			renderer->renderTexturedQuad(&skyVerts[0], "sky");
+
+			renderer->renderWorldObjects(gameScene->worldObjects);
+
+		}
 		
-		float groundVerts[16] =
-		{
-			1.0f, 0.0f, 1.0f, 1.0f,
-			-1.0f, 0.0f, 1.0f, 1.0f,
-			-1.0f, -1.0f, 1.0f, 1.0f,
-			1.0f, -1.0f, 1.0f, 1.0f
-		};
-
-		float skyVerts[16] =
-		{
-			1.0f, 1.0f, 1.0f, 1.0f,
-			-1.0f, 1.0f, 1.0f, 1.0f,
-			-1.0f, 0.0f, 1.0f, 1.0f,
-			1.0f, 0.0f, 1.0f, 1.0f
-		};
-
-		renderer->renderTexturedQuad(&groundVerts[0], "ground");
-		renderer->renderTexturedQuad(&skyVerts[0], "sky");
-
-		renderer->renderWorldObjects(gameScene->worldObjects);
-
-		SDL_Color textColour = {255, 255, 0, 255};
-		renderer->renderText("Now it's chasing me! HELP!", textColour, -1.0f, 1.0f, 1.0f, 0.5f);
 		
 		renderer->swapBuffers();
 	}
