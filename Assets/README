@@ -20,8 +20,4 @@ typical model. It just contains two bounding boxes
 for the goat, which have been manually created and
 exported to Game/Data/GoatBB, only with the options
 "Apply Modifiers", "Include Edges", "Objects as OBJ
-Objects" and "Keep Vertex Order". The exported file
-is not being used programmatically. It just helps
-for hardcoding the bounding boxes and checking for
-collisions between the goat and the bug (and there
-is no bounding box for the bug).
+Objects" and "Keep Vertex Order".
