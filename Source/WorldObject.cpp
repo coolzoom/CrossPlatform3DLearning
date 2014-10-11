@@ -8,6 +8,7 @@
 #include "WorldObject.h"
 #include <sstream>
 #include <iomanip>
+#include "GameException.h"
 
 namespace AvoidTheBug3D {
 
@@ -19,7 +20,7 @@ namespace AvoidTheBug3D {
 
 	WorldObject::WorldObject(const string &name, const string &modelPath,
 		const boost::shared_ptr<Configuration> cfg, const boost::shared_ptr<GameLog> log, const int &numFrames, 
-		const string &texturePath) {
+		const string &texturePath, const string &boundingBoxesPath) {
 			this->name = name;
 			this->log = log;
 			animating = false;
@@ -52,6 +53,14 @@ namespace AvoidTheBug3D {
 					new Image(texturePath, cfg, log));
 			}
 			this->initPropVectors();
+
+			if (boundingBoxesPath != "") {
+				boundingBoxes = boost::shared_ptr<BoundingBoxes>(new BoundingBoxes(cfg, log));
+				boundingBoxes->loadFromFile(boundingBoxesPath);
+			}
+			else {
+				boundingBoxes = NULL;
+			}
 	}
 
 	WorldObject::~WorldObject() {
@@ -129,6 +138,15 @@ namespace AvoidTheBug3D {
 				}
 			}
 		}
+	}
+
+	bool WorldObject::collidesWithPoint( float x, float y, float z )
+	{
+		if (boundingBoxes == NULL) {
+			throw GameException("No bounding boxes have been provided for " + name + ", so collision detection is not enabled.");
+		}
+
+		return boundingBoxes->pointCollides(x, y, z, offset->x, offset->y, offset->z, rotation->y);
 	}
 
 }

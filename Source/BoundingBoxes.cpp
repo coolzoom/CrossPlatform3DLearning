@@ -120,54 +120,69 @@ namespace AvoidTheBug3D {
 		}
 		file.close();
 
-		numBoxes = facesVertexIndexes->size() / 4;
+		numBoxes = facesVertexIndexes->size() / 6;
 	}
 
-	bool BoundingBoxes::pointCollides( float pointX, float pointY, float pointZ, float boxesX, float boxesY, float boxesZ, float boxesRotation )
+	bool BoundingBoxes::pointCollides( const float &pointX, const float &pointY, const float &pointZ, 
+		const float &boxesX, const float &boxesY, const float &boxesZ, const float &boxesRotation)
 	{
 		bool collides = false;
+		glm::mat4x4 *rotationMatrix = rotateY(boxesRotation);
 	
 		for (int idx = 0; idx < numBoxes; ++idx) {
 			float minZ, maxZ, minX, maxX, minY, maxY;
 
-			glm::vec4 rotatedCoords = glm::vec4(vertices->at(idx * 8)[0] + boxesX, vertices->at(idx * 8)[1] + boxesY, vertices->at(idx * 8)[2] + boxesZ, 1);
-			rotatedCoords = *rotateZ(boxesRotation) * rotatedCoords;
-
-			minX = rotatedCoords.x;
-			maxX = rotatedCoords.x;
-			minY = rotatedCoords.y;
-			maxY = rotatedCoords.y;
-			minZ = rotatedCoords.z;
-			maxZ = rotatedCoords.z;
+			glm::vec4 *coords = new glm::vec4(vertices->at(idx * 8)[0], vertices->at(idx * 8)[1], vertices->at(idx * 8)[2], 1);
+			glm::vec4 *rotatedCoords = new glm::vec4(0.0f, 0.0f, 0.0f, 1.0f); 
 			
+			*rotatedCoords = (*rotationMatrix) * (*coords);
+
+			rotatedCoords->x += boxesX;
+			rotatedCoords->y += boxesY;
+			rotatedCoords->z += boxesZ;
+
+			minX = rotatedCoords->x;
+			maxX = rotatedCoords->x;
+			minY = rotatedCoords->y;
+			maxY = rotatedCoords->y;
+			minZ = rotatedCoords->z;
+			maxZ = rotatedCoords->z;
 
 			for (int checkidx = idx * 8; checkidx < (idx + 1) * 8; ++checkidx )
 			{
-				glm::vec4 rotatedCoords(vertices->at(idx * 8)[0] + boxesX, vertices->at(idx * 8)[1] + boxesY, vertices->at(idx * 8)[2] + boxesZ, 1);
-				//rotatedCoords *= rotateZ(boxesRotation);
+				*coords = glm::vec4(vertices->at(checkidx)[0], vertices->at(checkidx)[1], vertices->at(checkidx)[2], 1);
+				*rotatedCoords = (*rotationMatrix) * (*coords);
+				
+				rotatedCoords->x += boxesX;
+				rotatedCoords->y += boxesY;
+				rotatedCoords->z += boxesZ;
 
-				if (rotatedCoords.x < minX)
-					minX = rotatedCoords.x;
-				if (rotatedCoords.x > maxX)
-					maxX = rotatedCoords.x;
-				if (rotatedCoords.y < minY)
-					minY = rotatedCoords.y;
-				if (rotatedCoords.y > maxY)
-					maxY = rotatedCoords.y;
-				if (rotatedCoords.z < minZ)
-					minZ = rotatedCoords.z;
-				if (rotatedCoords.z > maxZ)
-					maxZ = rotatedCoords.z;
+				if (rotatedCoords->x < minX)
+					minX = rotatedCoords->x;
+				if (rotatedCoords->x > maxX)
+					maxX = rotatedCoords->x;
+				if (rotatedCoords->y < minY)
+					minY = rotatedCoords->y;
+				if (rotatedCoords->y > maxY)
+					maxY = rotatedCoords->y;
+				if (rotatedCoords->z < minZ)
+					minZ = rotatedCoords->z;
+				if (rotatedCoords->z > maxZ)
+					maxZ = rotatedCoords->z;
 			}
 
+			delete coords;
+			delete rotatedCoords;
+
 			if (pointX > minX && pointX < maxX &&
-				pointY > minX && pointY < maxY &&
-				pointZ > minX && pointZ < maxZ) {
+				pointY > minY && pointY < maxY &&
+				pointZ > minZ && pointZ < maxZ) {
 					collides = true;
 					break;
 			}
 		}
-
+		delete rotationMatrix;
+		
 		return collides;
 	}
 

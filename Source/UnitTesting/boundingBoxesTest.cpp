@@ -45,5 +45,7 @@ BOOST_AUTO_TEST_SUITE(ModelTestSuite)
 				bboxes->facesVertexIndexes->at(idx)[3] << ", " << endl;
 
 		}
+
+		BOOST_CHECK_EQUAL(bboxes->pointCollides(0.1f, 0.1f, 0.1f, 0.0f, 0.1f, 0.1f, 1.4f), false);
 }
 BOOST_AUTO_TEST_SUITE_END()

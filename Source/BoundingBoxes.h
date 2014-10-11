@@ -85,8 +85,8 @@ namespace AvoidTheBug3D {
 		 * @return	true if it succeeds, false if it fails.
 		 */
 
-		bool pointCollides(float pointX, float pointY, float pointZ, 
-			float boxesX, float boxesY, float boxesZ, float boxesRotation);
+		bool pointCollides(const float &pointX, const float &pointY, const float &pointZ, 
+			const float &boxesX, const float &boxesY, const float &boxesZ, const float &boxesRotation);
 
 	};
 }

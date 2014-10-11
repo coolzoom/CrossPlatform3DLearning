@@ -39,7 +39,7 @@ namespace AvoidTheBug3D {
 			goat = boost::shared_ptr<WorldObject> (
 				new WorldObject("goat",
 				"/Game/Data/Goat/goatAnim",
-				cfg, log, 19, "/Game/Data/Goat/Goat.png"));
+				cfg, log, 19, "/Game/Data/Goat/Goat.png", "/Game/Data/GoatBB/goatBB.obj"));
 
 			bug = boost::shared_ptr<WorldObject> (
 				new WorldObject("bug",
@@ -156,6 +156,11 @@ namespace AvoidTheBug3D {
 
 		if (bugState == DIVING_DOWN)
 		{
+			if (goat->collidesWithPoint(bug->getOffset()->x, bug->getOffset()->y, bug->getOffset()->z))
+			{
+				gameState = START_SCREEN;
+			}
+
 			if (bugFramesInCurrentState > BUG_DIVE_DURATION / 2)
 			{
 				bugState = DIVING_UP;
@@ -163,6 +168,11 @@ namespace AvoidTheBug3D {
 		}
 		else if (bugState == DIVING_UP)
 		{
+			if (goat->collidesWithPoint(bug->getOffset()->x, bug->getOffset()->y, bug->getOffset()->z))
+			{
+				gameState = START_SCREEN;
+			}
+
 			if (bugFramesInCurrentState > BUG_DIVE_DURATION / 2) {
 				bugState = FLYING_STRAIGHT;
 				bugOffset->y = GROUND_Y + BUG_FLIGHT_HEIGHT; // Correction of possible rounding errors

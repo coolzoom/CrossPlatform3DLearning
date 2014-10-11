@@ -15,6 +15,7 @@
 #include "Configuration.h"
 #include "Image.h"
 #include <glm/glm.hpp>
+#include "BoundingBoxes.h"
 
 using namespace std;
 
@@ -39,6 +40,7 @@ private:
     boost::shared_ptr<glm::vec4> colour;
     boost::shared_ptr<glm::vec3> offset;
     boost::shared_ptr<glm::vec3> rotation;
+	boost::shared_ptr<BoundingBoxes> boundingBoxes;
 
     void initPropVectors();
 
@@ -58,10 +60,13 @@ public:
 	 * @param numFrames The number of frames, if the object is animated. A single animation
 	 * 					sequence is supported per object and the first frame is considered to
 	 * 					be the non-moving state.
+	 * @param boundingBoxesPath The path to the file containing the object's bounding boxes. If no such
+	 * 							path is given, the object cannot be checked for collision detection.
      */
     WorldObject(const string &name, const string &modelPath,
                 const boost::shared_ptr<Configuration> cfg,
-                const boost::shared_ptr<GameLog> log, const int &numFrames = 1, const string &texturePath = "");
+                const boost::shared_ptr<GameLog> log, const int &numFrames = 1, const string &texturePath = "",
+				const string &boundingBoxesPath = "");
 
     /**
      * Destructor
@@ -155,6 +160,19 @@ public:
 	 * Process animation (progress current frame if necessary)
 	 */
 	void animate();
+
+	/**
+	 * Check if the object collides with a point of the given
+	 * coordinates
+	 *
+	 * @param	x	The x coordinate of the point
+	 * @param	y	The y coordinate of the point
+	 * @param	z	The z coordinate of the point
+	 *
+	 * @return	true if a collision is detected, false otherwise.
+	 */
+
+	bool collidesWithPoint(float x, float y, float z);
 
 };
 
