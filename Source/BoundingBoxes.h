@@ -4,7 +4,9 @@
 #include <boost/smart_ptr.hpp>
 #include "Configuration.h"
 #include "GameLog.h"
+#include <vector>
 
+using namespace std;
 
 namespace AvoidTheBug3D {
 
@@ -21,6 +23,11 @@ namespace AvoidTheBug3D {
 	private:
 		boost::shared_ptr<Configuration> cfg;
 		boost::shared_ptr<GameLog> log;
+
+		// Basic data read from .obj file
+		vector<float*> *vertices;
+		vector<int*> *facesVertexIndexes;
+
 	public:
 		BoundingBoxes(const boost::shared_ptr<Configuration> cfg,
 			const boost::shared_ptr<GameLog> log);

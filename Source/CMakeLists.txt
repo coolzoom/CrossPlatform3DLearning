@@ -66,7 +66,7 @@ ADD_EXECUTABLE(game main.cpp GameLog.cpp Model.cpp GameLogic.cpp
  Image.cpp GameScene.cpp BoundingBoxes.cpp
  GameLog.h Model.h WorldObject.h Configuration.h GameLogic.h PlayerView.h
  GameException.h Image.h Renderer.h KeyInput.h GameScene.h MathMacros.h
- BoundingBoxes.h
+ BoundingBoxes.h GetTokens.h
  )
 
 # Link to the required libraries
