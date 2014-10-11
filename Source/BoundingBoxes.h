@@ -31,6 +31,8 @@ namespace AvoidTheBug3D {
 		boost::shared_ptr<Configuration> cfg;
 		boost::shared_ptr<GameLog> log;
 
+		int numBoxes;
+
 	public:
 
 		/**
@@ -67,6 +69,24 @@ namespace AvoidTheBug3D {
 		 */
 
 		void loadFromFile(string fileLocation);
+
+		/**
+		 * Check if a point collides (or is inside) any of the boxes
+		 * assuming that they are in a given offset and have a certain rotation
+		 *
+		 * @param	pointX		 	The point x coordinate.
+		 * @param	pointY		 	The point y coordinate.
+		 * @param	pointZ		 	The point z coordinate.
+		 * @param	boxesX		 	The boxes x coordinate.
+		 * @param	boxesY		 	The boxes y coordinate.
+		 * @param	boxesZ		 	The boxes z coordinate.
+		 * @param	boxesRotation	The boxes rotation.
+		 *
+		 * @return	true if it succeeds, false if it fails.
+		 */
+
+		bool pointCollides(float pointX, float pointY, float pointZ, 
+			float boxesX, float boxesY, float boxesZ, float boxesRotation);
 
 	};
 }

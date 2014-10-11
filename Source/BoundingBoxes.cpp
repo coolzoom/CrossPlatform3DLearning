@@ -117,6 +117,18 @@ namespace AvoidTheBug3D {
 			}
 		}
 		file.close();
+
+		numBoxes = facesVertexIndexes->size() / 4;
+	}
+
+	bool BoundingBoxes::pointCollides( float pointX, float pointY, float pointZ, float boxesX, float boxesY, float boxesZ, float boxesRotation )
+	{
+		bool collides = false;
+		for (int idx = 0; idx < numBoxes; ++idx) {
+
+		}
+
+		return collides;
 	}
 
 }

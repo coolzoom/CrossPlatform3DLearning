@@ -64,10 +64,10 @@ ADD_EXECUTABLE(unittest globalFixture globals.h mainTest.cpp gameLogTest.cpp gam
  modelTest.cpp rendererTest.cpp imageTest.cpp configurationTest.cpp boundingBoxesTest.cpp
   ../Model.cpp ../GameLogic.cpp ../WorldObject.cpp ../PlayerView.cpp
   ../GameLog.cpp ../Configuration.cpp ../Renderer.cpp ../GameException.cpp
-  ../Image.cpp ../GameScene.cpp ../BoundingBoxes.cpp ../GetTokens.cpp
+  ../Image.cpp ../GameScene.cpp ../BoundingBoxes.cpp ../GetTokens.cpp ../GameMath.cpp
   ../GameLog.h ../Model.h ../WorldObject.h ../Configuration.h ../GameLogic.h
   ../PlayerView.h ../GameException.h ../Image.h ../Renderer.h ../KeyInput.h
-  ../GameScene.h ../MathMacros.h ../BoundingBoxes.h ../GetTokens.h
+  ../GameScene.h ../BoundingBoxes.h ../GetTokens.h ../GameMath.h
  )
 
 # Link to the required libraries

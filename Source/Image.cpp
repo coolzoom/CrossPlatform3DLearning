@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <boost/numeric/conversion/cast.hpp>
 #include "GameException.h"
-#include "MathMacros.h"
+#include "GameMath.h"
 
 using namespace std;
 

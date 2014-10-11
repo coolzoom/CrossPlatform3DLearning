@@ -94,27 +94,6 @@ private:
      */
     boost::unordered_map<string, GLuint> *textures;
 
-    /**
-     * Rotation transformation for rotating around the X axis
-     * @param angle The angle to rotate by, in radians.
-     * @return The X rotation matrix
-     */
-    glm::mat4x4* rotateX(const float angle) const;
-
-    /**
-     * Rotation transformation for rotating around the Y axis
-     * @param angle The angle to rotate by, in radians.
-	 * @return The Y rotation matrix
-     */
-    glm::mat4x4* rotateY(const float angle) const;
-
-    /**
-     * Rotation transformation for rotating around the Z axis
-     * @param angle The angle to rotate by, in radians.
-	 * @return The Z rotation matrix
-     */
-    glm::mat4x4* rotateZ(const float angle) const;
-
 public:
 
     /**

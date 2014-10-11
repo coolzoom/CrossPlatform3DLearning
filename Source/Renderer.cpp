@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <boost/unordered_map.hpp>
 #include <boost/numeric/conversion/cast.hpp>
+#include "GameMath.h"
 
 using namespace boost;
 
@@ -682,36 +683,6 @@ void Renderer::swapBuffers()
 {
     SDL_GL_SwapBuffers();
 }
-
-glm::mat4x4* Renderer::rotateX(const float angle) const
-{
-    return new glm::mat4x4(1.0f, 0.0f, 0.0f, 0.0f,
-                           0.0f, glm::cos(angle), -glm::sin(angle), 0.0f,
-                           0.0f, glm::sin(angle), glm::cos(angle), 0.0f,
-                           0.0f, 0.0f, 0.0f, 1.0f
-                          );
-}
-
-glm::mat4x4* Renderer::rotateY(const float angle) const
-{
-    return new glm::mat4x4(glm::cos(angle), 0.0f, glm::sin(angle), 0.0f,
-                           0.0f, 1.0f, 0.0f, 0.0f,
-                           -glm::sin(angle), 0.0f, glm::cos(angle), 0.0f,
-                           0.0f, 0.0f, 0.0f, 1.0f
-                          );
-
-}
-
-glm::mat4x4* Renderer::rotateZ(const float angle) const
-{
-    return new glm::mat4x4(glm::cos(angle), -glm::sin(angle), 0.0f,  0.0f,
-                           glm::sin(angle), glm::cos(angle), 0.0f, 0.0f,
-                           0.0f, 0.0f, 1.0f, 0.0f,
-                           0.0f, 0.0f, 0.0f, 1.0f
-                          );
-}
-
-
 
 } // AvoidTheBug3D
 

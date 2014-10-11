@@ -23,7 +23,7 @@
 
 #include "GameLogic.h"
 #include <glm/glm.hpp>
-#include "MathMacros.h"
+#include "GameMath.h"
 #include "GameException.h"
 
 namespace AvoidTheBug3D {

@@ -63,9 +63,9 @@ ADD_DEFINITIONS(${PNG_DEFINITIONS})
 ADD_EXECUTABLE(game main.cpp GameLog.cpp Model.cpp GameLogic.cpp
  WorldObject.cpp
  PlayerView.cpp Renderer.cpp GameException.cpp Configuration.cpp
- Image.cpp GameScene.cpp BoundingBoxes.cpp GetTokens.cpp
+ Image.cpp GameScene.cpp BoundingBoxes.cpp GetTokens.cpp GameMath.cpp
  GameLog.h Model.h WorldObject.h Configuration.h GameLogic.h PlayerView.h
- GameException.h Image.h Renderer.h KeyInput.h GameScene.h MathMacros.h
+ GameException.h Image.h Renderer.h KeyInput.h GameScene.h GameMath.h
  BoundingBoxes.h GetTokens.h
  )
 
