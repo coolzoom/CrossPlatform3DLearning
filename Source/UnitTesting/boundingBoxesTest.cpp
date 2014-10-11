@@ -37,7 +37,7 @@ BOOST_AUTO_TEST_SUITE(ModelTestSuite)
 		}
 
 		cout<<"Bounding boxes faces vertex indexes: "<<endl;
-		for (int idx = 0; idx < 16; idx++)
+		for (int idx = 0; idx < 12; idx++)
 		{
 			cout<<bboxes->facesVertexIndexes->at(idx)[0] << ", " <<
 				bboxes->facesVertexIndexes->at(idx)[1] << ", " <<
