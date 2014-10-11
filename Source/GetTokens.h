@@ -1,6 +1,10 @@
 #ifndef GETTOKENS_H_
 #define GETTOKENS_H_
 
+#include <string>
+
+using namespace std;
+
 namespace AvoidTheBug3D {
 
 	/**
@@ -14,32 +18,7 @@ namespace AvoidTheBug3D {
 	 * @return	The number of tokens
 	 */
 
-	int getTokens(string input, char sep, string* tokens){
-		int curPos = 0;
-		int count = 0;
-
-		int length = input.length();
-
-		for (int idx = 0; idx < length; ++idx) {
-			if (input[idx] == sep) {
-				++count;
-			}
-		}
-		++count;
-
-		for (int idx = 0; idx < count; ++idx) {
-			if (idx == count - 1) {
-				tokens[idx] = input.substr(curPos);
-			}
-			else {
-
-				size_t foundPos = input.find(sep, curPos);
-				tokens[idx] = input.substr(curPos, foundPos - curPos);
-				curPos = foundPos + 1;
-			}
-		}
-		return count;
-	}
+	int getTokens(string input, char sep, string* tokens);
 }
 
 #endif /* GETTOKENS_H_ */

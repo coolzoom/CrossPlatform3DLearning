@@ -89,7 +89,8 @@ void Model::loadFromFile(string fileLocation)
         {
             if (line[0] == 'v' || line[0] == 'f')
             {
-                string *tokens = new string[4]; // Max 4 such tokens in Wavefront files
+                string *tokens = new string[4]; // Max 4 such tokens in the specific kind of
+												// Wavefront file
 				
 				int numTokens = getTokens(line, ' ', tokens);
 				
@@ -99,8 +100,8 @@ void Model::loadFromFile(string fileLocation)
                 {
                     // get vertex normal
                     float *vn = new float[3];
-                    //BOOST_FOREACH (const string& t, tokens)
-                    for (int tokenIdx = 0; tokenIdx < numTokens; ++tokenIdx)
+
+					for (int tokenIdx = 0; tokenIdx < numTokens; ++tokenIdx)
                     {
 						string t = tokens[tokenIdx];
                         if (idx > 0)   // The first token is the vertex normal indicator
@@ -114,7 +115,7 @@ void Model::loadFromFile(string fileLocation)
                 else if (line[0] == 'v' && line[1] == 't')
                 {
                     float *vt = new float[2];
-                    //BOOST_FOREACH (const string& t, tokens)
+
 					for (int tokenIdx = 0; tokenIdx < numTokens; ++tokenIdx)
 					{
 						string t = tokens[tokenIdx];
@@ -133,7 +134,7 @@ void Model::loadFromFile(string fileLocation)
                 {
                     // get vertex
                     float *v = new float[3];
-                    //BOOST_FOREACH (const string& t, tokens)
+
 					for (int tokenIdx = 0; tokenIdx < numTokens; ++tokenIdx)
 					{
 						string t = tokens[tokenIdx];
@@ -151,7 +152,7 @@ void Model::loadFromFile(string fileLocation)
                     int *v = new int[3];
                     int *n = NULL;
                     int *textC = NULL;
-                    //BOOST_FOREACH (const string& t, tokens)
+
 					for (int tokenIdx = 0; tokenIdx < numTokens; ++tokenIdx)
 					{
 						string t = tokens[tokenIdx];
@@ -183,7 +184,6 @@ void Model::loadFromFile(string fileLocation)
 
                                 int componentIdx = 0;
 
-                                //BOOST_FOREACH(const string &component, components)
 								for (int compIdx = 0; compIdx < numComponents; ++compIdx)
 								{
 									string component = components[compIdx];
