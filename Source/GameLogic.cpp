@@ -58,7 +58,7 @@ namespace AvoidTheBug3D {
 	}
 
 	GameLogic::~GameLogic() {
-		// TODO Auto-generated destructor stub
+		LOGINFO("GameLogic destructor running");
 	}
 
 	void GameLogic::initGame()
