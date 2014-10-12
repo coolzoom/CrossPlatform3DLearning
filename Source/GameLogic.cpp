@@ -49,9 +49,17 @@ namespace AvoidTheBug3D {
 			bug->setFrameDelay(2);
 
 			bugVerticalSpeed = ROUND_2_DECIMAL(BUG_FLIGHT_HEIGHT / BUG_DIVE_DURATION);
+
+			tree = boost::shared_ptr<WorldObject> (
+				new WorldObject("tree",
+				"/Game/Data/Tree/tree.obj",
+				cfg, log, 1, "/Game/Data/Tree/tree.png"));
+
+			tree->setOffset(1.2f, GROUND_Y, -6.0f);
 			
 			gameScene->worldObjects->push_back(goat);
 			gameScene->worldObjects->push_back(bug);
+			gameScene->worldObjects->push_back(tree);
 
 			gameState = START_SCREEN;
 

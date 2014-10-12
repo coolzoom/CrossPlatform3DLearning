@@ -28,6 +28,7 @@ namespace AvoidTheBug3D {
 
 		boost::shared_ptr<WorldObject> goat;
 		boost::shared_ptr<WorldObject> bug;
+		boost::shared_ptr<WorldObject> tree;
 
 		enum GameState {START_SCREEN, PLAYING};
 		GameState gameState;
