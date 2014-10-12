@@ -55,7 +55,8 @@ namespace AvoidTheBug3D {
 				"/Game/Data/Tree/tree.obj",
 				cfg, log, 1, "/Game/Data/Tree/tree.png"));
 
-			tree->setOffset(1.2f, GROUND_Y, -6.0f);
+			tree->setOffset(2.6f, GROUND_Y, -8.0f);
+			tree->setRotation(0.0f, -0.5f, 0.0f);
 			
 			gameScene->worldObjects->push_back(goat);
 			gameScene->worldObjects->push_back(bug);
