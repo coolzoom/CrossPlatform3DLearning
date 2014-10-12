@@ -58,9 +58,7 @@ namespace AvoidTheBug3D {
 				boundingBoxes = boost::shared_ptr<BoundingBoxes>(new BoundingBoxes(cfg, log));
 				boundingBoxes->loadFromFile(boundingBoxesPath);
 			}
-			else {
-				boundingBoxes = NULL;
-			}
+
 	}
 
 	WorldObject::~WorldObject() {
