@@ -54,7 +54,8 @@ void Configuration::findHomeDirectory() {
 		{
 			homePath = homePath.branch_path().branch_path();
 		}
-	} else if (boost::algorithm::ends_with(currentLower, "bin")) // production
+	} else if (boost::algorithm::ends_with(currentLower, "bin") || 
+		boost::algorithm::ends_with(currentLower, "source")) // production
 			{
 		homePath = homePath.branch_path();
 	} else // if no conditions is met, the home directory cannot be determined
